@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">我只在乎你</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+
+     <string name="hello">Hello World, TabSample!</string>
+    
+	<string-array name="Spinner_Content">
+	    <item>One</item>
+		<item>Two</item>
+		<item>Three</item>
+	</string-array>
+</resources>
