@@ -4,12 +4,19 @@
     <string name="app_name">我只在乎你</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="hello">Hello World, TabSample!</string>
 
-     <string name="hello">Hello World, TabSample!</string>
-    
-	<string-array name="Spinner_Content">
-	    <item>One</item>
-		<item>Two</item>
-		<item>Three</item>
-	</string-array>
+    <string-array name="Spinner_Content">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
+
+    <string name="title_activity_timeline">TimelineActivity</string>
+    <string name="title_activity_picture_wall">PictureWallActivity</string>
+    <string name="title_activity_account">AccountActivity</string>
+    <string name="title_activity_status_timeline">StatusTimelineActivity</string>
+    <string name="title_activity_lab">LabActivity</string>
+    <string name="title_activity_preference">PreferenceActivity</string>
+
 </resources>

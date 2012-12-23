@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:drawable="@drawable/microscope"
+	<item android:drawable="@drawable/tab_microscope"
 		android:state_selected="true" />
-	<item android:drawable="@drawable/microscope" />
+	<item android:drawable="@drawable/tab_microscope" />
 </selector> 

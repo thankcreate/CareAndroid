@@ -1,10 +1,18 @@
 package com.thankcreate.care;
 
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.Action;
 import com.thankcreate.care.R;
+import com.thankcreate.care.account.AccountActivity;
+import com.thankcreate.care.lab.LabActivity;
+import com.thankcreate.care.picture.PictureWallActivity;
+import com.thankcreate.care.preference.PreferenceActivity;
+import com.thankcreate.care.status.StatusTimelineActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +21,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 
@@ -20,7 +29,23 @@ public class MainActivity extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		setTabs() ;
+		
+		setNavigateBar();
+		setTabs();
+	}
+
+	private void setNavigateBar() {
+		
+//		actionBar.addAction(new Action() {
+//            @Override
+//            public void performAction(View view) {
+//                Toast.makeText(MainActivity.this, "Added action.", Toast.LENGTH_SHORT).show();
+//            }
+//            @Override
+//            public int getDrawable() {
+//                return R.drawable.ic_title_share_default;
+//            }
+//        });
 	}
 
 	@Override
@@ -32,12 +57,12 @@ public class MainActivity extends TabActivity {
 	
 	private void setTabs()
 	{
-		addTab("主页", R.drawable.tab_home, ArrowsActivity.class);
-		addTab("图片", R.drawable.tab_picture, OptionsActivity.class);
+		addTab("主页", R.drawable.tab_home, StatusTimelineActivity.class);
+		addTab("图片", R.drawable.tab_picture, PictureWallActivity.class);
 		
-		addTab("奇怪的地方", R.drawable.tab_microscope, ArrowsActivity.class);
-		addTab("帐号", R.drawable.tab_account, OptionsActivity.class);
-		addTab("设置", R.drawable.tab_settings, OptionsActivity.class);
+		addTab("奇怪的地方", R.drawable.tab_microscope, LabActivity.class);
+		addTab("帐号", R.drawable.tab_account, AccountActivity.class);
+		addTab("设置", R.drawable.tab_settings, PreferenceActivity.class);
 	}
 	
 	private void addTab(String labelId, int drawableId, Class<?> c)
@@ -57,6 +82,12 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(spec);
 	}
 	
+	
+    public static Intent createIntent(Context context) {
+        Intent i = new Intent(context, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return i;
+    }
 	
 
 }

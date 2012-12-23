@@ -41,10 +41,12 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
     private LayoutInflater mInflater;
     private RelativeLayout mBarView;
     private ImageView mLogoView;
+    private ImageView mTitleLogoView;
     private View mBackIndicator;
     //private View mHomeView;
     private TextView mTitleView;
-    private LinearLayout mActionsView;
+    private LinearLayout mActionsLeftView;
+    private LinearLayout mActionsRightView;
     private ImageButton mHomeBtn;
     private RelativeLayout mHomeLayout;
     private ProgressBar mProgress;
@@ -63,7 +65,9 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
         mBackIndicator = mBarView.findViewById(R.id.actionbar_home_is_back);
 
         mTitleView = (TextView) mBarView.findViewById(R.id.actionbar_title);
-        mActionsView = (LinearLayout) mBarView.findViewById(R.id.actionbar_actions);
+        mTitleLogoView =  (ImageView) mBarView.findViewById(R.id.actionbar_title_icon);
+        mActionsLeftView = (LinearLayout) mBarView.findViewById(R.id.actionbar_actions_left);
+        mActionsRightView = (LinearLayout) mBarView.findViewById(R.id.actionbar_actions_right);
         
         mProgress = (ProgressBar) mBarView.findViewById(R.id.actionbar_progress);
 
@@ -100,6 +104,11 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
         mLogoView.setImageResource(resId);
         mLogoView.setVisibility(View.VISIBLE);
         mHomeLayout.setVisibility(View.GONE);
+    }
+    
+    public void SetTitleLogo(int resId){
+    	mTitleLogoView.setImageResource(resId);
+    	mTitleLogoView.setVisibility(View.VISIBLE);    	
     }
 
     /* Emulating Honeycomb, setdisplayHomeAsUpEnabled takes a boolean
@@ -155,15 +164,25 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
             action.performAction(view);
         }
     }
+    /**
+     * Adds a list of {@link Action}s.
+     * @param actionList the actions to add
+     */
+    public void addActionsLeft(ActionList actionList) {
+        int actions = actionList.size();
+        for (int i = 0; i < actions; i++) {
+            addActionLeft(actionList.get(i));
+        }
+    }
 
     /**
      * Adds a list of {@link Action}s.
      * @param actionList the actions to add
      */
-    public void addActions(ActionList actionList) {
+    public void addActionsRight(ActionList actionList) {
         int actions = actionList.size();
         for (int i = 0; i < actions; i++) {
-            addAction(actionList.get(i));
+            addActionRight(actionList.get(i));
         }
     }
 
@@ -171,9 +190,19 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
      * Adds a new {@link Action}.
      * @param action the action to add
      */
-    public void addAction(Action action) {
-        final int index = mActionsView.getChildCount();
-        addAction(action, index);
+    public void addActionLeft(Action action) {
+        final int index = mActionsLeftView.getChildCount();
+        addActionLeft(action, index);
+    }
+
+    
+    /**
+     * Adds a new {@link Action}.
+     * @param action the action to add
+     */
+    public void addActionRight(Action action) {
+        final int index = mActionsRightView.getChildCount();
+        addActionRight(action, index);
     }
 
     /**
@@ -181,37 +210,80 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
      * @param action the action to add
      * @param index the position at which to add the action
      */
-    public void addAction(Action action, int index) {
-        mActionsView.addView(inflateAction(action), index);
+    public void addActionLeft(Action action, int index) {
+        mActionsLeftView.addView(inflateLeftAction(action), index);
+    }
+
+    
+    /**
+     * Adds a new {@link Action} at the specified index.
+     * @param action the action to add
+     * @param index the position at which to add the action
+     */
+    public void addActionRight(Action action, int index) {
+        mActionsRightView.addView(inflateRightAction(action), index);
+    }
+    
+    /**
+     * Removes all action views from this action bar
+     */
+    public void removeAllActionsLeft() {
+        mActionsLeftView.removeAllViews();
     }
 
     /**
      * Removes all action views from this action bar
      */
-    public void removeAllActions() {
-        mActionsView.removeAllViews();
+    public void removeAllActionsRight() {
+        mActionsRightView.removeAllViews();
     }
 
     /**
      * Remove a action from the action bar.
      * @param index position of action to remove
      */
-    public void removeActionAt(int index) {
-        mActionsView.removeViewAt(index);
+    public void removeActionLeftAt(int index) {
+        mActionsLeftView.removeViewAt(index);
+    }
+
+    
+    /**
+     * Remove a action from the action bar.
+     * @param index position of action to remove
+     */
+    public void removeActionRightAt(int index) {
+        mActionsRightView.removeViewAt(index);
     }
 
     /**
      * Remove a action from the action bar.
      * @param action The action to remove
      */
-    public void removeAction(Action action) {
-        int childCount = mActionsView.getChildCount();
+    public void removeLeftAction(Action action) {
+        int childCount = mActionsLeftView.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            View view = mActionsView.getChildAt(i);
+            View view = mActionsLeftView.getChildAt(i);
             if (view != null) {
                 final Object tag = view.getTag();
                 if (tag instanceof Action && tag.equals(action)) {
-                    mActionsView.removeView(view);
+                    mActionsLeftView.removeView(view);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Remove a action from the action bar.
+     * @param action The action to remove
+     */
+    public void removeRightAction(Action action) {
+        int childCount = mActionsRightView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = mActionsRightView.getChildAt(i);
+            if (view != null) {
+                final Object tag = view.getTag();
+                if (tag instanceof Action && tag.equals(action)) {
+                    mActionsRightView.removeView(view);
                 }
             }
         }
@@ -221,20 +293,45 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
      * Returns the number of actions currently registered with the action bar.
      * @return action count
      */
-    public int getActionCount() {
-        return mActionsView.getChildCount();
+    public int getActionLeftCount() {
+        return mActionsLeftView.getChildCount();
     }
+    /**
+     * Returns the number of actions currently registered with the action bar.
+     * @return action count
+     */
+    public int getActionRightCount() {
+        return mActionsRightView.getChildCount();
+    }
+    
+    /**
+     * Inflates a {@link View} with the given {@link Action}.
+     * @param action the action to inflate
+     * @return a view
+     */
+    private View inflateLeftAction(Action action) {
+        View view = mInflater.inflate(R.layout.actionbar_item_left, mActionsLeftView, false);
+
+        ImageButton labelView =
+            (ImageButton) view.findViewById(R.id.actionbar_item_left);
+        labelView.setImageResource(action.getDrawable());
+
+        view.setTag(action);
+        view.setOnClickListener(this);
+        return view;
+    }
+
 
     /**
      * Inflates a {@link View} with the given {@link Action}.
      * @param action the action to inflate
      * @return a view
      */
-    private View inflateAction(Action action) {
-        View view = mInflater.inflate(R.layout.actionbar_item, mActionsView, false);
+    private View inflateRightAction(Action action) {
+        View view = mInflater.inflate(R.layout.actionbar_item_right, mActionsRightView, false);
 
         ImageButton labelView =
-            (ImageButton) view.findViewById(R.id.actionbar_item);
+            (ImageButton) view.findViewById(R.id.actionbar_item_right);
         labelView.setImageResource(action.getDrawable());
 
         view.setTag(action);

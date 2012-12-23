@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	
-	
+    
+	<color name="transparent">#00000000</color>
+	<color name="gray">#ffbbbbbb</color>
+	<color name="white">#ffffffff</color>
+	<color name="black">#ff000000</color>
+	<color name="red">#ffff0000</color>
 	
 	<color name="tabMedium">#2B2B2B</color>
 	<color name="tabDark">#000000</color>
 	<color name="tabTransparent">#10ffffff</color>
 	
+	<color name="roundCornerTableBorder">#ffbbbbbb</color>
 	
-	
-	
+    <color name="gradient_red_start">#ff1A1A</color>
+    <color name="gradient_red_end">#CD2626</color>
+		
 </resources>
