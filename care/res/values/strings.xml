@@ -18,5 +18,6 @@
     <string name="title_activity_status_timeline">StatusTimelineActivity</string>
     <string name="title_activity_lab">LabActivity</string>
     <string name="title_activity_preference">PreferenceActivity</string>
+    <string name="title_activity_account_select_freind">AccountSelectFreindActivity</string>
 
 </resources>

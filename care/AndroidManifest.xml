@@ -7,11 +7,11 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />    
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <application
         android:allowBackup="true"
         android:debuggable="true"
@@ -26,9 +26,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.thankcreate.care.ArrowsActivity" />
-        <activity android:name="com.thankcreate.care.OptionsActivity" />
+        </activity>       
         <activity
             android:name="com.thankcreate.care.account.AccountActivity"
             android:label="@string/title_activity_account" >
@@ -48,6 +46,10 @@
         <activity
             android:name="com.thankcreate.care.preference.PreferenceActivity"
             android:label="@string/title_activity_preference" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.account.AccountSelectFreindActivity"
+            android:label="@string/title_activity_account_select_freind" >
         </activity>
     </application>
 
