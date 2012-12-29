@@ -1,4 +1,4 @@
-package com.thankcreate.care.tool;
+package com.thankcreate.care.tool.misc;
 
 import java.util.concurrent.locks.Lock;
 
@@ -45,14 +45,14 @@ public class TaskHelper {
 		if(taskInProcess == 0)
 		{
 			if(onTaskCompleteListener != null)
-				onTaskCompleteListener.onTaskComplete();
+				onTaskCompleteListener.onAllTaskComplete();
 		}		
 	}
 
 
 	public interface OnTaskCompleteListener
 	{
-		public void onTaskComplete();
+		public void onAllTaskComplete();
 	}
 	
 	

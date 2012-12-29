@@ -1,10 +1,11 @@
-package com.thankcreate.care.tool;
+package com.thankcreate.care.tool.misc;
 
 import java.net.ContentHandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.thankcreate.care.App;
 import com.thankcreate.care.AppConstants;
 import com.thankcreate.care.account.AccountActivity;
 import com.thankcreate.care.viewmodel.EntryType;
@@ -14,17 +15,18 @@ public class MiscTool {
 	
 
 	
-	public static Boolean isSinaWeiboLogin(Context context)
+	public static Boolean isSinaWeiboLogin()
 	{
-		SharedPreferences pref = context.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+		SharedPreferences pref = App.getAppContext().getSharedPreferences(AppConstants.PREFERENCES_NAME,
 						Context.MODE_APPEND);
 		String token = pref.getString("SinaWeibo_Token", "");
 		return !StringTool.isNullOrEmpty(token);
 	}
 	
-	public static String getCurrentAccountID(Context context ,int type)
+	
+	public static String getCurrentAccountID(int type)
 	{
-		SharedPreferences pref = context.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+		SharedPreferences pref = App.getAppContext().getSharedPreferences(AppConstants.PREFERENCES_NAME,
 				Context.MODE_APPEND);
 		String id;
 		switch (type) {
@@ -44,9 +46,9 @@ public class MiscTool {
 		return id;
 	}
 
-	public static Oauth2AccessToken getOauth2AccessToken(Context context) 
+	public static Oauth2AccessToken getOauth2AccessToken() 
 	{
-		SharedPreferences pref = context.getSharedPreferences(
+		SharedPreferences pref = App.getAppContext().getSharedPreferences(
 				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
 		String token = pref.getString("SinaWeibo_Token", "");
 		long exp = pref.getLong("SinaWeibo_ExpirationDate", -1);

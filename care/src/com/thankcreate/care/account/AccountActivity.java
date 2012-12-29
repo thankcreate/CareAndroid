@@ -3,6 +3,7 @@ package com.thankcreate.care.account;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,9 @@ import com.thankcreate.care.R.drawable;
 import com.thankcreate.care.R.id;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
-import com.thankcreate.care.tool.MiscTool;
-import com.thankcreate.care.tool.PreferenceHelper;
+import com.thankcreate.care.tool.misc.MiscTool;
+import com.thankcreate.care.tool.misc.PreferenceHelper;
+import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
 import com.weibo.sdk.android.Oauth2AccessToken;
@@ -138,12 +140,12 @@ public class AccountActivity extends Activity {
 					
 					Activity activity = AccountActivity.this;
 					mSsoHandler = new SsoHandler(AccountActivity.this, App
-							.getInstance().sinaWeibo);
+							.sinaWeibo);
 					mSsoHandler.authorize(weiboAuthListener);
 				}
 				// 指定关注人
 				else if (position == 1) {
-					if(MiscTool.isSinaWeiboLogin(AccountActivity.this)) {
+					if(MiscTool.isSinaWeiboLogin()) {
 						Intent intent = new Intent();
 						intent.setClass(AccountActivity.this, AccountSelectFreindActivity.class);
 						intent.putExtra("type", EntryType.SinaWeibo);
@@ -160,9 +162,9 @@ public class AccountActivity extends Activity {
 				}
 				// 退出
 				else if (position == 2) {
-					PreferenceHelper.removeSinaWeiboPreference(AccountActivity.this);
+					PreferenceHelper.removeSinaWeiboPreference();
 					initSinaWeibo();
-					App.getInstance().mainViewModel.isChanged = true;
+					App.mainViewModel.isChanged = true;
 				}
 			}
 			
@@ -177,6 +179,7 @@ public class AccountActivity extends Activity {
 			String expires_in = values.getString("expires_in");
 			long exp = System.currentTimeMillis() + Long.parseLong(expires_in)
 					* 1000;
+			
 
 			SharedPreferences pref = AccountActivity.this.getSharedPreferences(
 					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
@@ -195,9 +198,8 @@ public class AccountActivity extends Activity {
     		usersAPI.show(lID, sinaWeiboShowRequestListener);
         }
         @Override
-        public void onError(WeiboDialogError e) {
-            Toast.makeText(getApplicationContext(),
-                    "授权过程中发生未知错误，请确保网络通畅", Toast.LENGTH_SHORT).show();
+        public void onError(WeiboDialogError e) {        	
+        	ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");           
         }
 
         @Override
@@ -207,8 +209,7 @@ public class AccountActivity extends Activity {
 
         @Override
         public void onWeiboException(WeiboException e) {
-        	Toast.makeText(getApplicationContext(),
-                    "授权过程中发生未知错误，请确保网络通畅", Toast.LENGTH_SHORT).show();
+        	ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
         }
     };
     

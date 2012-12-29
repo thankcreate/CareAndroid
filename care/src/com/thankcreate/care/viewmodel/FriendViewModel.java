@@ -1,6 +1,8 @@
 package com.thankcreate.care.viewmodel;
 
-public class FriendViewModel {
+import java.io.Serializable;
+
+public class FriendViewModel implements Serializable {
 	public String name;
 	public String ID;
 	public String description;	

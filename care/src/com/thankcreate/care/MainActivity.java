@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -32,6 +33,13 @@ public class MainActivity extends TabActivity {
 		
 		setNavigateBar();
 		setTabs();
+		setDensity();
+	}
+
+	private void setDensity() {
+		DisplayMetrics metric = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metric);
+		App.density = metric.density;
 	}
 
 	private void setNavigateBar() {

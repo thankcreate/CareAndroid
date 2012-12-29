@@ -1,8 +1,9 @@
 package com.thankcreate.care.viewmodel;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PictureItemViewModel {
+public class PictureItemViewModel implements Serializable{
 	
 	public String smallURL;
 	public String middleURL;

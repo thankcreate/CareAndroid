@@ -19,5 +19,7 @@
     <string name="title_activity_lab">LabActivity</string>
     <string name="title_activity_preference">PreferenceActivity</string>
     <string name="title_activity_account_select_freind">AccountSelectFreindActivity</string>
+    <string name="title_activity_status_detail">StatusDetailActivity</string>
+    <string name="title_activity_status_add_comment">StatusAddCommentActivity</string>
 
 </resources>

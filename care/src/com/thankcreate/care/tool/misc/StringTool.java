@@ -1,4 +1,4 @@
-package com.thankcreate.care.tool;
+package com.thankcreate.care.tool.misc;
 
 import net.sourceforge.pinyin4j.PinyinHelper;  
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;  

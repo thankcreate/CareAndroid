@@ -1,8 +1,11 @@
 package com.thankcreate.care.viewmodel;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ItemViewModel {
+import com.thankcreate.care.tool.misc.StringTool;
+
+public class ItemViewModel implements Serializable{
 
 	public String iconURL;
 	public String largeIconURL;
@@ -26,4 +29,17 @@ public class ItemViewModel {
 	public String sharedCount;
 	
 	public ItemViewModel forwardItem;
+	
+	public String getContentWithTitle()
+	{
+		String prefix = (title == null)? "" : title;
+		String inner =  (content == null)? "" : content;
+		return prefix + ": " + inner;
+	}
+	
+	public String getCommentCount()
+	{
+		String result = StringTool.isNullOrEmpty(commentCount)? "0" : commentCount;
+		return result;
+	}
 }

@@ -18,12 +18,13 @@ import com.thankcreate.care.R.menu;
 import com.thankcreate.care.account.AccountActivity.AccountGroupAdapter.ViewHolder;
 import com.thankcreate.care.control.SearchBarWidget;
 import com.thankcreate.care.control.SearchBarWidget.onSearchListener;
-import com.thankcreate.care.tool.DrawableManager;
-import com.thankcreate.care.tool.FirstCharactorComparator;
-import com.thankcreate.care.tool.MiscTool;
-import com.thankcreate.care.tool.PreferenceHelper;
-import com.thankcreate.care.tool.StringTool;
 import com.thankcreate.care.tool.converter.SinaWeiboConverter;
+import com.thankcreate.care.tool.misc.FirstCharactorComparator;
+import com.thankcreate.care.tool.misc.MiscTool;
+import com.thankcreate.care.tool.misc.PreferenceHelper;
+import com.thankcreate.care.tool.misc.StringTool;
+import com.thankcreate.care.tool.ui.DrawableManager;
+import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
@@ -149,7 +150,7 @@ public class AccountSelectFreindActivity extends Activity {
 			editor.putString("SinaWeibo_FollowerAvatar", friend.avatar);
 			editor.putString("SinaWeibo_FollowerAvatar2", friend.avatar2);
 			editor.commit();
-			App.getInstance().mainViewModel.isChanged = true;
+			App.mainViewModel.isChanged = true;
 			finish();
 			
 		}			
@@ -217,15 +218,15 @@ public class AccountSelectFreindActivity extends Activity {
 	private void loadFriendSinaWeibo()
 	{
 		
-		Oauth2AccessToken oa = MiscTool.getOauth2AccessToken(this);
+		Oauth2AccessToken oa = MiscTool.getOauth2AccessToken();
+		if(oa == null)
+			return;
 		FriendshipsAPI friendshipsAPI = new FriendshipsAPI(oa);
-		String myId = MiscTool.getCurrentAccountID(this, EntryType.SinaWeibo);
-		friendshipsAPI.friends(Long.parseLong(myId), 200, 0, false, sinaWeiboShowFriendsRequestListener);
-	}	
-
-
+		String myId = MiscTool.getCurrentAccountID(EntryType.SinaWeibo);
+		friendshipsAPI.friends(Long.parseLong(myId), 200, 0, false, mSinaWeiboShowFriendsRequestListener);
+	}
 	
-	RequestListener sinaWeiboShowFriendsRequestListener = new RequestListener()
+	RequestListener mSinaWeiboShowFriendsRequestListener = new RequestListener()
 	{
 
 		@Override
@@ -249,14 +250,14 @@ public class AccountSelectFreindActivity extends Activity {
 				// 不为0，继续请求
 				if (nextCursorString != 0) {
 					Oauth2AccessToken oa = MiscTool
-							.getOauth2AccessToken(AccountSelectFreindActivity.this);
+							.getOauth2AccessToken();
+					if(oa == null)
+						return;
 					FriendshipsAPI friendshipsAPI = new FriendshipsAPI(oa);
-					String myId = MiscTool.getCurrentAccountID(
-							AccountSelectFreindActivity.this,
-							EntryType.SinaWeibo);
+					String myId = MiscTool.getCurrentAccountID(EntryType.SinaWeibo);
 					friendshipsAPI.friends(Long.parseLong(myId),
 							200, nextCursorString, false,
-							sinaWeiboShowFriendsRequestListener);
+							mSinaWeiboShowFriendsRequestListener);
 				}
 				// 为0，刷新页面
 				else {
@@ -269,15 +270,12 @@ public class AccountSelectFreindActivity extends Activity {
 
 		@Override
 		public void onError(WeiboException arg0) {
-			Toast.makeText(getApplicationContext(),
-                    "获取朋友列表过程中发生未知错误，请确保网络通畅", Toast.LENGTH_SHORT).show();
-			
+			ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");
 		}
 
 		@Override
 		public void onIOException(IOException arg0) {
-			Toast.makeText(getApplicationContext(),
-                    "获取朋友列表过程中发生未知错误，请确保网络通畅", Toast.LENGTH_SHORT).show();			
+			ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");			
 		}
 		
 	};
@@ -327,6 +325,7 @@ public class AccountSelectFreindActivity extends Activity {
 		
 		public void setListModel(List<FriendViewModel> input){
 			listModel = input;
+			notifyDataSetChanged();
 		}
 
 		@Override
@@ -368,6 +367,7 @@ public class AccountSelectFreindActivity extends Activity {
 			
 			holder.textName.setText(listModel.get(position).name);
 			holder.textDescription.setText(listModel.get(position).description);
+			holder.imageAvatar.setTag(listModel.get(position).avatar);
 			drawableManager.fetchDrawableOnThread(listModel.get(position).avatar, holder.imageAvatar);
 			return convertView;
 		}

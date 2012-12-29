@@ -13,44 +13,70 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="com.thankcreate.care.App"
         android:allowBackup="true"
         android:debuggable="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.thankcreate.care.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>       
+        </activity>
         <activity
             android:name="com.thankcreate.care.account.AccountActivity"
-            android:label="@string/title_activity_account" >
+            android:label="@string/title_activity_account"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.thankcreate.care.status.StatusTimelineActivity"
-            android:label="@string/title_activity_status_timeline" >
+            android:label="@string/title_activity_status_timeline"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.thankcreate.care.lab.LabActivity"
-            android:label="@string/title_activity_lab" >
+            android:label="@string/title_activity_lab"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.thankcreate.care.picture.PictureWallActivity"
-            android:label="@string/title_activity_picture_wall" >
+            android:label="@string/title_activity_picture_wall"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.thankcreate.care.preference.PreferenceActivity"
-            android:label="@string/title_activity_preference" >
+            android:label="@string/title_activity_preference"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.thankcreate.care.account.AccountSelectFreindActivity"
-            android:label="@string/title_activity_account_select_freind" >
+            android:label="@string/title_activity_account_select_freind"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.status.StatusDetailActivity"
+            android:label="@string/title_activity_status_detail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.status.StatusAddCommentActivity"
+            android:label="@string/title_activity_status_add_comment"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" >
+"
+        </activity>
+        <activity
+            android:name="com.buuuk.android.gallery.ImageViewFlipper"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
-
 </manifest>

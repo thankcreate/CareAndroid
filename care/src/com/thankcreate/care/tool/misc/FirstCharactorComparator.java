@@ -1,4 +1,4 @@
-package com.thankcreate.care.tool;
+package com.thankcreate.care.tool.misc;
 
 
 import java.text.Collator;
