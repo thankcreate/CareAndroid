@@ -7,6 +7,7 @@ public class EntryType {
 	public static final int SinaWeibo = 1;
 	public static final int Renren = 2;
 	public static final int Douban = 3;	
+	public static final int Rss = 4;
 	
 	public static String StringValueOf(int type)
 	{
@@ -22,6 +23,11 @@ public class EntryType {
 		{
 			return "来自豆瓣";
 		}
+		else if(type == Rss)
+		{
+			return "来自RSS";
+		}
+		
 		else
 		{
 			return "来自火星";

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <application
         android:name="com.thankcreate.care.App"
@@ -19,16 +21,26 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.renren.api.connect.android.AuthorizationHelper$BlockActivity"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.DispatcherActivity"
+            android:label="@string/title_activity_dispatcher"
+            android:noHistory="true" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.thankcreate.care.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.thankcreate.care.account.AccountActivity"
@@ -71,12 +83,64 @@
             android:label="@string/title_activity_status_add_comment"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize" >
-"
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.status.StatusPostActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.buuuk.android.gallery.ImageViewFlipper"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.thankcreate.care.lab.LabTimelineActivity"
+            android:label="@string/title_activity_lab_timeline"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.lab.LabCharactorAnalysisActivity"
+            android:label="@string/title_activity_lab_charactor_analysis"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.lab.LabPercentageActivity"
+            android:label="@string/title_activity_lab_percentage"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.lab.LabEnemyActivity"
+            android:label="@string/title_activity_lab_enemy"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.lab.LabCatActivity"
+            android:label="@string/title_activity_lab_cat"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.rss.RssSetActivity"
+            android:label="@string/title_activity_rss_set"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.rss.RssDetailActivity"
+            android:label="@string/title_activity_rss_detail"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.password.PasswordSetActivity"
+            android:label="@string/title_activity_password_set"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.password.PasswordActivity"
+            android:label="@string/title_activity_password"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
+
 </manifest>

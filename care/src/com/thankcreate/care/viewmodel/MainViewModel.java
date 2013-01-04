@@ -1,22 +1,23 @@
 package com.thankcreate.care.viewmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainViewModel {
+public class MainViewModel implements Serializable{
 	
-	public List<ItemViewModel> items;
-	public List<ItemViewModel> listItems;
-	public List<ItemViewModel> sinaWeiboItems;
-	public List<ItemViewModel> renrenItems;
-	public List<ItemViewModel> doubanItems;
-	public List<ItemViewModel> rssItems;
+	public ArrayList<ItemViewModel> items;
+	public ArrayList<ItemViewModel> listItems;
+	public ArrayList<ItemViewModel> sinaWeiboItems;
+	public ArrayList<ItemViewModel> renrenItems;
+	public ArrayList<ItemViewModel> doubanItems;
+	public ArrayList<ItemViewModel> rssItems;
 	
-	public List<PictureItemViewModel> pictureItems;
-	public List<PictureItemViewModel> listPictureItems;
-	public List<PictureItemViewModel> sinaWeiboPictureItems;
-	public List<PictureItemViewModel> renrenPictureItems;
-	public List<PictureItemViewModel> doubanPictureItems;
+	public ArrayList<PictureItemViewModel> pictureItems;
+	public ArrayList<PictureItemViewModel> listPictureItems;
+	public ArrayList<PictureItemViewModel> sinaWeiboPictureItems;
+	public ArrayList<PictureItemViewModel> renrenPictureItems;
+	public ArrayList<PictureItemViewModel> doubanPictureItems;
 	
 	public Boolean isChanged = true;
 

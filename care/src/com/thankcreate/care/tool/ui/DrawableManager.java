@@ -3,13 +3,17 @@ package com.thankcreate.care.tool.ui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.thankcreate.care.tool.misc.StringTool;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,42 +28,74 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 public class DrawableManager {
-    private final WeakHashMap<String, Drawable> drawableMap;
+    private final WeakHashMap<String, Bitmap> drawableMap;
     public  WeakHashMap<String, Rect> adjustSizeMap;
+    public List<String> cancelList;
+    
 
     public DrawableManager() {
-        drawableMap = new WeakHashMap<String, Drawable>();
+        drawableMap = new WeakHashMap<String, Bitmap>();
         adjustSizeMap = new WeakHashMap<String, Rect>();
+        cancelList = new ArrayList<String>();
     }
     
     public void removeFromCache(String url)
     {
     	drawableMap.remove(url);
+    	
+    	// 目前偷了一下懒，直接在removeFromCache里做了cancelReqeust了
+    	cancelReqeuest(url);
+    }
+    
+    public void cancelReqeuest(String url)
+    {
+    	cancelList.add(url);
     }
 
-    public Drawable fetchDrawable(String urlString) {
+    public Bitmap fetchDrawable(String urlString) {
+    	// 一个主动的fetchDrawable过来后，需要把这个url从cancel列表中清除    	
+    	cancelList.remove(urlString);
+    	
+    	// 第一次查缓存
         if (drawableMap.containsKey(urlString)) {
             return drawableMap.get(urlString);
         }
-
+        
         Log.d(this.getClass().getSimpleName(), "image url:" + urlString);
         try {
+        	
+        	// 下面这一步可能是很耗时的，在这其间，什么都有可能发生
             InputStream is = fetch(urlString);
+            if(cancelList.contains(urlString))
+            	return null;
             
-            
-            Drawable drawable = Drawable.createFromStream(is, "src");
-            
-
-            if (drawable != null) {            	
-                drawableMap.put(urlString, drawable);
-                Log.d(this.getClass().getSimpleName(), "got a thumbnail drawable: " + drawable.getBounds() + ", "
-                        + drawable.getIntrinsicHeight() + "," + drawable.getIntrinsicWidth() + ", "
-                        + drawable.getMinimumHeight() + "," + drawable.getMinimumWidth());
-            } else {
-              Log.w(this.getClass().getSimpleName(), "could not get thumbnail");
+            // 第二次查缓存
+            if (drawableMap.containsKey(urlString)) {
+                return drawableMap.get(urlString);
             }
-
-            return drawable;
+            
+            // 开始做decode
+            BitmapFactory.Options opt =new BitmapFactory.Options();
+            opt.inPreferredConfig = Bitmap.Config.RGB_565;   
+            opt.inSampleSize = 1;   //width，hight设为原来的一分之一
+            opt.inPurgeable = true; 
+            opt.inInputShareable = true;            
+            // 下面这一句其实才是OOM的根本所在，尽量避免无意义的decode
+            Bitmap bmp =BitmapFactory.decodeStream(is,null, opt);
+            
+//            Drawable drawable = Drawable.createFromStream(is, "src");
+//            if (drawable != null) {            	
+//                drawableMap.put(urlString, drawable);
+//                Log.d(this.getClass().getSimpleName(), "got a thumbnail drawable: " + drawable.getBounds() + ", "
+//                        + drawable.getIntrinsicHeight() + "," + drawable.getIntrinsicWidth() + ", "
+//                        + drawable.getMinimumHeight() + "," + drawable.getMinimumWidth());
+//            } else {
+//              Log.w(this.getClass().getSimpleName(), "could not get thumbnail");
+//            }
+            
+            if(bmp != null)
+            	drawableMap.put(urlString, bmp);
+            return bmp;
         } catch (MalformedURLException e) {
             Log.e(this.getClass().getSimpleName(), "fetchDrawable failed", e);
             return null;
@@ -76,7 +112,8 @@ public class DrawableManager {
         }
     	
     	if (drawableMap.containsKey(urlString)) {
-            imageView.setImageDrawable(drawableMap.get(urlString));
+            //imageView.setImageDrawable(drawableMap.get(urlString));
+    		imageView.setImageBitmap(drawableMap.get(urlString));
         }
 
         final Handler handler = new Handler() {
@@ -87,8 +124,10 @@ public class DrawableManager {
                 {
                 	return;
                 }                
-            	Drawable drawable = (Drawable) message.obj;            	
-                imageView.setImageDrawable((Drawable) message.obj);
+//            	Drawable drawable = (Drawable) message.obj;            	
+//                imageView.setImageDrawable((Drawable) message.obj);
+                Bitmap bmp = (Bitmap) message.obj;
+                imageView.setImageBitmap(drawableMap.get(urlString));
             }
         };
 
@@ -97,7 +136,12 @@ public class DrawableManager {
             public void run() {
 
                 //TODO : set imageView to a "pending" image
-                Drawable drawable = fetchDrawable(urlString);
+                //Drawable drawable = fetchDrawable(urlString);
+            	if(StringTool.isNullOrEmpty(urlString))
+            		return;
+            	Bitmap drawable = fetchDrawable(urlString);
+            	if(drawable == null)
+            		return;
                 Message message = handler.obtainMessage(1, drawable);
                 handler.sendMessage(message);
             }
@@ -125,8 +169,9 @@ public class DrawableManager {
                 {
                 	return;
                 }
-            	Drawable drawable = (Drawable) message.obj;
-            	callback.fetchComplete(drawable);
+            	//Drawable drawable = (Drawable) message.obj;
+                Bitmap bmp = (Bitmap) message.obj;
+            	callback.fetchComplete(bmp);
                 //imageView.setImageDrawable((Drawable) message.obj);
             }
         };
@@ -136,7 +181,10 @@ public class DrawableManager {
             public void run() {
 
                 //TODO : set imageView to a "pending" image
-                Drawable drawable = fetchDrawable(urlString);
+                //Drawable drawable = fetchDrawable(urlString);
+            	Bitmap drawable = fetchDrawable(urlString);
+            	if(drawable == null)
+            		return;
                 Message message = handler.obtainMessage(1, drawable);
                 handler.sendMessage(message);
             }
@@ -156,7 +204,7 @@ public class DrawableManager {
             public void run() {
 
                 //TODO : set imageView to a "pending" image
-                Drawable drawable = fetchDrawable(urlString);
+                fetchDrawable(urlString);
             }
         };
         thread.start();
@@ -190,7 +238,8 @@ public class DrawableManager {
         }
     	
     	if (drawableMap.containsKey(urlString)) {
-            imageView.setImageDrawable(drawableMap.get(urlString));
+            //imageView.setImageDrawable(drawableMap.get(urlString));
+    		imageView.setImageBitmap(drawableMap.get(urlString));
         }
 
         final Handler handler = new Handler() {
@@ -200,9 +249,9 @@ public class DrawableManager {
                 {
                 	return;
                 }
-            	Drawable drawable = (Drawable) message.obj;
-            	int sourceWidth = drawable.getIntrinsicWidth();
-            	int sourceHeight = drawable.getIntrinsicHeight();
+            	Bitmap bmp = (Bitmap) message.obj;
+            	int sourceWidth = bmp.getWidth();
+            	int sourceHeight = bmp.getHeight();
             	if(needFit)
             	{    
             		LayoutParams params = imageView.getLayoutParams();
@@ -226,7 +275,7 @@ public class DrawableManager {
             		Rect cacheRecht = new Rect(0, 0, params.width, params.height);
             		adjustSizeMap.put(urlString, cacheRecht);
             	}
-                imageView.setImageDrawable((Drawable) message.obj);                
+                imageView.setImageBitmap((Bitmap) message.obj);                
             }
         };
 
@@ -234,12 +283,19 @@ public class DrawableManager {
             @Override
             public void run() {
                 //TODO : set imageView to a "pending" image
-                Drawable drawable = fetchDrawable(urlString);
+                //Drawable drawable = fetchDrawable(urlString);
+            	Bitmap bmp = fetchDrawable(urlString);
+            	if(bmp == null)
+            		return;
+            	
                 if(!isMatch(urlString, imageView))
                 {
                 	return;
                 }
-                Message message = handler.obtainMessage(1, drawable);
+                
+                
+                //Message message = handler.obtainMessage(1, drawable);
+                Message message = handler.obtainMessage(1, bmp);
                 handler.sendMessage(message);
             }
         };
@@ -255,6 +311,7 @@ public class DrawableManager {
     
     public interface FetchDrawableCompleteListener
     {
-    	public void fetchComplete(Drawable d);
+    	//public void fetchComplete(Drawable d);
+    	public void fetchComplete(Bitmap d);
     }
 }

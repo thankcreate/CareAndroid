@@ -34,4 +34,17 @@ public class StringTool {
 		}
 		return pinyinName;
 	}
+	
+	public static int getSig(String input)
+	{
+		if(input == null)
+			return 0;
+		int herSig = 0;
+		for(int i = 0; i < input.length(); i++)
+		{
+			char cIter = input.charAt(i);
+			herSig += (int)cIter;
+		}
+		return herSig;
+	}
 }

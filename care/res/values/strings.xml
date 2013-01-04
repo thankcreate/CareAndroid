@@ -5,6 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="hello">Hello World, TabSample!</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_cancel">取消</string>
 
     <string-array name="Spinner_Content">
         <item>One</item>
@@ -21,5 +23,15 @@
     <string name="title_activity_account_select_freind">AccountSelectFreindActivity</string>
     <string name="title_activity_status_detail">StatusDetailActivity</string>
     <string name="title_activity_status_add_comment">StatusAddCommentActivity</string>
+    <string name="title_activity_lab_timeline">LabTimelineActivity</string>
+    <string name="title_activity_lab_charactor_analysis">LabCharactorAnalysisActivity</string>
+    <string name="title_activity_lab_percentage">LabPercentageActivity</string>
+    <string name="title_activity_lab_enemy">LabEnemyActivity</string>
+    <string name="title_activity_lab_cat">LabCatActivity</string>
+    <string name="title_activity_rss_set">RssSetActivity</string>
+    <string name="title_activity_rss_detail">RssDetailActivity</string>
+    <string name="title_activity_password_set">PasswordSetActivity</string>
+    <string name="title_activity_password">PasswordActivity</string>
+    <string name="title_activity_dispatcher">DispatcherActivity</string>
 
 </resources>

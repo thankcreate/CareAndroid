@@ -9,15 +9,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dongxuexidu.douban4j.constants.DefaultConfigs;
+import com.dongxuexidu.douban4j.model.app.DoubanException;
+import com.dongxuexidu.douban4j.model.user.DoubanUserFeedObj;
+import com.dongxuexidu.douban4j.service.DoubanUserService;
+import com.dongxuexidu.douban4j.utils.HttpManager;
 import com.markupartist.android.widget.ActionBar;
+import com.renren.api.connect.android.AsyncRenren;
+import com.renren.api.connect.android.common.AbstractRequestListener;
+import com.renren.api.connect.android.exception.RenrenError;
+import com.renren.api.connect.android.friends.FriendsGetFriendsRequestParam;
+import com.renren.api.connect.android.friends.FriendsGetFriendsResponseBean;
+import com.renren.api.connect.android.friends.FriendsGetFriendsResponseBean.Friend;
 import com.thankcreate.care.App;
 import com.thankcreate.care.AppConstants;
+import com.thankcreate.care.BaseActivity;
 import com.thankcreate.care.R;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
 import com.thankcreate.care.account.AccountActivity.AccountGroupAdapter.ViewHolder;
 import com.thankcreate.care.control.SearchBarWidget;
 import com.thankcreate.care.control.SearchBarWidget.onSearchListener;
+import com.thankcreate.care.tool.converter.DoubanConverter;
+import com.thankcreate.care.tool.converter.RenrenConverter;
 import com.thankcreate.care.tool.converter.SinaWeiboConverter;
 import com.thankcreate.care.tool.misc.FirstCharactorComparator;
 import com.thankcreate.care.tool.misc.MiscTool;
@@ -58,7 +72,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AccountSelectFreindActivity extends Activity {
+public class AccountSelectFreindActivity extends BaseActivity {
 
 	private ActionBar actionBar;
 	private SearchBarWidget searchBarWidget;
@@ -71,6 +85,9 @@ public class AccountSelectFreindActivity extends Activity {
 	private List<FriendViewModel> listFriendsInShow = new ArrayList<FriendViewModel>();
 	private List<FriendViewModel> listFriendsAll = new ArrayList<FriendViewModel>();
 	private DrawableManager drawableManager = new DrawableManager();
+	
+	private final int RENREN_FETCH_COUNT = 500;
+	private int mRenrenLastFetchPage = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +106,7 @@ public class AccountSelectFreindActivity extends Activity {
 		searchBarWidget = (SearchBarWidget) findViewById(R.id.search_bar);
 		progressLinearLayout = (LinearLayout) findViewById(R.id.progess);
 		txtInput = (EditText) findViewById(R.id.search_text);
-		listViewFriend =  (ListView) findViewById(R.id.listView1);
+		listViewFriend =  (ListView) findViewById(R.id.listViewFriends);
 		listViewFriend.setFastScrollEnabled(true);		
 		
 		searchBarWidget.setOnSearchListener(new onSearchListener() {			
@@ -145,14 +162,33 @@ public class AccountSelectFreindActivity extends Activity {
 			SharedPreferences pref = AccountSelectFreindActivity.this.getSharedPreferences(
 					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
 			Editor editor = pref.edit();
-			editor.putString("SinaWeibo_FollowerID", friend.ID);
-			editor.putString("SinaWeibo_FollowerNickName", friend.name);
-			editor.putString("SinaWeibo_FollowerAvatar", friend.avatar);
-			editor.putString("SinaWeibo_FollowerAvatar2", friend.avatar2);
+			
+			
+			if(type == EntryType.SinaWeibo)
+			{
+				editor.putString("SinaWeibo_FollowerID", friend.ID);
+				editor.putString("SinaWeibo_FollowerNickName", friend.name);
+				editor.putString("SinaWeibo_FollowerAvatar", friend.avatar);
+				editor.putString("SinaWeibo_FollowerAvatar2", friend.avatar2);
+			}
+			else if(type == EntryType.Renren)
+			{
+				editor.putString("Renren_FollowerID", friend.ID);
+				editor.putString("Renren_FollowerNickName", friend.name);
+				editor.putString("Renren_FollowerAvatar", friend.avatar);
+				editor.putString("Renren_FollowerAvatar2", friend.avatar2);
+			} 
+			else if(type == EntryType.Douban)
+			{
+				editor.putString("Douban_FollowerID", friend.ID);
+				editor.putString("Douban_FollowerNickName", friend.name);
+				editor.putString("Douban_FollowerAvatar", friend.avatar);
+				editor.putString("Douban_FollowerAvatar2", friend.avatar2);
+			} 
 			editor.commit();
+
 			App.mainViewModel.isChanged = true;
 			finish();
-			
 		}			
 	};
 	
@@ -206,15 +242,18 @@ public class AccountSelectFreindActivity extends Activity {
 		}
 		else if(type == EntryType.Renren)
 		{
-			// TODO
+			loadFriendRenren();
 		}
 		else if(type == EntryType.Douban)
 		{
-			// TODO
+			loadFriendDouban();
 		}
 		
 	}
-	
+
+
+
+
 	private void loadFriendSinaWeibo()
 	{
 		
@@ -222,8 +261,55 @@ public class AccountSelectFreindActivity extends Activity {
 		if(oa == null)
 			return;
 		FriendshipsAPI friendshipsAPI = new FriendshipsAPI(oa);
-		String myId = MiscTool.getCurrentAccountID(EntryType.SinaWeibo);
+		String myId = MiscTool.getMyID(EntryType.SinaWeibo);
 		friendshipsAPI.friends(Long.parseLong(myId), 200, 0, false, mSinaWeiboShowFriendsRequestListener);
+	}
+	
+	private void loadFriendRenren() {
+		AsyncRenren asyncRenren = new AsyncRenren(App.getRenren());	
+		
+		// 人人是从1开始的分页，每页最多500
+		mRenrenLastFetchPage = 1;
+		FriendsGetFriendsRequestParam param = new FriendsGetFriendsRequestParam(mRenrenLastFetchPage, 500, null);
+		asyncRenren.getFriends(param,  mRenrenShowFriendsRequestListener);
+	}
+	
+	
+	private void loadFriendDouban() {		
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(
+				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    	final String token = pref.getString("Douban_Token", "");
+    	final String myID = pref.getString("Douban_ID", "");
+    	if(StringTool.isNullOrEmpty(token) || StringTool.isNullOrEmpty(myID))
+    		return;
+    	
+    	
+    	
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					HttpManager httpManager = new HttpManager(token);
+					String url = String.format("%s/shuo/v2/users/%s/following", 
+							DefaultConfigs.API_URL_PREFIX, myID);
+					String result = httpManager.getResponseString(url, null, true);
+					JSONArray users = new JSONArray(result);
+					int length = users.length();
+					for (int i = 0 ; i< length; i++) {
+						JSONObject user = users.getJSONObject(i);
+						FriendViewModel model = DoubanConverter.convertFriendToCommon(user);
+						if(model != null)
+						{
+							listFriendsAll.add(model);
+						}
+					}
+					fetchComplete();
+				} catch (Exception e) {
+					e.printStackTrace();
+					ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");
+				}				
+			}
+		}).start();
 	}
 	
 	RequestListener mSinaWeiboShowFriendsRequestListener = new RequestListener()
@@ -254,7 +340,7 @@ public class AccountSelectFreindActivity extends Activity {
 					if(oa == null)
 						return;
 					FriendshipsAPI friendshipsAPI = new FriendshipsAPI(oa);
-					String myId = MiscTool.getCurrentAccountID(EntryType.SinaWeibo);
+					String myId = MiscTool.getMyID(EntryType.SinaWeibo);
 					friendshipsAPI.friends(Long.parseLong(myId),
 							200, nextCursorString, false,
 							mSinaWeiboShowFriendsRequestListener);
@@ -278,6 +364,45 @@ public class AccountSelectFreindActivity extends Activity {
 			ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");			
 		}
 		
+	};
+
+	private AbstractRequestListener<FriendsGetFriendsResponseBean> mRenrenShowFriendsRequestListener = new AbstractRequestListener<FriendsGetFriendsResponseBean>() {
+
+		@Override
+		public void onComplete(FriendsGetFriendsResponseBean bean) {
+			if(bean == null)
+				fetchComplete();
+			
+			ArrayList<Friend> friends = bean.getFriendList();
+			// 继续拉取
+			if(friends != null &&  friends.size() != 0)
+			{
+				for(int i = 0; i< friends.size(); i++)
+				{
+					FriendViewModel model = RenrenConverter.convertFriendToCommon(friends.get(i));
+					if(model != null)
+						listFriendsAll.add(model);
+				}
+				AsyncRenren asyncRenren = new AsyncRenren(App.getRenren());	
+				FriendsGetFriendsRequestParam param = new FriendsGetFriendsRequestParam(++mRenrenLastFetchPage, 500, null);
+				asyncRenren.getFriends(param,  mRenrenShowFriendsRequestListener);
+			}
+			// 刷新
+			else
+			{
+				fetchComplete();
+			}
+		}
+
+		@Override
+		public void onRenrenError(RenrenError renrenError) {
+			ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");
+		}
+
+		@Override
+		public void onFault(Throwable fault) {
+			ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");
+		}
 	};
 
 	public void fetchComplete()

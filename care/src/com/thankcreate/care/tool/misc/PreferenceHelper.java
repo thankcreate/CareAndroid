@@ -28,6 +28,52 @@ public class PreferenceHelper {
         editor.commit();
     }
     
+    public static void removeRenrenPreference()
+    {
+    	SharedPreferences pref = App.getAppContext().getSharedPreferences(
+				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    	Editor editor = pref.edit();    	
+        editor.remove("Renren_NickName");
+    	editor.remove("Renren_ID");
+    	editor.remove("Renren_FollowerID");
+        editor.remove("Renren_FollowerNickName");
+        editor.remove("Renren_Token");
+        editor.remove("Renren_ExpirationDate");
+        editor.remove("Renren_RecentCount");
+        editor.remove("Renren_Avatar");
+        editor.remove("Renren_FollowerAvatar");
+        editor.remove("Renren_FollowerAvatar2");
+        editor.commit();
+    }
+    
+    public static void removeDoubanPreference()
+    {
+    	SharedPreferences pref = App.getAppContext().getSharedPreferences(
+				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    	Editor editor = pref.edit();    	
+        editor.remove("Douban_NickName");
+    	editor.remove("Douban_ID");
+    	editor.remove("Douban_FollowerID");
+        editor.remove("Douban_FollowerNickName");
+        editor.remove("Douban_Token");
+        editor.remove("Douban_ExpirationDate");
+        editor.remove("Douban_RecentCount");
+        editor.remove("Douban_Avatar");
+        editor.remove("Douban_FollowerAvatar");
+        editor.remove("Douban_FollowerAvatar2");
+        editor.commit();
+    }
+    
+    public static void removeRssPreference()
+    {
+    	SharedPreferences pref = App.getAppContext().getSharedPreferences(
+				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    	Editor editor = pref.edit();    	
+        editor.remove("RSS_FollowerSiteTitle");
+    	editor.remove("RSS_FollowerPath");
+    	editor.remove("RSS_FollowerDescription");
+        editor.commit();
+    }
     /**
      *  
      * @param key

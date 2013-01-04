@@ -6,6 +6,7 @@ import java.util.List;
 import com.buuuk.android.gallery.ImageViewFlipper;
 import com.markupartist.android.widget.ActionBar;
 import com.thankcreate.care.App;
+import com.thankcreate.care.BaseActivity;
 import com.thankcreate.care.R;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
@@ -37,7 +38,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PictureWallActivity extends Activity implements OnRefreshCompleteListener{
+public class PictureWallActivity extends BaseActivity implements OnRefreshCompleteListener{
 	
 	private ActionBar actionBar;
 	private GridView gridViewPictureWall;

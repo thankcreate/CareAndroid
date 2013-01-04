@@ -11,22 +11,45 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dongxuexidu.douban4j.constants.DefaultConfigs;
+import com.dongxuexidu.douban4j.model.app.AccessToken;
+import com.dongxuexidu.douban4j.model.app.DoubanException;
+import com.dongxuexidu.douban4j.model.user.DoubanUserObj;
+import com.dongxuexidu.douban4j.provider.DoubanDialog;
+import com.dongxuexidu.douban4j.service.DoubanUserService;
+import com.dongxuexidu.douban4j.utils.DoubanAuthListener;
+import com.dongxuexidu.douban4j.utils.HttpManager;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
+import com.renren.api.connect.android.AsyncRenren;
+import com.renren.api.connect.android.Renren;
+import com.renren.api.connect.android.Util;
+import com.renren.api.connect.android.common.AbstractRequestListener;
+import com.renren.api.connect.android.exception.RenrenAuthError;
+import com.renren.api.connect.android.exception.RenrenError;
+import com.renren.api.connect.android.users.UserInfo;
+import com.renren.api.connect.android.users.UsersGetInfoRequestParam;
+import com.renren.api.connect.android.users.UsersGetInfoResponseBean;
+import com.renren.api.connect.android.view.RenrenAuthListener;
 import com.thankcreate.care.App;
 import com.thankcreate.care.AppConstants;
+import com.thankcreate.care.BaseActivity;
 import com.thankcreate.care.MainActivity;
 import com.thankcreate.care.R;
 import com.thankcreate.care.R.drawable;
 import com.thankcreate.care.R.id;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
+import com.thankcreate.care.rss.RssSetActivity;
 import com.thankcreate.care.tool.misc.MiscTool;
 import com.thankcreate.care.tool.misc.PreferenceHelper;
+import com.thankcreate.care.tool.misc.StringTool;
+import com.thankcreate.care.tool.ui.ListViewTool;
 import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
 import com.weibo.sdk.android.Oauth2AccessToken;
+import com.weibo.sdk.android.Weibo;
 import com.weibo.sdk.android.WeiboAuthListener;
 import com.weibo.sdk.android.WeiboDialogError;
 import com.weibo.sdk.android.WeiboException;
@@ -39,6 +62,7 @@ import com.weibo.sdk.android.net.RequestListener;
 import com.weibo.sdk.android.sso.SsoHandler;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -56,26 +80,33 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AccountActivity extends Activity {
+public class AccountActivity extends BaseActivity {
 
+	
+	private ScrollView scrollRoot;
 	private ActionBar actionBar;
 	private ListView sinaWeiboListView;
+	private ListView renrenListView;
+	private ListView doubanListView;
+	private ListView rssListView;
 	private AccountGroupAdapter sinaWeiboAdapter = null;
-	private SsoHandler mSsoHandler;
-	
-	
+	private AccountGroupAdapter renrenAdapter = null;
+	private AccountGroupAdapter doubanAdapter = null;
+	private AccountGroupAdapter rssAdapter = null;
+	private SsoHandler msinaWeiboSsoHandler;
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account_account);
 		
 		initControlBind();
-		initActionBar();
-		
+		initActionBar();		
 	}
 	
 	
@@ -84,18 +115,25 @@ public class AccountActivity extends Activity {
 	protected void onResume() { 
 		super.onResume();
 		initSinaWeibo();
+		initRenren();
+		initDouban();
+		initRss();
 	}
 
 
 
 	private void initControlBind()
 	{
-		actionBar = (ActionBar) findViewById(R.id.actionbar);
-		sinaWeiboListView = (ListView) findViewById(R.id.listView1);
+		scrollRoot = (ScrollView) findViewById(R.id.status_detail_scroll_root);	
+		sinaWeiboListView = (ListView) findViewById(R.id.account_list_sinaweibo);
+		renrenListView = (ListView) findViewById(R.id.account_list_renren);
+		doubanListView = (ListView) findViewById(R.id.account_list_douban);
+		rssListView = (ListView) findViewById(R.id.account_list_rss);
 	}
 	
 	private void initActionBar()
-	{		
+	{	
+		actionBar = (ActionBar) findViewById(R.id.actionbar);
         actionBar.setTitle("帐号");       
         actionBar.SetTitleLogo(R.drawable.tab_account);
 	}
@@ -124,6 +162,7 @@ public class AccountActivity extends Activity {
 		sinaWeiboAdapter.addItem(model2);
 		sinaWeiboAdapter.addItem(model3);
 		sinaWeiboListView.setAdapter(sinaWeiboAdapter);
+		ListViewTool.setListViewHeightBasedOnChildren(sinaWeiboListView, 0 , true);
 		sinaWeiboListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -139,16 +178,17 @@ public class AccountActivity extends Activity {
 					}
 					
 					Activity activity = AccountActivity.this;
-					mSsoHandler = new SsoHandler(AccountActivity.this, App
-							.sinaWeibo);
-					mSsoHandler.authorize(weiboAuthListener);
+//					App.getSinaWeibo().authorize(activity, mWeiboAuthListener);
+					msinaWeiboSsoHandler = new SsoHandler(AccountActivity.this, App
+							.getSinaWeibo());
+					msinaWeiboSsoHandler.authorize(mWeiboAuthListener);
 				}
 				// 指定关注人
 				else if (position == 1) {
 					if(MiscTool.isSinaWeiboLogin()) {
 						Intent intent = new Intent();
 						intent.setClass(AccountActivity.this, AccountSelectFreindActivity.class);
-						intent.putExtra("type", EntryType.SinaWeibo);
+						intent.putExtra("type", EntryType.SinaWeibo);						
 						startActivity(intent);
 					}
 					else {
@@ -170,32 +210,197 @@ public class AccountActivity extends Activity {
 			
 		});
 	}
+		
+	private void initRenren()
+	{
+		SharedPreferences pref = AccountActivity.this
+				.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+						Context.MODE_APPEND);
+		String myName = pref.getString("Renren_NickName", "未登陆");	
+		String herName = pref.getString("Renren_FollowerNickName", "未指定");
+		
+		
+		SimpleTableModel model1 = new SimpleTableModel();
+		model1.prefix = "登陆帐号:";
+		model1.value = myName;
+		SimpleTableModel model2 = new SimpleTableModel();
+		model2.prefix = "关注帐号:";
+		model2.value = herName;
+		SimpleTableModel model3 = new SimpleTableModel();
+		
+		renrenAdapter = new AccountGroupAdapter(getApplicationContext());
+		renrenAdapter.addItem(model1);
+		renrenAdapter.addItem(model2);
+		renrenAdapter.addItem(model3);
+		renrenListView.setAdapter(renrenAdapter);
+		ListViewTool.setListViewHeightBasedOnChildren(renrenListView, 0 , true);
+		renrenListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				// 登陆
+				if(position == 0) {
+					Util.clearCookies(AccountActivity.this);
+					Activity activity = AccountActivity.this;
+					App.getRenren().authorize(AccountActivity.this, AppConstants.RENREN_PERMISSION, mRenrenAuthListener);
+				}
+				// 指定关注人
+				else if (position == 1) {
+					
+					if(MiscTool.isRenrenLogin()) {
+						Intent intent = new Intent();
+						intent.setClass(AccountActivity.this, AccountSelectFreindActivity.class);
+						intent.putExtra("type", EntryType.Renren);
+						startActivity(intent);
+					}
+					else {
+						Builder alertDialog = new  AlertDialog.Builder(AccountActivity.this);
+						alertDialog.setTitle(">_<");
+						alertDialog.setMessage("还没有登陆怎么指定关注的人说~");
+						alertDialog.setPositiveButton("朕知道了" ,  null);
+						alertDialog.show();
+					}
+				}
+				// 退出
+				else if (position == 2) {
+					PreferenceHelper.removeRenrenPreference();				
+					App.getRenren().logout(AccountActivity.this);
+					initRenren();
+					App.mainViewModel.isChanged = true;
+				}
+			}
+			
+		});
+	}
 	
-	private WeiboAuthListener weiboAuthListener = new WeiboAuthListener (){
+	private void initDouban()
+	{
+		SharedPreferences pref = AccountActivity.this
+				.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+						Context.MODE_APPEND);
+		String myName = pref.getString("Douban_NickName", "未登陆");	
+		String herName = pref.getString("Douban_FollowerNickName", "未指定");
+		
+		
+		SimpleTableModel model1 = new SimpleTableModel();
+		model1.prefix = "登陆帐号:";
+		model1.value = myName;
+		SimpleTableModel model2 = new SimpleTableModel();
+		model2.prefix = "关注帐号:";
+		model2.value = herName;
+		SimpleTableModel model3 = new SimpleTableModel();
+		
+		doubanAdapter = new AccountGroupAdapter(getApplicationContext());
+		doubanAdapter.addItem(model1);
+		doubanAdapter.addItem(model2);
+		doubanAdapter.addItem(model3);
+		doubanListView.setAdapter(doubanAdapter);
+		ListViewTool.setListViewHeightBasedOnChildren(doubanListView, 0 , true);
+		doubanListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				// 登陆
+				if(position == 0) {
+					DoubanDialog dlg = new DoubanDialog(AccountActivity.this,  mDoubanAuthListener);
+					dlg.show();
+				}
+				// 指定关注人
+				else if (position == 1) {
+					if(MiscTool.isDoubanLogin()) {
+						Intent intent = new Intent();
+						intent.setClass(AccountActivity.this, AccountSelectFreindActivity.class);
+						intent.putExtra("type", EntryType.Douban);
+						startActivity(intent);
+					}
+					else {
+						Builder alertDialog = new  AlertDialog.Builder(AccountActivity.this);
+						alertDialog.setTitle(">_<");
+						alertDialog.setMessage("还没有登陆怎么指定关注的人说~");
+						alertDialog.setPositiveButton("朕知道了" ,  null);
+						alertDialog.show();
+					}
+				}
+				// 退出
+				else if (position == 2) {
+					PreferenceHelper.removeDoubanPreference();
+					initDouban();
+					App.mainViewModel.isChanged = true;
+				}
+			}
+		});
+	}
+	
+	private void initRss()
+	{
+		SharedPreferences pref = AccountActivity.this
+				.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+						Context.MODE_APPEND);
+		String siteTitle = pref.getString("RSS_FollowerSiteTitle", "未订阅");
+		
+		SimpleTableModel model1 = new SimpleTableModel();
+		model1.prefix = "当前订阅:";
+		model1.value = siteTitle;
+		SimpleTableModel model2 = new SimpleTableModel();
+		model2.value = "取消订阅";		
+		
+		rssAdapter = new AccountGroupAdapter(getApplicationContext());
+		rssAdapter.addItem(model1);
+		rssAdapter.addItem(model2);		
+		rssListView.setAdapter(rssAdapter);
+		ListViewTool.setListViewHeightBasedOnChildren(rssListView, 0 , true);
+		rssListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				// 登陆
+				if(position == 0) {
+					Intent intent = new Intent();
+					intent.setClass(AccountActivity.this, RssSetActivity.class);					
+					startActivity(intent);
+				}
+				// 退出
+				else if (position == 1) {
+					PreferenceHelper.removeRssPreference();
+					initRss();
+					App.mainViewModel.isChanged = true;
+				}
+			}
+		});
+	}
+	
+	private WeiboAuthListener mWeiboAuthListener = new WeiboAuthListener (){
         @Override
         public void onComplete(Bundle values) {
-			String id = values.getString("uid");
-			String token = values.getString("access_token");
-			String expires_in = values.getString("expires_in");
-			long exp = System.currentTimeMillis() + Long.parseLong(expires_in)
-					* 1000;
-			
+        	try {
+    			String id = values.getString("uid");
+    			String token = values.getString("access_token");
+    			String expires_in = values.getString("expires_in");
+    			long exp = System.currentTimeMillis() + Long.parseLong(expires_in)
+    					* 1000;
+    			
 
-			SharedPreferences pref = AccountActivity.this.getSharedPreferences(
-					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
-			Editor editor = pref.edit();			
-			editor.putString("SinaWeibo_ID", id);
-			editor.putString("SinaWeibo_Token", token);
-			editor.putLong("SinaWeibo_ExpirationDate", exp);
-			editor.commit();
+    			SharedPreferences pref = AccountActivity.this.getSharedPreferences(
+    					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    			Editor editor = pref.edit();			
+    			editor.putString("SinaWeibo_ID", id);
+    			editor.putString("SinaWeibo_Token", token);
+    			editor.putLong("SinaWeibo_ExpirationDate", exp);
+    			editor.commit();
 
-    		Oauth2AccessToken oauth2AccessToken = new Oauth2AccessToken();
-    		oauth2AccessToken.setToken(token);
-    		oauth2AccessToken.setExpiresTime(exp);    		
-    		
-    		UsersAPI usersAPI=new UsersAPI(oauth2AccessToken);
-    		long lID = Long.parseLong(id);
-    		usersAPI.show(lID, sinaWeiboShowRequestListener);
+        		Oauth2AccessToken oauth2AccessToken = new Oauth2AccessToken();
+        		oauth2AccessToken.setToken(token);
+        		oauth2AccessToken.setExpiresTime(exp);    		
+        		
+        		UsersAPI usersAPI=new UsersAPI(oauth2AccessToken);
+        		long lID = Long.parseLong(id);
+        		usersAPI.show(lID, mSinaWeiboShowRequestListener);
+			} catch (Exception e) {
+				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");  
+				PreferenceHelper.removeSinaWeiboPreference();
+			}
+
         }
         @Override
         public void onError(WeiboDialogError e) {        	
@@ -213,7 +418,7 @@ public class AccountActivity extends Activity {
         }
     };
     
-    RequestListener sinaWeiboShowRequestListener = new RequestListener()
+    private RequestListener mSinaWeiboShowRequestListener = new RequestListener()
 	{
 
 		@Override
@@ -238,21 +443,178 @@ public class AccountActivity extends Activity {
 					}
 				});				
 			} catch (JSONException e) {
-				e.printStackTrace();
+				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
+				PreferenceHelper.removeSinaWeiboPreference();				
 			}			
 		}
 
 		@Override
 		public void onError(WeiboException arg0) {
-
-			
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
+			PreferenceHelper.removeSinaWeiboPreference();
 		}
 
 		@Override
 		public void onIOException(IOException arg0) {
-
-			
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
+			PreferenceHelper.removeSinaWeiboPreference();
 		}	
+	};
+	
+	
+	private RenrenAuthListener mRenrenAuthListener = new RenrenAuthListener() {
+		
+		@Override
+		public void onRenrenAuthError(RenrenAuthError renrenAuthError) {
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");			
+		}
+		
+		@Override
+		public void onComplete(Bundle values) {
+			// 人人登陆后不返回ID		
+			try {				
+				String token = values.getString("access_token");
+				String expires_in = values.getString("expires_in");
+				long exp = System.currentTimeMillis() + Long.parseLong(expires_in)
+						* 1000;
+				
+				SharedPreferences pref = AccountActivity.this.getSharedPreferences(
+						AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+				Editor editor = pref.edit();
+				editor.putString("Renren_Token", token);
+				editor.putLong("Renren_ExpirationDate", exp);
+				editor.commit();
+
+				AsyncRenren asyncRenren = new AsyncRenren(App.getRenren());	
+		
+				UsersGetInfoRequestParam param = new UsersGetInfoRequestParam(null, "uid,name,sex,birthday,headurl"); 
+				asyncRenren.getUsersInfo(param, mRenrenShowRequestListener);
+			} catch (Exception e) {
+				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
+				PreferenceHelper.removeRenrenPreference();
+			}
+		}
+		
+		@Override
+		public void onCancelLogin() {
+		}
+		
+		@Override
+		public void onCancelAuth(Bundle values) {				
+		}
+	};
+	
+	private AbstractRequestListener<UsersGetInfoResponseBean> mRenrenShowRequestListener = new AbstractRequestListener<UsersGetInfoResponseBean>() {
+		public void onComplete(UsersGetInfoResponseBean bean) {
+			try {
+				ArrayList<UserInfo> listUsers = bean.getUsersInfo();
+				
+				UserInfo user = listUsers.get(0);
+				SharedPreferences pref = AccountActivity.this
+						.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+								Context.MODE_APPEND);
+				Editor editor = pref.edit();
+				editor.putString("Renren_ID", String.valueOf(user.getUid()));
+				editor.putString("Renren_NickName", user.getName());
+				editor.putString("Renren_Avatar", user.getHeadurl());
+				editor.commit();
+				renrenListView.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						initRenren();						
+					}
+				});
+				
+			} catch (Exception e) {				
+				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
+				PreferenceHelper.removeRenrenPreference();
+				App.getRenren().logout(getApplicationContext());
+			}
+		}
+
+		public void onRenrenError(RenrenError renrenError) {
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
+			PreferenceHelper.removeRenrenPreference();
+			App.getRenren().logout(getApplicationContext());
+		}
+
+		public void onFault(Throwable fault) {
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
+			PreferenceHelper.removeRenrenPreference();
+			App.getRenren().logout(getApplicationContext());
+		}
+	};
+	
+	private DoubanAuthListener mDoubanAuthListener = new DoubanAuthListener() {
+		
+		@Override
+		public void onError(String e) {
+			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
+			PreferenceHelper.removeDoubanPreference();
+		}
+		
+		@Override
+		public void onComplete(AccessToken values) {
+			try {
+    			String id = values.getDoubanUserId();
+    			final String token = values.getAccessToken();
+    			Integer expires_in = values.getExpiresIn();
+    			String refresh_token = values.getRefreshToken();
+    			long exp = System.currentTimeMillis() + expires_in * 1000;    			
+
+    			SharedPreferences pref = AccountActivity.this.getSharedPreferences(
+    					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+    			Editor editor = pref.edit();			
+    			editor.putString("Douban_ID", id);
+    			editor.putString("Douban_Token", token);
+    			editor.putString("Douban_RefreshToken", refresh_token);
+    			editor.putLong("Douban_ExpirationDate", exp);    			
+    			editor.commit();
+
+        		new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							HttpManager httpManager = new HttpManager(token);
+							String result = httpManager.getResponseString(DefaultConfigs.API_URL_PREFIX + "/v2/user/~me", null, true);
+							JSONObject object = new JSONObject(result);
+														
+							String name = object.optString("name");
+							String avatar = object.optString("avatar");
+
+							SharedPreferences pref = AccountActivity.this
+									.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+											Context.MODE_APPEND);
+							Editor editor = pref.edit();
+							editor.putString("Douban_NickName", name);
+							editor.putString("Douban_Avatar", avatar);
+							editor.commit();
+							
+							doubanListView.post(new Runnable() {					
+								@Override
+								public void run() {						
+									initDouban();
+								}
+							});				
+						} catch (Exception e) {
+							e.printStackTrace();
+						} 
+					}
+				}).start();
+        		
+			} catch (Exception e) {
+				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");  
+				PreferenceHelper.removeDoubanPreference();
+			}
+		}
+		
+		@Override
+		public void onCancel() {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 		
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -261,8 +623,8 @@ public class AccountActivity extends Activity {
         /**
          * 下面两个注释掉的代码，仅当sdk支持sso时有效，
          */
-        if (mSsoHandler != null) {
-            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        if (msinaWeiboSsoHandler != null) {
+            msinaWeiboSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
 
@@ -291,7 +653,7 @@ public class AccountActivity extends Activity {
 
 			@Override
 			public int getCount() {
-				return 3;
+				return listModel.size();
 			}
 
 			@Override
@@ -309,36 +671,50 @@ public class AccountActivity extends Activity {
 			}
 
 			@Override
+			/**
+			 * 因为表格中有两种格式的，所以这里不做convert了，每次都建一个新view，不然极易崩溃
+			 */
 			public View getView(int position, View convertView, ViewGroup parent) {	
 				ViewHolder holder = null;
-				if(convertView == null)
-				{
+//				if(convertView == null)
+//				{
 					holder = new ViewHolder();
-					if(position < 2)
+					if(position < listModel.size() - 1)
 					{
 						convertView = mInflater.inflate(R.layout.listview_item_account, null);
 						holder.textViewPrefix = (TextView) convertView.findViewById(R.id.account_list_item_prefix);	
 						holder.textViewValue = (TextView) convertView.findViewById(R.id.account_list_item_value);	
-						convertView.setTag(holder);
+						convertView.setTag(holder);						
 					}
 					else 
 					{
 						convertView = mInflater.inflate(R.layout.listview_item_account_logout, null);
+						SimpleTableModel md = listModel.get(position);
+						if(!StringTool.isNullOrEmpty(md.value))
+						{
+							TextView txt = (TextView) convertView.findViewById(R.id.setting_list_item_logout_text);
+							txt.setText(md.value);
+						}
 					}						
-				}
-				else
-				{
-					if(position < 2)
-					{
-						holder = (ViewHolder)convertView.getTag();
-					}
-				}
+//				}
+//				else
+//				{
+//					if(position < 2)
+//					{
+//						holder = (ViewHolder)convertView.getTag();
+//					}
+//				}
 				
-				if(position < 2)
+				if(position < listModel.size() - 1)
 				{
-					holder.textViewPrefix.setText(listModel.get(position).prefix);
+					TextView test = holder.textViewPrefix;
+					SimpleTableModel md = listModel.get(position);
+					String test2 = md.prefix;
+					holder.textViewPrefix.setText(listModel.get(position).prefix);					
 					holder.textViewValue.setText(listModel.get(position).value);
 				}
+				
+				
 				return convertView;
 			}
 			
