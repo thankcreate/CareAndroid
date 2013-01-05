@@ -32,6 +32,8 @@
     <string name="title_activity_rss_detail">RssDetailActivity</string>
     <string name="title_activity_password_set">PasswordSetActivity</string>
     <string name="title_activity_password">PasswordActivity</string>
-    <string name="title_activity_dispatcher">DispatcherActivity</string>
+    <string name="title_activity_dispatcher">我只在乎你</string>
+    <string name="title_activity_preference_about">PreferenceAboutActivity</string>
+    <string name="title_activity_guide">GuideActivity</string>
 
 </resources>

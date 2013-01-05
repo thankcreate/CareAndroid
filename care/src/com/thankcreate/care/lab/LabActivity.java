@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.youmi.android.AdView;
+
 import com.buuuk.android.gallery.ImageViewFlipper;
 import com.markupartist.android.widget.ActionBar;
 import com.thankcreate.care.App;
@@ -11,7 +13,9 @@ import com.thankcreate.care.BaseActivity;
 import com.thankcreate.care.R;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
+import com.thankcreate.care.password.PasswordSetActivity;
 import com.thankcreate.care.picture.PictureWallActivity;
+import com.thankcreate.care.preference.PreferenceActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -21,6 +25,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
@@ -28,19 +33,20 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 public class LabActivity extends BaseActivity {
 	private ActionBar actionBar;
-	private GridView gridView;
-	private LabItemAdapter adapter;
+	private GridView gridView;	
 	private Class[] activities;
+	private ImageView[] imageViews = {null, null, null, null, null};	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lab_lab);
 		initActionBar();
 		initControl();
-		loadGridView();
+		
 	}
 	
 	private void initActionBar()
@@ -59,36 +65,38 @@ public class LabActivity extends BaseActivity {
 				LabEnemyActivity.class,
 				LabCatActivity.class
 			};
-		gridView = (GridView) findViewById(R.id.lab_grid_view);
-		gridView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int index,
-					long id) {
-				if(index < 0 || index >= adapter.listModel.size())
-					return;
-				
-				Intent intent = new Intent();
-				intent.setClass(LabActivity.this, activities[index]);					
-				startActivity(intent); 
-			}
-		});
+		imageViews[0] = (ImageView) findViewById(R.id.lab_item_timeline);
+		imageViews[1] = (ImageView) findViewById(R.id.lab_item_charactor_analysis);
+		imageViews[2] = (ImageView) findViewById(R.id.lab_item_percentage);
+		imageViews[3] = (ImageView) findViewById(R.id.lab_item_enemy);
+		imageViews[4] = (ImageView) findViewById(R.id.lab_item_cat);
+		for(int i = 0; i < activities.length; i++)
+		{
+			imageViews[i].setOnClickListener(new LabItemOnClickListner(i));
+		}
+		
+		LinearLayout adViewLayout = (LinearLayout) findViewById(R.id.lab_ad);
+		adViewLayout.addView(new AdView(this),
+		new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+		LinearLayout.LayoutParams.WRAP_CONTENT));
 	}
 	
-	private void loadGridView()
-	{
+	class LabItemOnClickListner implements OnClickListener{
 
+		int index;
 		
-		adapter = new LabItemAdapter(LabActivity.this);
-		Integer[]  arrayPicID = new Integer[]{
-				R.drawable.lab_1, 
-				R.drawable.lab_2,
-				R.drawable.lab_3,
-				R.drawable.lab_4,
-				R.drawable.lab_5};
-		List<Integer> listPicID  = Arrays.asList(arrayPicID);
-		adapter.setListModel(listPicID);
-		gridView.setAdapter(adapter);
+		public LabItemOnClickListner(int index) {
+			super();
+			this.index = index;
+		}
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent();
+			intent.setClass(LabActivity.this, activities[index]);					
+			startActivity(intent);
+		}
+		
 	}
 
 
@@ -97,77 +105,5 @@ public class LabActivity extends BaseActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab, menu);
 		return true;
-	}
-	
-	 class LabItemAdapter extends BaseAdapter {
-
-			public List<Integer> listModel = new ArrayList();;
-			private LayoutInflater mInflater;
-			
-			public LabItemAdapter(Context context) {
-				super();
-				mInflater = LayoutInflater.from(context);
-			}
-			
-			public void addItem(int model) {
-				listModel.add(model);
-				notifyDataSetChanged();
-			}
-			
-			public void setListModel(List<Integer> input){
-				listModel = input;
-				notifyDataSetChanged();
-			}
-
-			@Override
-			public int getCount() {
-				return listModel.size();
-			}
-
-			@Override
-			public Object getItem(int position) {
-				try {
-					return listModel.get(position);
-				} catch (Exception e) {
-					return null;
-				}
-			}
-
-			@Override
-			public long getItemId(int position) {
-				return position;
-			}
-
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {	
-				ViewHolder holder = null;
-				if(convertView == null)
-				{
-					holder = new ViewHolder();					
-					convertView = mInflater.inflate(R.layout.gridview_item_lab, null);
-					holder.imageThumb = (ImageView) convertView.findViewById(R.id.lab_item_thumb_image);
-					LayoutParams params = holder.imageThumb.getLayoutParams();
-					params.height = params.width;
-					holder.imageThumb.setLayoutParams(params);
-					convertView.setTag(holder);
-				}
-				else
-				{
-					holder = (ViewHolder)convertView.getTag();				
-				}
-			
-				Integer picID = listModel.get(position);
-				if(picID == null)
-					return null;
-					
-				holder.imageThumb.setImageResource(picID);
-				return convertView;
-			}
-			
-			public class ViewHolder {
-		        public ImageView imageThumb;
-		        public int tag;
-		    }
-
-		}
+	}	
 }

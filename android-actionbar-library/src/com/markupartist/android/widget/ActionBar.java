@@ -79,6 +79,11 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
         }
         a.recycle();
     }
+    
+    public ProgressBar getProgressBar()
+    {
+    	return mProgress;
+    }
 
     public void setHomeAction(Action action) {
         mHomeBtn.setOnClickListener(this);

@@ -13,6 +13,7 @@ import com.thankcreate.care.password.PasswordActivity;
 import com.thankcreate.care.password.PasswordSetActivity;
 import com.thankcreate.care.rss.RssSetActivity;
 import com.thankcreate.care.tool.misc.PreferenceHelper;
+import com.umeng.fb.UMFeedbackService;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class PreferenceActivity extends BaseActivity {
 	private void initActionBar() {
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle("设置");
+		actionBar.SetTitleLogo(R.drawable.tab_settings);
 	}
 
 	@Override
@@ -128,9 +130,25 @@ public class PreferenceActivity extends BaseActivity {
 		
 		// 意见反馈
 		layoutFeedback = (RelativeLayout) findViewById(R.id.preference_feedback);
+		layoutFeedback.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				UMFeedbackService.openUmengFeedbackSDK(PreferenceActivity.this);
+			}
+		});
 		
 		// 关于
 		layoutAboutLayout = (RelativeLayout) findViewById(R.id.preference_about);
+		layoutAboutLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(PreferenceActivity.this, PreferenceAboutActivity.class);					
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private void initControlContent()

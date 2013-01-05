@@ -8,6 +8,7 @@ import com.thankcreate.care.lab.LabActivity;
 import com.thankcreate.care.picture.PictureWallActivity;
 import com.thankcreate.care.preference.PreferenceActivity;
 import com.thankcreate.care.status.StatusTimelineActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -36,6 +37,15 @@ public class MainActivity extends TabActivity {
 		setDensity();
 	}
 
+	protected void onResume() {
+	    super.onResume();
+	    MobclickAgent.onResume(this);
+	}
+	protected void onPause() {
+	    super.onPause();
+	    MobclickAgent.onPause(this);
+	}
+	
 	private void setDensity() {
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);

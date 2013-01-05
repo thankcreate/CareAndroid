@@ -124,6 +124,7 @@ public class AccountSelectFreindActivity extends BaseActivity {
 	{		
         actionBar.setTitle("选择关注人");       
         actionBar.SetTitleLogo(R.drawable.tab_account);
+        addActionBarBackButton(actionBar);
 	}
 	
 	private void parseIntent()

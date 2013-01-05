@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.youmi.android.AdManager;
+
 import com.buuuk.android.gallery.ImageViewFlipper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -38,6 +40,7 @@ import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
+import com.umeng.update.UmengUpdateAgent;
 
 import android.os.Bundle;
 import android.os.DropBoxManager.Entry;
@@ -67,6 +70,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 这个类必须是在tabhost里第一个显示的类
+ * 因为一些初始化工作是在这个类里做的
+ * 如果以后想把第一个显示页改成其它的
+ * 需要考虑这些初始化工作怎么适当处理
+ * @author ThankCreate 
+ */
 public class StatusTimelineActivity extends BaseActivity implements OnRefreshCompleteListener {
 	private ActionBar actionBar;
 	private RefreshViewerHelper refreshViewerHelper;
@@ -85,7 +95,12 @@ public class StatusTimelineActivity extends BaseActivity implements OnRefreshCom
 		initActionBar();
 		initSourceSelected();
 		checkNetWork();
-
+		
+		// 做友盟自动更新，因为这里是在tabhost中，所以要getParent
+		// 据说是因为tabhost的子页面拿不到service
+		UmengUpdateAgent.update(this.getParent());
+		// 有米初始化	
+		AdManager.init(this.getBaseContext(),"3e9fc4796d5e9801", "4d78213f8ac82754 ", 45, false);
 	}
 	
 	private void checkNetWork() {
