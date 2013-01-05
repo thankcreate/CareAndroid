@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bitmap_bkg_tile_accountpage"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <ScrollView
+        android:id="@+id/status_detail_scroll_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp" 
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="新浪微博"
+                android:textColor="@color/black" />
+
+            <com.thankcreate.care.control.RoundCornerListView
+                android:id="@+id/account_list_sinaweibo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_bkg_table_round_corner"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@color/roundCornerTableBorder"
+                android:dividerHeight="0.5dp" >
+            </com.thankcreate.care.control.RoundCornerListView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="人人"
+                android:textColor="@color/black" />
+
+            <com.thankcreate.care.control.RoundCornerListView
+                android:id="@+id/account_list_renren"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_bkg_table_round_corner"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@color/roundCornerTableBorder"
+                android:dividerHeight="0.5dp" >
+            </com.thankcreate.care.control.RoundCornerListView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="豆瓣"
+                android:textColor="@color/black" />
+
+            <com.thankcreate.care.control.RoundCornerListView
+                android:id="@+id/account_list_douban"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_bkg_table_round_corner"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@color/roundCornerTableBorder"
+                android:dividerHeight="0.5dp" >
+            </com.thankcreate.care.control.RoundCornerListView>
+            
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="RSS订阅"
+                android:textColor="@color/black" />
+
+            <com.thankcreate.care.control.RoundCornerListView
+                android:id="@+id/account_list_rss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_bkg_table_round_corner"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@color/roundCornerTableBorder"
+                android:dividerHeight="0.5dp" >
+            </com.thankcreate.care.control.RoundCornerListView>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

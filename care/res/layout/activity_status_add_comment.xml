@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.thankcreate.care.control.BackKeyLinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/comment_add_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <LinearLayout        
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+         android:orientation="vertical" >
+
+         <EditText
+            android:id="@+id/comment_add_input"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="5dp"
+            android:gravity="top"
+            android:background="@drawable/search_bkg"
+			android:textSize="15sp"
+            android:inputType="textMultiLine"
+            android:padding="10dp" >
+
+            <requestFocus />
+        </EditText>
+        
+        <RelativeLayout
+            android:id="@+id/comment_add_bottom"            
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="剩余字数: "
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/comment_add_count_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+     
+        </RelativeLayout>
+
+       
+    </LinearLayout>
+
+</com.thankcreate.care.control.BackKeyLinearLayout>

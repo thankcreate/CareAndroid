@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bitmap_bkg_tile_accountpage"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/preference_about_logo_image"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/thumb_logo" />
+
+        <TextView
+            android:id="@+id/preference_about_app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/preference_about_logo_image"
+            android:layout_marginTop="3dp"
+            android:layout_centerHorizontal="true"
+            android:text="我只在乎你"
+            android:textColor="#B3081F"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/preference_about_app_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/preference_about_app_title"
+            android:layout_centerHorizontal="true"
+            android:text="V1.0.0"
+            android:textColor="#B3081F"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/preference_about_copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:text="Copyright © 2013"
+            android:textSize="20dp" 
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/preference_about_seller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/preference_about_copyright"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:text="ThankCreate Studio"
+            android:textSize="20dp" 
+            android:textColor="#666666" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"    
+    >
+    
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+    
+    <com.thankcreate.care.control.SearchBarWidget android:id="@+id/search_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </com.thankcreate.care.control.SearchBarWidget>
+    
+   <RelativeLayout       
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" >
+       <com.thankcreate.care.control.IndexableListView
+            android:id="@+id/listViewFriends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@color/roundCornerTableBorder"
+            android:dividerHeight="0.5dp" >
+        </com.thankcreate.care.control.IndexableListView>
+        
+       <LinearLayout
+           android:id="@+id/progess"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerInParent="true"
+           android:orientation="horizontal"
+           android:visibility="visible"  >
+          	
+          	<ProgressBar
+                
+                style="@style/ActionBarProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateOnly="true"
+                android:paddingRight="7dip"
+               />
+
+          	<TextView          	    
+          	    android:layout_width="wrap_content"
+          	    android:layout_height="wrap_content"
+          	    android:text="加载中" />
+		</LinearLayout>
+      
+           
+   </RelativeLayout>
+
+
+
+</LinearLayout>

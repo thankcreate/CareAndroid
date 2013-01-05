@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:background="@drawable/shape_bkg_search_bar"
+  >     
+         
+         <EditText
+             android:id="@+id/search_text"
+             android:layout_width="fill_parent"
+             android:layout_height="30dp"
+             
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp"
+             android:layout_marginTop="10dp"
+             android:layout_marginBottom="10dp"
+             android:layout_centerVertical ="true"
+             android:background="@drawable/search_bkg"
+             android:drawableLeft="@drawable/search_icon"
+             android:padding="2dp"
+             android:singleLine="true"
+             android:textStyle="bold" >
+         </EditText>
+
+         <ImageButton  android:id="@+id/search_cancel_button"
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginRight="7dp"
+             android:layout_centerVertical ="true"
+             android:src="@drawable/search_cancel"
+             android:background="@color/transparent"             
+             android:visibility="gone"
+             android:layout_alignParentRight="true">
+         </ImageButton >
+    
+</RelativeLayout>

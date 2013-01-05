@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="pull_to_refresh_pull_label">下拉以刷新…</string>
+  <string name="pull_to_refresh_release_label">好啦，快放开人家啦!</string>
+  <string name="pull_to_refresh_refreshing_label">少女更新中…</string>
+</resources>
