@@ -131,7 +131,7 @@ public class LabCharactorAnalysisActivity extends LabShareActivity {
 		}
 		
 		textName.setText(herName);
-		App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewAvatar);
+		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewAvatar);
 		
 		int herSig = StringTool.getSig(herName);
 		param1 = (int)(herSig * 575 % 50 + 50);

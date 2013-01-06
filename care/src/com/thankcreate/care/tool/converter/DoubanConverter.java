@@ -19,6 +19,7 @@ import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.thankcreate.care.viewmodel.MainViewModel;
 import com.thankcreate.care.viewmodel.PictureItemViewModel;
 import com.thankcreate.care.viewmodel.RenrenType;
 
@@ -71,7 +72,7 @@ public class DoubanConverter {
 		return model;
 	}
 	
-	public static ItemViewModel convertStatusToCommon(JSONObject status)
+	public static ItemViewModel convertStatusToCommon(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
@@ -93,21 +94,21 @@ public class DoubanConverter {
 			
 			if(tp.equalsIgnoreCase("collect_book"))
 			{
-				return convertStatusBook(status);
+				return convertStatusBook(status, mainViewModel);
 			}
 			else if(tp.equalsIgnoreCase("collect_movie"))
 			{
-				return convertStatusMovie(status);
+				return convertStatusMovie(status, mainViewModel);
 			}
 			else if(tp.equalsIgnoreCase("collect_music"))
 			{
-				return convertStatusMusic(status);
+				return convertStatusMusic(status, mainViewModel);
 			}
 			// 豆瓣现在抽风，纯文字状态有时候type是null 真无语>_<
 			// Note:豆瓣的所有的转发，外转的type都是text
 			else if(tp.equalsIgnoreCase("text") || title.equalsIgnoreCase("说："))
 			{
-				return convertStatusText(status);
+				return convertStatusText(status, mainViewModel);
 			}
 			return null;
 		} catch (Exception e) {
@@ -115,7 +116,7 @@ public class DoubanConverter {
 		}		
 	}
 	
-	public static ItemViewModel convertStatusBook(JSONObject status)
+	public static ItemViewModel convertStatusBook(JSONObject status, MainViewModel mainViewModel)
 	{		
 		if(status == null)
 			return null;
@@ -156,14 +157,14 @@ public class DoubanConverter {
 			model.commentCount = status.optString("comments_count");
 			model.sharedCount = status.optString("reshared_count");
 			model.type = EntryType.Douban;
-	        filtPicture(status, model);
+	        filtPicture(status, model, mainViewModel);
 			return model;
 		} catch (Exception e) {
 			return null;
 		}		
 	}
 	
-	public static ItemViewModel convertStatusMovie(JSONObject status)
+	public static ItemViewModel convertStatusMovie(JSONObject status, MainViewModel mainViewModel)
 	{		
 		if(status == null)
 			return null;
@@ -204,14 +205,14 @@ public class DoubanConverter {
 			model.commentCount = status.optString("comments_count");
 			model.sharedCount = status.optString("reshared_count");
 			model.type = EntryType.Douban;
-	        filtPicture(status, model);
+	        filtPicture(status, model, mainViewModel);
 			return model;
 		} catch (Exception e) {
 			return null;
 		}	
 	}
 	
-	public static ItemViewModel convertStatusMusic(JSONObject status)
+	public static ItemViewModel convertStatusMusic(JSONObject status, MainViewModel mainViewModel)
 	{		
 		if(status == null)
 			return null;
@@ -252,14 +253,14 @@ public class DoubanConverter {
 			model.commentCount = status.optString("comments_count");
 			model.sharedCount = status.optString("reshared_count");
 			model.type = EntryType.Douban;
-	        filtPicture(status, model);
+	        filtPicture(status, model, mainViewModel);
 			return model;
 		} catch (Exception e) {
 			return null;
 		}		
 	}
 	
-	public static ItemViewModel convertStatusText(JSONObject status)
+	public static ItemViewModel convertStatusText(JSONObject status, MainViewModel mainViewModel)
 	{		
 		if(status == null)
 			return null;
@@ -286,21 +287,21 @@ public class DoubanConverter {
 			JSONObject foward = status.optJSONObject("reshared_status");
 			if(foward != null)
 			{
-				ItemViewModel fowardModel = convertStatusToCommon(foward);
+				ItemViewModel fowardModel = convertStatusToCommon(foward, mainViewModel);
 				if(fowardModel == null)				
 					return null;
 				// 如果是转播的话，把model的text改成“转播”两字，不然空在那里很奇怪
 				model.content = "转播";
 				model.forwardItem = fowardModel;
 			}
-			filtPicture(status, model);
+			filtPicture(status, model, mainViewModel);
 			return model;
 		} catch (Exception e) {
 			return null;
 		}		
 	}
 	
-	public static void filtPicture(JSONObject status, ItemViewModel model) {
+	public static void filtPicture(JSONObject status, ItemViewModel model, MainViewModel mainViewModel) {
 		if (status == null || model == null)
 			return;
 		try {
@@ -339,7 +340,7 @@ public class DoubanConverter {
 							picItem.title = model.title;
 							picItem.description = model.content;
 							picItem.time = model.time;
-							App.mainViewModel.doubanPictureItems.add(picItem);
+							mainViewModel.doubanPictureItems.add(picItem);
 							break;
 						}
 					}

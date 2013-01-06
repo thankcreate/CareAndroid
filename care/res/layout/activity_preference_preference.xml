@@ -51,6 +51,8 @@
                 android:textOn="" />
         </RelativeLayout>
 
+       
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -79,6 +81,47 @@
                 android:textOff=""
                 android:textOn="" />
         </RelativeLayout>
+        
+         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/roundCornerTableBorder" />
+
+        <RelativeLayout
+            android:id="@+id/preference_use_polling_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/selector_bkg_table_lastrow_round_corner"
+            >
+            <TextView
+                android:id="@+id/preference_use_polling_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:text="新鲜事后台推送"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            
+             <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"                
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/preference_use_polling_text"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/thumb_rightarrow" />
+
+            <ToggleButton
+                android:id="@+id/preference_use_polling_toggle"
+                android:layout_width="90dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/selector_bkg_switch"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
     </LinearLayout>
 
     <TextView
@@ -94,8 +137,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"     
-        android:layout_marginTop="5dp"   
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/shape_bkg_table_round_corner"
         android:orientation="vertical" >
 

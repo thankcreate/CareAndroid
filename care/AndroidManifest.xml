@@ -131,6 +131,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.thankcreate.care.lab.LabSmartChatActivity"
+            android:label="@string/title_activity_lab_smart_chat"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
             android:name="com.thankcreate.care.rss.RssSetActivity"
             android:label="@string/title_activity_rss_set"
             android:screenOrientation="portrait" >
@@ -197,6 +203,12 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        
+        <service
+            android:name="com.thankcreate.care.service.NewsPollingService"
+            android:label="新鲜事轮询"
+            android:process=":NewsPollingService">            
+        </service>
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.thankcreate.care.viewmodel.MainViewModel;
 import com.thankcreate.care.viewmodel.PictureItemViewModel;
 import com.thankcreate.care.viewmodel.RenrenType;
 
@@ -87,7 +88,7 @@ public class RenrenConverter {
 	
 	
 	
-	public static ItemViewModel convertStatusToCommon(JSONObject status)
+	public static ItemViewModel convertStatusToCommon(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
@@ -95,15 +96,15 @@ public class RenrenConverter {
 			String tp = status.optString("feed_type");
 			if(tp.equalsIgnoreCase(FeedTypeTextStatus))
 			{
-				return convertTextStatus(status);
+				return convertTextStatus(status, mainViewModel);
 			}
 			else if(tp.equalsIgnoreCase(FeedTypeUploadPhoto))
 			{
-				return convertUploadPhoto(status);
+				return convertUploadPhoto(status, mainViewModel);
 			}
 			else if(tp.equalsIgnoreCase(FeedTypeSharePhoto))
 			{
-				return convertSharePhoto(status);
+				return convertSharePhoto(status, mainViewModel);
 			}
 			return null;
 		} catch (Exception e) {
@@ -111,7 +112,7 @@ public class RenrenConverter {
 		}		
 	}
 	
-	public static ItemViewModel convertTextStatus(JSONObject status)
+	public static ItemViewModel convertTextStatus(JSONObject status, MainViewModel mainViewModel)
 	{		
 		if(status == null)
 			return null;
@@ -163,7 +164,7 @@ public class RenrenConverter {
 	}
 	
 	
-	public static ItemViewModel convertUploadPhoto(JSONObject status)
+	public static ItemViewModel convertUploadPhoto(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
@@ -209,7 +210,7 @@ public class RenrenConverter {
 	                     pic.description = model.content;
 	                     pic.time = model.time;
 	                     pic.type = EntryType.Renren;
-	                     App.mainViewModel.renrenPictureItems.add(pic);
+	                     mainViewModel.renrenPictureItems.add(pic);
 	        		}
 	        	}
 	        }
@@ -219,7 +220,7 @@ public class RenrenConverter {
 		}		
 	}
 	
-	public static ItemViewModel convertSharePhoto(JSONObject status)
+	public static ItemViewModel convertSharePhoto(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
@@ -260,17 +261,20 @@ public class RenrenConverter {
 	        			model.forwardItem.midImageURL = attach.optString("src");
 	        			model.forwardItem.fullImageURL = attach.optString("raw_src");  
 	        			
-	        			
-	        			 PictureItemViewModel pic =  new PictureItemViewModel();
-	                     pic.smallURL = model.forwardItem.imageURL;
-	                     pic.middleURL = model.forwardItem.midImageURL;
-	                     pic.largeURL = model.forwardItem.fullImageURL;
-	                     pic.ID = model.ID;
-	                     pic.title = model.title;
-	                     pic.description = model.content;
-	                     pic.time = model.time;
-	                     pic.type = EntryType.Renren;
-	                     App.mainViewModel.renrenPictureItems.add(pic);
+	        			String useFowardPictureString = PreferenceHelper.getString("Global_NeedFetchImageInRetweet", "True");
+	        			if(useFowardPictureString.equalsIgnoreCase("True"))
+	        			{
+	        				PictureItemViewModel pic =  new PictureItemViewModel();
+		                     pic.smallURL = model.forwardItem.imageURL;
+		                     pic.middleURL = model.forwardItem.midImageURL;
+		                     pic.largeURL = model.forwardItem.fullImageURL;
+		                     pic.ID = model.ID;
+		                     pic.title = model.title;
+		                     pic.description = model.content;
+		                     pic.time = model.time;
+		                     pic.type = EntryType.Renren;
+		                     mainViewModel.renrenPictureItems.add(pic);
+	        			}
 	        		}
 	        	}
 	        }

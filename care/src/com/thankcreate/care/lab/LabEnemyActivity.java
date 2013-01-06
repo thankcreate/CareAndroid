@@ -93,8 +93,23 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 		setContentView(R.layout.activity_lab_enemy);
 		initActionBar();
 		initControl();	
+		
+	}
+	
+	
+	/**
+	 * 真奇怪，我这里都换到postResume里做刷新了
+	 * 而且refresh里面已经跳到后台线程里了
+	 * 但是打个潜在情敌页还是要卡半天
+	 * why?
+	 */
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
 		refresh();
 	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -353,7 +368,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 			analyseSourceSelected = 0;
 			mFetcher = new SinaWeiboFetcher();
 			textName.setText(MiscTool.getHerName(EntryType.SinaWeibo));
-			App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.SinaWeibo), imageViewAvatar);
+			App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.SinaWeibo), imageViewAvatar);
         }
         else if(mType == EntryType.Renren)
         {
@@ -361,7 +376,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 			analyseSourceSelected = 1;
 			mFetcher = new RenrenFetcher();
 			textName.setText(MiscTool.getHerName(EntryType.Renren));
-			App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.Renren), imageViewAvatar);
+			App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.Renren), imageViewAvatar);
         }
         else if(mType == EntryType.Douban)
         {
@@ -369,7 +384,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 			analyseSourceSelected = 2;
 			mFetcher = new DoubanFetcher();
 			textName.setText(MiscTool.getHerName(EntryType.Douban));
-			App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.Douban), imageViewAvatar);
+			App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(EntryType.Douban), imageViewAvatar);
         }     
 		
 		if(mFetcher != null)

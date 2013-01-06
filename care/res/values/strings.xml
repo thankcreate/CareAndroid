@@ -35,5 +35,9 @@
     <string name="title_activity_dispatcher">我只在乎你</string>
     <string name="title_activity_preference_about">PreferenceAboutActivity</string>
     <string name="title_activity_guide">GuideActivity</string>
+    <string name="title_activity_lab_smart_chat">LabSmartChatActivity</string>
+    
+    
+    <string name="notification_title">最新更新</string>
 
 </resources>

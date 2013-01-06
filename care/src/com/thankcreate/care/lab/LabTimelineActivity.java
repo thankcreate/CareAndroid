@@ -119,7 +119,7 @@ public class LabTimelineActivity extends LabShareActivity {
 		}
 		
 		textName.setText(herName);
-		App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewAvatar);
+		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewAvatar);
 		
 		for(ItemViewModel item : App.mainViewModel.items)
         {

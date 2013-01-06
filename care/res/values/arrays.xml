@@ -4,7 +4,15 @@
     <string-array name="array_post_source_choose">
         <item>新浪微博</item>
         <item>人人</item>
-        <item>豆瓣</item>        
+        <item>豆瓣</item>
+    </string-array>
+    
+    <string-array name="array_polling_time">
+        <item>10分钟</item>
+        <item>20分钟</item>
+        <item>30分钟</item>
+        <item>1小时</item>
+        <item>禁止推送</item>
     </string-array>
 
 </resources>

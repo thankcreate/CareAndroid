@@ -86,7 +86,7 @@ public class StatusDetailActivity extends BaseActivity {
     public TextView textTime;
     public TextView textCommentCount;
 	
-    private DrawableManager drawableManager = App.drawableManager;
+    private DrawableManager drawableManager = App.getDrawableManager();
     private ItemViewModel itemViewModel;
     
     private List<CommentViewModel> listComments = new ArrayList<CommentViewModel>();
@@ -176,9 +176,10 @@ public class StatusDetailActivity extends BaseActivity {
 		@Override
 		public void onItemClick(AdapterView<?> arg0,  View view, int position,
 				long id) {
+			// position是从1开始算起的?
+			position -= 1;
 			if(position < 0 || position >= adapter.listModel.size())
 				return;
-			
 			CommentViewModel commentViewModel = adapter.listModel.get(position);
 			Intent intent = new Intent();
 			intent.setClass(StatusDetailActivity.this, StatusAddCommentActivity.class);

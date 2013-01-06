@@ -42,14 +42,14 @@ public class PictureWallActivity extends BaseActivity implements OnRefreshComple
 	
 	private ActionBar actionBar;
 	private GridView gridViewPictureWall;
-	private DrawableManager drawableManager = App.drawableManager;
+	private DrawableManager drawableManager = App.getDrawableManager();
 	private PictureWallAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_picture_picture_wall);
-		RefreshViewerHelper.getInstance().addListenter(this); 
+		RefreshViewerHelper.getAppInstance().addListenter(this); 
 		initActionBar();
 		initControl();
 		loadPicture();
@@ -61,7 +61,7 @@ public class PictureWallActivity extends BaseActivity implements OnRefreshComple
 		super.onResume();
 		if(App.mainViewModel.isChanged)
 		{
-			RefreshViewerHelper.getInstance().refreshMainViewModel();
+			RefreshViewerHelper.getAppInstance().refreshMainViewModel();
 		}
 	}
 	

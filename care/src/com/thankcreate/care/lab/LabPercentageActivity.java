@@ -103,8 +103,8 @@ public class LabPercentageActivity extends LabShareActivity {
 		textMyName.setText(myName);
 		textHerName.setText(herName);
 		
-		App.drawableManager.fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewHerAvatar);
-		App.drawableManager.fetchDrawableOnThread(MiscTool.getMyIconUrl(), imageViewMyAvatar);
+		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewHerAvatar);
+		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getMyIconUrl(), imageViewMyAvatar);
 		
 		int herSig = StringTool.getSig(herName);
 		int mySig =  StringTool.getSig(myName);

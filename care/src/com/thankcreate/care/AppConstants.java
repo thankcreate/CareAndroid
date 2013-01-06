@@ -4,6 +4,7 @@ public class AppConstants {
 
 	public static final String PREFERENCES_NAME = "com_thankcreate_care";
 	public static final String CACHE_ITEM = "cacheItem";
+	public static final String LAB_SMART_CHAT_HISTORY = "labSmartChatHistory";
 	
 	// SinaWeibo
 	public static final String SINAWEIBO_APP_KEY = "892878802";
@@ -37,5 +38,8 @@ public class AppConstants {
 	public static final String DOUBAN_SECRET_KEY = "947c7204b935bf14";
 	public static final String DOUBAN_REDIRECT_URL = "http://thankcreate.github.com/Care/callback.html";
 	public static final String DOUBAN_PERMISSION = "shuo_basic_r,shuo_basic_w,douban_basic_common";
+	
+	// 推送
+	public static final int DEFAULT_POLLING_INTERVAL = 30 * 60 * 1000;
 
 }

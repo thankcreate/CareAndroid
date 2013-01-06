@@ -17,8 +17,8 @@ public class App extends Application {
 	
 	private static Weibo sinaWeibo;	
 	private static Renren renren;
-	public static MainViewModel mainViewModel;
-	public static DrawableManager drawableManager = new DrawableManager();
+	private static DrawableManager drawableManager = new DrawableManager();
+	public static MainViewModel mainViewModel;	
 	public static float density = 1;
 	public static Boolean memoryCleaned = false;
 	
@@ -36,6 +36,11 @@ public class App extends Application {
 		mainViewModel = new MainViewModel();		
 	}
 	
+	public static DrawableManager getDrawableManager(){
+		if(drawableManager == null)
+			drawableManager = new DrawableManager();
+		return drawableManager;
+	}
 	
 	/**
 	 * 虽说一开始就初始化过，但如果切出去后内存不足，把这个释放了就完蛋了

@@ -17,6 +17,7 @@ import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.thankcreate.care.viewmodel.MainViewModel;
 import com.thankcreate.care.viewmodel.PictureItemViewModel;
 
 public class SinaWeiboConverter {
@@ -65,14 +66,14 @@ public class SinaWeiboConverter {
 		return model;
 	}
 	
-	public static ItemViewModel convertStatusToCommon(JSONObject status)
+	public static ItemViewModel convertStatusToCommon(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
 		
 		ItemViewModel model = new ItemViewModel();
 		try {
-			convertPictureToCommon(status);
+			convertPictureToCommon(status, mainViewModel);
 			JSONObject user = status.optJSONObject("user");
 			if(user == null)
 				return null;
@@ -125,7 +126,7 @@ public class SinaWeiboConverter {
 		return model;
 	}
 	
-	public static void convertPictureToCommon(JSONObject status)
+	public static void convertPictureToCommon(JSONObject status, MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return;
@@ -137,7 +138,7 @@ public class SinaWeiboConverter {
 				JSONObject forward = status.optJSONObject("retweeted_status");
 				if(forward != null)
 				{
-					convertPictureToCommon(forward);
+					convertPictureToCommon(forward, mainViewModel);
 				}
 			}
 			model.smallURL = status.optString("thumbnail_pic");

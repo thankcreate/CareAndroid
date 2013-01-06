@@ -39,7 +39,7 @@ public class LabActivity extends BaseActivity {
 	private ActionBar actionBar;
 	private GridView gridView;	
 	private Class[] activities;
-	private ImageView[] imageViews = {null, null, null, null, null};	
+	private ImageView[] imageViews = {null, null, null, null, null, null};	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,13 +63,15 @@ public class LabActivity extends BaseActivity {
 				LabCharactorAnalysisActivity.class,
 				LabPercentageActivity.class,
 				LabEnemyActivity.class,
-				LabCatActivity.class
+				LabCatActivity.class,
+				LabSmartChatActivity.class
 			};
 		imageViews[0] = (ImageView) findViewById(R.id.lab_item_timeline);
 		imageViews[1] = (ImageView) findViewById(R.id.lab_item_charactor_analysis);
 		imageViews[2] = (ImageView) findViewById(R.id.lab_item_percentage);
 		imageViews[3] = (ImageView) findViewById(R.id.lab_item_enemy);
 		imageViews[4] = (ImageView) findViewById(R.id.lab_item_cat);
+		imageViews[5] = (ImageView) findViewById(R.id.lab_item_smart_chat);
 		for(int i = 0; i < activities.length; i++)
 		{
 			imageViews[i].setOnClickListener(new LabItemOnClickListner(i));

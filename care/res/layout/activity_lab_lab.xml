@@ -95,6 +95,15 @@
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
                         android:src="@drawable/lab_5" />
+                    
+                       <ImageView
+                        android:id="@+id/lab_item_smart_chat"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="7dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/lab_6" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
