@@ -195,7 +195,7 @@ public class AccountSelectFreindActivity extends BaseActivity {
 	
 	private void search(String key)
 	{
-		if(listFriendsAll == null || listFriendsAll.size() ==0)
+		if(adapter == null || listFriendsAll == null || listFriendsAll.size() ==0)
 			return;
 		
 		if(StringTool.isNullOrEmpty(key))
@@ -429,7 +429,7 @@ public class AccountSelectFreindActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_account_select_freind, menu);
-		return true;
+		return false;
 	}
 	
 	

@@ -6,7 +6,7 @@ import java.util.Date;
 import com.thankcreate.care.tool.misc.StringTool;
 
 public class ItemViewModel implements Serializable{
-
+		
 	public String iconURL;
 	public String largeIconURL;
 	
@@ -29,7 +29,7 @@ public class ItemViewModel implements Serializable{
 	public String sharedCount;
 	
 	public ItemViewModel forwardItem;
-	
+		
 	public String getContentWithTitle()
 	{
 		String prefix = (title == null)? "" : title;

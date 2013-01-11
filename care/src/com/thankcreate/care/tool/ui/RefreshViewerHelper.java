@@ -33,12 +33,15 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.dongxuexidu.douban4j.constants.DefaultConfigs;
+import com.dongxuexidu.douban4j.model.app.AccessToken;
+import com.dongxuexidu.douban4j.provider.OAuthDoubanProvider;
 import com.dongxuexidu.douban4j.utils.HttpManager;
 import com.hp.hpl.sparta.xpath.ThisNodeTest;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.exception.RenrenError;
 import com.thankcreate.care.App;
 import com.thankcreate.care.AppConstants;
+import com.thankcreate.care.account.AccountActivity;
 import com.thankcreate.care.service.NewsPollingService;
 import com.thankcreate.care.tool.converter.DoubanConverter;
 import com.thankcreate.care.tool.converter.RenrenConverter;
@@ -64,8 +67,8 @@ import com.weibo.sdk.android.net.RequestListener;
  * 一类是供前台程序运行的RefreshViewerHelper，它直接与App的MainViewModel绑定
  * 另一类是供后台Service运行的RefreshViewerHelper，它刷新的是后台Service的那个临时MainViewModel
  * 今后，安卓版所有的刷新操作，都不能直接拿App的MainViewModel，而是要一步步传参传过去
- * 注意，此类中所有的涉及UI的操作，都应该判断mType的状态，只有前台RefreshViewerHelper才能触发Toast
- * 
+ * 注意:此类中所有的涉及UI的操作，都应该判断mType的状态，只有前台RefreshViewerHelper才能触发Toast
+ * 注意:后台轮询时要最大化节省用户流量
  * @author ThankCreate
  */
 public class RefreshViewerHelper implements OnTaskCompleteListener {
@@ -76,7 +79,7 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 	private TaskHelper taskHelper;
 
 	public boolean isLoading = false;
-	public boolean isComplete = false;
+	public boolean isComplete = false;  // isComplete本质上来说，只是用来判断预加载那一次有没有做完
 
 	private MainViewModel mainViewModel;
 	private List<OnRefreshCompleteListener> listListeners = new ArrayList<RefreshViewerHelper.OnRefreshCompleteListener>();
@@ -176,7 +179,12 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 
 		StatusesAPI statusesAPI = new StatusesAPI(oa);
 		// 新浪微博最多一次加载100
-		statusesAPI.userTimeline(Long.parseLong(strFollowerID), 0, 0, 80, 1,
+		int count  = 80;
+		if(mType == FORGRAOUND)
+			count = 80;
+		else
+			count = 5;  // 后台轮询时，要最大化节约用户流量
+		statusesAPI.userTimeline(Long.parseLong(strFollowerID), 0, 0, count, 1,
 				false, FEATURE.ALL, false, mSinaWeiboUserTimeLineListener);
 	}
 
@@ -218,7 +226,6 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 
 		@Override
 		public void onError(WeiboException arg0) {
-			// TODO: 验证statusCode是否有用
 			taskHelper.popTask("SinaWeibo");
 			if (mType == FORGRAOUND) {
 				if (arg0.getStatusCode() == 21327) {
@@ -293,12 +300,15 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 			return;
 		}
 
-		AsyncRenren asyncRenren = new AsyncRenren(App.getRenren());
+		AsyncRenren asyncRenren = new AsyncRenren(App.getRenren());   
 		Bundle bd = new Bundle();
 		bd.putString("method", "feed.get");
 		bd.putString("type", "10,30,32");
 		bd.putString("uid", strFollowerID);
-		bd.putString("count", "50"); // 人人最多就为50
+		if(mType == FORGRAOUND)
+			bd.putString("count", "50"); // 人人最多就为50
+		else
+			bd.putString("count", "10");  // 后台运行的话，最大化节省流量		
 		asyncRenren.requestJSON(bd, mRenrenUserTimeLineListener);
 
 	}
@@ -364,52 +374,101 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 			return;
 		}
 
-		// 3.判断是否过期
+		// 3. 依据是否过期，抓timeline
 		long exp = PreferenceHelper.getLong("Douban_ExpirationDate");
+		// 3.1 如果过期，尝试用refresh_token来刷新
 		if (exp < System.currentTimeMillis()) {
-			if (mType == FORGRAOUND) {
-				ToastHelper.show(">_<  豆瓣帐号授权已过期，请到帐号页重新登陆以授权");
-				PreferenceHelper.removeDoubanPreference();
+			final String refreshToken = PreferenceHelper.getString("Douban_RefreshToken");
+			// 有refresh_token的情况下，开始做刷新token工作
+			if(!StringTool.isNullOrEmpty(refreshToken))
+			{
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							OAuthDoubanProvider provider = new OAuthDoubanProvider();
+							AccessToken newAccessToken = provider.tradeAccessTokenWithRefreshToken(refreshToken);							
+			    			final String token = newAccessToken.getAccessToken();
+			    			Integer expires_in = newAccessToken.getExpiresIn();
+			    			String refresh_token = newAccessToken.getRefreshToken();
+			    			long exp = System.currentTimeMillis() + expires_in * 1000;    
+							SharedPreferences pref = App.getAppContext().getSharedPreferences(
+			    					AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+			    			Editor editor = pref.edit();
+			    			editor.putString("Douban_Token", token);
+			    			editor.putString("Douban_RefreshToken", refresh_token);
+			    			editor.putLong("Douban_ExpirationDate", exp);    			
+			    			editor.commit();
+			    			// 至此，说明换token成功，开始重新refreshModelDouban
+			    			refreshModelDouban();
+			    			return;
+						} catch (Exception e) {							
+							if (mType == FORGRAOUND) {
+								ToastHelper.show(">_<  豆瓣帐号授权已过期，请到帐号页重新登陆以授权");
+								PreferenceHelper.removeDoubanPreference();
+							}
+							taskHelper.popTask("Douban");
+							return;
+						}
+							
+					}
+				}).start();
+				return;
 			}
-			taskHelper.popTask("Douban");
-			return;
+			// 要是连refresh_token都没有，直接返回，报过期。正常情况下，不应该进入这里才对
+			else
+			{
+				// 走到这里，说明
+				if (mType == FORGRAOUND) {
+					ToastHelper.show(">_<  豆瓣帐号授权已过期，请到帐号页重新登陆以授权");
+					PreferenceHelper.removeDoubanPreference();
+				}
+				taskHelper.popTask("Douban");
+				return;
+			}
 		}
+		// 3.2 若没有过期,抓 timeline
+		else
+		{
+			final String token = PreferenceHelper.getString("Douban_Token");
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						HttpManager httpManager = new HttpManager(token);
+						String url = String.format(
+								"%s/shuo/v2/statuses/user_timeline/%s",
+								DefaultConfigs.API_URL_PREFIX, strFollowerID);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						if(mType == FORGRAOUND)
+							params.add(new BasicNameValuePair("count", "100")); // 豆瓣最大一次加载200
+						else
+							params.add(new BasicNameValuePair("count", "5"));  // 后台轮询的话，要最大化节省流量 ^_^ 我真是个好人
+						String result = httpManager.getResponseString(url, params,
+								true);
 
-		final String token = PreferenceHelper.getString("Douban_Token");
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					HttpManager httpManager = new HttpManager(token);
-					String url = String.format(
-							"%s/shuo/v2/statuses/user_timeline/%s",
-							DefaultConfigs.API_URL_PREFIX, strFollowerID);
-					List<NameValuePair> params = new ArrayList<NameValuePair>();
-					params.add(new BasicNameValuePair("count", "100")); // 豆瓣最大一次加载200
-					String result = httpManager.getResponseString(url, params,
-							true);
-
-					JSONArray statuses = new JSONArray(result);
-					if (statuses != null) {
-						for (int i = 0; i < statuses.length(); i++) {
-							JSONObject ob = statuses.getJSONObject(i);
-							ItemViewModel model = DoubanConverter
-									.convertStatusToCommon(ob, mainViewModel);
-							if (model != null) {
-								mainViewModel.doubanItems.add(model);
+						JSONArray statuses = new JSONArray(result);
+						if (statuses != null) {
+							for (int i = 0; i < statuses.length(); i++) {
+								JSONObject ob = statuses.getJSONObject(i);
+								ItemViewModel model = DoubanConverter
+										.convertUnionStatus(ob, mainViewModel);
+								if (model != null) {
+									mainViewModel.doubanItems.add(model);
+								}
 							}
 						}
-					}
-					taskHelper.popTask("Douban");
-				} catch (Exception e) {
-					e.printStackTrace();
-					taskHelper.popTask("Douban");
-					if (mType == FORGRAOUND) {
-						ToastHelper.show(">_<  豆瓣信息获取发生未知错误");
+						taskHelper.popTask("Douban");
+					} catch (Exception e) {
+						e.printStackTrace();
+						taskHelper.popTask("Douban");
+						if (mType == FORGRAOUND) {
+							ToastHelper.show(">_<  豆瓣信息获取发生未知错误");
+						}
 					}
 				}
-			}
-		}).start();
+			}).start();
+		}
 	}
 
 	@Override
@@ -472,7 +531,12 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 			FileOutputStream fos = new FileOutputStream(cacheFile);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(mainViewModel.items);
-			oos.close();
+			
+			File cacheFile2 = new File(myDir, AppConstants.CACHE_PIC_ITEM);
+			FileOutputStream fos2 = new FileOutputStream(cacheFile2);
+			ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+			oos2.writeObject(mainViewModel.pictureItems);
+			oos2.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

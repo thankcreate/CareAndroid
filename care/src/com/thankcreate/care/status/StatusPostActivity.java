@@ -41,6 +41,7 @@ import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.umeng.analytics.MobclickAgent;
 import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.CommentsAPI;
@@ -49,7 +50,9 @@ import com.weibo.sdk.android.net.RequestListener;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -95,7 +98,7 @@ public class StatusPostActivity extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
-		return true;
+		return false;
 	}
 
 	private void initActionBar() {
@@ -105,6 +108,7 @@ public class StatusPostActivity extends BaseActivity {
 			@Override
 			public void performAction(View view) {
 				sendClick();
+				MobclickAgent.onEvent(StatusPostActivity.this, "PostNew");
 			}			
 
 			@Override
@@ -214,6 +218,23 @@ public class StatusPostActivity extends BaseActivity {
 	};
 	
 	private void sendClick() {
+		new AlertDialog.Builder(this)
+        .setIcon(R.drawable.thumb_send)
+        .setTitle("确认发送吗？点击确认将发布您的状态")
+        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	sendInternal();
+            }
+        })
+        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        })
+        .create().show();
+	}
+	
+	private void sendInternal()
+	{
 		String commentText = textInput.getText().toString();
 		if(StringTool.isNullOrEmpty(commentText))
 		{
@@ -429,6 +450,8 @@ public class StatusPostActivity extends BaseActivity {
 		}
 	};
 	
+	
+
 	private void doubanSend()
 	{
 		final String postText = textInput.getText().toString();

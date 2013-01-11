@@ -9,7 +9,7 @@
         android:id="@+id/actionbar"
         style="@style/ActionBar" />
 
-    <GridView        
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView        
         android:id="@+id/picture_wall_grid_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"        

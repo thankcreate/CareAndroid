@@ -11,6 +11,7 @@ import com.thankcreate.care.R;
 import com.thankcreate.care.tool.misc.MiscTool;
 import com.thankcreate.care.tool.misc.PreferenceHelper;
 import com.thankcreate.care.tool.ui.RefreshViewerHelper;
+import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.tool.ui.RefreshViewerHelper.OnRefreshCompleteListener;
 
 import com.thankcreate.care.viewmodel.ItemViewModel;
@@ -46,7 +47,7 @@ public class NewsPollingService extends Service implements OnRefreshCompleteList
 		mainViewModel = new MainViewModel();
 		refreshViewerHelper = RefreshViewerHelper.getServiceInstance(mainViewModel);
 		refreshViewerHelper.addListenter(this);
-		refreshViewerHelper.refreshMainViewModel();		
+		refreshViewerHelper.refreshMainViewModel();
 	}
 
 	@Override
@@ -57,7 +58,6 @@ public class NewsPollingService extends Service implements OnRefreshCompleteList
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -1,7 +1,13 @@
 package com.thankcreate.care;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import com.thankcreate.care.password.PasswordActivity;
 import com.thankcreate.care.service.NewsPollingService;
+import com.thankcreate.care.tool.converter.DoubanConverter;
+import com.thankcreate.care.tool.converter.RenrenConverter;
+import com.thankcreate.care.tool.converter.SinaWeiboConverter;
 import com.thankcreate.care.tool.misc.PreferenceHelper;
 import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.RefreshViewerHelper;
@@ -39,7 +45,7 @@ public class DispatcherActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_dispatcher, menu);
-		return true;
+		return false;
 	}
 
 	@Override
@@ -57,29 +63,33 @@ public class DispatcherActivity extends BaseActivity {
 			RefreshViewerHelper.getAppInstance().refreshMainViewModel();
 		}
 		
+		// UI线程延时一段时间做跳转
 		new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-            	// 第一次启动
-            	if(StringTool.isNullOrEmpty(firstLaunch))
-        		{
-            		// 开启后台轮询
+        		// 根据需要开启后台轮询
+            	try {
             		PendingIntent alarmSender;
             		alarmSender = PendingIntent.getService(DispatcherActivity.this, 0, new Intent(DispatcherActivity.this,
             				NewsPollingService.class), 0);
             		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
             		SharedPreferences pref = App.getAppContext().getSharedPreferences(
-            				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);            		
-            		Editor editor = pref.edit();
-        			editor.putString("Global_UsePolling", "True");
-        			editor.putLong("Global_PollingTime", AppConstants.DEFAULT_POLLING_INTERVAL);
-        			editor.commit();
-        			long interval = AppConstants.DEFAULT_POLLING_INTERVAL;
-        			long firstTime = SystemClock.elapsedRealtime() + interval;
-        			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-        	                firstTime , interval, alarmSender);
-        		
-            		
+            				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+            		String usePolling = pref.getString("Global_UsePolling", "True");
+            		if(usePolling.equalsIgnoreCase("True"))
+            		{			
+            			long interval = pref.getLong("Global_PollingTime", AppConstants.DEFAULT_POLLING_INTERVAL);			
+            			long firstTime = SystemClock.elapsedRealtime() + interval;
+            			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            	                firstTime , interval, alarmSender);
+            		}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+    			
+            	// 第一次启动
+            	if(StringTool.isNullOrEmpty(firstLaunch))
+        		{
             		// 跳转到引导页
         			editor.putString("Global_FirstLauch", "WhatEver");
         			editor.commit();
@@ -103,6 +113,16 @@ public class DispatcherActivity extends BaseActivity {
             }
         }, SPLASH_DISPLAY_LENGHT);
 		
+		
+		// 最大化提升加载效率, SimpleDateFormat的初始化实在是太费时间了，简直难以忍受，特别是在虚拟机上
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				SinaWeiboConverter.sdf = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy", Locale.ENGLISH);
+				RenrenConverter.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+				DoubanConverter.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+			}
+		}).start();
 		
 	}
 }

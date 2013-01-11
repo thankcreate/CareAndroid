@@ -134,9 +134,6 @@ public class DrawableManager {
         Thread thread = new Thread() {
             @Override
             public void run() {
-
-                //TODO : set imageView to a "pending" image
-                //Drawable drawable = fetchDrawable(urlString);
             	if(StringTool.isNullOrEmpty(urlString))
             		return;
             	Bitmap drawable = fetchDrawable(urlString);
@@ -179,8 +176,6 @@ public class DrawableManager {
         Thread thread = new Thread() {
             @Override
             public void run() {
-
-                //TODO : set imageView to a "pending" image
                 //Drawable drawable = fetchDrawable(urlString);
             	Bitmap drawable = fetchDrawable(urlString);
             	if(drawable == null)
@@ -203,7 +198,6 @@ public class DrawableManager {
             @Override
             public void run() {
 
-                //TODO : set imageView to a "pending" image
                 fetchDrawable(urlString);
             }
         };
@@ -282,8 +276,7 @@ public class DrawableManager {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                //TODO : set imageView to a "pending" image
-                //Drawable drawable = fetchDrawable(urlString);
+
             	Bitmap bmp = fetchDrawable(urlString);
             	if(bmp == null)
             		return;
@@ -291,10 +284,8 @@ public class DrawableManager {
                 if(!isMatch(urlString, imageView))
                 {
                 	return;
-                }
+                }                
                 
-                
-                //Message message = handler.obtainMessage(1, drawable);
                 Message message = handler.obtainMessage(1, bmp);
                 handler.sendMessage(message);
             }

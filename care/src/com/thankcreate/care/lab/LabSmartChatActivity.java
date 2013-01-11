@@ -24,15 +24,18 @@ import com.thankcreate.care.viewmodel.ChatItemViewModel;
 import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -67,7 +70,7 @@ public class LabSmartChatActivity extends LabShareActivity {
 		initActionBar();
 		initProfile();
 		initControl();
-		initProfile();
+		MobclickAgent.onEvent(this, "LabSmartChatActivity");
 	}
 
 	private void initProfile() {
@@ -78,11 +81,13 @@ public class LabSmartChatActivity extends LabShareActivity {
 		if (StringTool.isNullOrEmpty(myName)) {
 			ToastHelper.show("请先至少登陆一个帐户");
 			finish();
+			return;
 		}
 
 		if (StringTool.isNullOrEmpty(herName)) {
 			ToastHelper.show("请先至少关注一个帐户");
 			finish();
+			return;
 		}
 	}
 
@@ -90,7 +95,7 @@ public class LabSmartChatActivity extends LabShareActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab_smart_chat, menu);
-		return true;
+		return false;
 	}
 
 	@Override
@@ -113,6 +118,18 @@ public class LabSmartChatActivity extends LabShareActivity {
 
 	private void initControl() {
 		editTextInput = (EditText) findViewById(R.id.lab_chat_input_edittext);
+		editTextInput.setOnKeyListener(new OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if(event.getAction() == KeyEvent.ACTION_DOWN 
+					&& event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				{
+					submit();
+				}
+				return false;
+			}
+		});
 		btnSubmit = (Button) findViewById(R.id.lab_chat_submit);
 		btnSubmit.setOnClickListener(new OnClickListener() {
 
@@ -354,6 +371,13 @@ public class LabSmartChatActivity extends LabShareActivity {
 			public TextView textTime;
 			public int type;
 		}
+	}
+	
+	
+
+	@Override
+	protected void preShare() {
+		super.preShare();		
 	}
 
 	@Override

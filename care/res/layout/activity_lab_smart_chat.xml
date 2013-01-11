@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <ListView
+        android:id="@+id/lab_chat_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"        
+        android:divider="#00ffffff" 
+        android:cacheColorHint="#00000000"
+        android:dividerHeight="0dp" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_bkg_bottom_post_bar"
+        android:padding="5dp" >
+
+        <EditText
+            android:id="@+id/lab_chat_input_edittext"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_bkg"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:paddingBottom="4dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:paddingTop="4dp" />
+
+        <Button
+            android:id="@+id/lab_chat_submit"
+            android:layout_width="50dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="3dp"            
+            android:padding="2dp"
+            android:background="@drawable/selector_bkg_lab_chat_submit_btn"
+            android:text="提交" 
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

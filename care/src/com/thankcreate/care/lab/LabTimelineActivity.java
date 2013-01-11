@@ -26,6 +26,7 @@ import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.ItemViewModel;
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -69,6 +70,7 @@ public class LabTimelineActivity extends LabShareActivity {
 		initActionBar();
 		initControl();
 		analysis();
+		MobclickAgent.onEvent(this, "LabTimelineActivity");
 	}
 
 
@@ -76,7 +78,7 @@ public class LabTimelineActivity extends LabShareActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab_timeline, menu);
-		return true;
+		return false;
 	}
 
 	@Override

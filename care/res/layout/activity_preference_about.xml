@@ -38,8 +38,22 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/preference_about_app_title"
             android:layout_centerHorizontal="true"
-            android:text="V1.0.0"
+            android:text="V1.0.1.0111"
             android:textColor="#B3081F"
+            android:textSize="16dp" />
+        
+        <TextView
+            android:id="@+id/preference_about_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/preference_about_app_version"
+            android:layout_centerHorizontal="true"
+            android:text="由于腾讯暂不开放相关API，对QQ空间的支持短期内实现无望，还请大家见谅"
+            android:textColor="#666666"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:textSize="16dp" />
 
         <TextView

@@ -34,6 +34,7 @@ import com.thankcreate.care.tool.misc.MiscTool;
 import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -60,7 +61,9 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 	
 	private ImageView imageViewAvatar;
 	private TextView textName;
-	private TextView textAward;
+	private TextView textEnemy1;
+	private TextView textEnemy2;
+	private TextView textEnemy3;
 	
 	private BaseFetcher mFetcher;
 	
@@ -93,7 +96,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 		setContentView(R.layout.activity_lab_enemy);
 		initActionBar();
 		initControl();	
-		
+		MobclickAgent.onEvent(this, "LabEnemyActivity");
 	}
 	
 	
@@ -115,7 +118,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab_enemy, menu);
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -207,7 +210,9 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 		progressLinearLayout = (LinearLayout) findViewById(R.id.progess);
 		imageViewAvatar = (ImageView) findViewById(R.id.lab_avatar);
 		textName = (TextView) findViewById(R.id.lab_name);
-		textAward = (TextView) findViewById(R.id.lab_award);
+		textEnemy1 = (TextView) findViewById(R.id.lab_enemy1);
+		textEnemy2 = (TextView) findViewById(R.id.lab_enemy2);
+		textEnemy3 = (TextView) findViewById(R.id.lab_enemy3);
 	}
 	
 
@@ -219,7 +224,7 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 				
 				@Override
 				public void run() {
-					refreshChart();					
+					refreshChart();
 				}
 			});
 			
@@ -289,10 +294,22 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 		}
 		
 		max = param1;
-		textAward.post(new Runnable() {
+		textEnemy1.post(new Runnable() {
 			@Override
 			public void run() {
-				textAward.setText(name1);
+				textEnemy1.setText(name1);
+			}
+		});
+		textEnemy2.post(new Runnable() {
+			@Override
+			public void run() {
+				textEnemy2.setText(name2);
+			}
+		});
+		textEnemy3.post(new Runnable() {
+			@Override
+			public void run() {
+				textEnemy3.setText(name3);
 			}
 		});
 		return true;
@@ -332,6 +349,16 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 	{
 		String myName= MiscTool.getMyName();
 		herName = MiscTool.getHerName();
+		layout.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				layout.removeAllViews();
+				textEnemy1.setText("分析中...");
+				textEnemy2.setText("分析中...");
+				textEnemy3.setText("分析中...");
+			}
+		});
 		
 		if(StringTool.isNullOrEmpty(myName))
 		{
@@ -420,9 +447,9 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 		
 		renderer.setBarSpacing(0.5f);		
 		renderer.setYLabelsAlign(Align.LEFT);
-		renderer.addXTextLabel(1, name2);
-		renderer.addXTextLabel(2, name1);
-		renderer.addXTextLabel(3, name3);	
+		renderer.addXTextLabel(1, getNameForShort(name2));
+		renderer.addXTextLabel(2, getNameForShort(name1));
+		renderer.addXTextLabel(3, getNameForShort(name3));	
 		renderer.setOrientation(Orientation.HORIZONTAL);
 		renderer.setClickEnabled(false);
 		renderer.setZoomEnabled(false,false);
@@ -447,7 +474,8 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 
 		mChartView
 				.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
+		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);	
+		layout.removeAllViews();
 		layout.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 	}
@@ -492,12 +520,18 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 				actionBar.setProgressBarVisibility(View.GONE);
 			}
 		});
-		if (list == null)
+		
+		if (list == null || list.size() == 0)
+		{			
+			ToastHelper.show(">_< 抓取数据不成失败，请确保网络连接正常~", true);
 			return;
+		}
+			
 		mListMan = list;
 		analysis();
 	}
 	
+
 	
 	@Override
 	protected String getShareTextSinaWeibo() {

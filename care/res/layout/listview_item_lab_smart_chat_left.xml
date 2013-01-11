@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/umeng_fb_atomLinearLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"    
+    android:orientation="horizontal" 
+    android:background="#00000000">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dip"
+        android:layout_marginTop="6dip"
+        android:layout_weight="1"
+        android:background="@drawable/thumb_lab_smart_chat_bubble_her"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/lab_smart_chat_item_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/lab_smart_chat_item_avatar_imageview"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/lab_smart_chat_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:text="Title"
+                android:textColor="#6F6F6F"
+                android:textSize="16dip" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lab_smart_chat_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="5dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:text="Content"
+            android:textColor="#6F6F6F"
+            android:textSize="13dip" />
+
+        <TextView
+            android:id="@+id/lab_smart_chat_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:layout_marginTop="3dip"
+            android:text="This is State or Send Time"
+            android:textColor="#BDBDBD"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/lab_smart_chat_item_right_margin"
+        android:layout_width="50dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+</LinearLayout>

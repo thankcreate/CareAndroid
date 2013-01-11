@@ -118,7 +118,7 @@ public class StatusDetailActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_status_detail, menu);
-		return true;
+		return false;
 	}
 	
 	private void initActionBar() {
@@ -365,6 +365,7 @@ public class StatusDetailActivity extends BaseActivity {
 			bd.putString("share_id", itemViewModel.ID);
 			bd.putString("user_id", itemViewModel.ownerID);
 		}
+		bd.putString("count", "100");
 		asyncRenren.requestJSON(bd, mRenrenCommentsShowRequestListener);
 		
 	}
@@ -441,6 +442,9 @@ public class StatusDetailActivity extends BaseActivity {
 
 
 	
+	/**
+	 * 豆瓣比较特殊，转发的评论其实就是原始广播的评论
+	 */
 	private void loadCommentsDouban() {
 		final String token = PreferenceHelper.getString("Douban_Token");
 		new Thread(new Runnable() {
@@ -449,9 +453,14 @@ public class StatusDetailActivity extends BaseActivity {
 				try {
 					listComments.clear();
 					HttpManager httpManager = new HttpManager(token);
+					String itemID = itemViewModel.ID;
+					if(itemViewModel.forwardItem != null)
+						itemID = itemViewModel.forwardItem.ID;
 					String url = String.format("%s/shuo/v2/statuses/%s/comments", 
-							DefaultConfigs.API_URL_PREFIX, itemViewModel.ID);									
-					String result = httpManager.getResponseString(url, null, true);					
+							DefaultConfigs.API_URL_PREFIX, itemID);		
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					params.add(new BasicNameValuePair("count", "100")); 
+					String result = httpManager.getResponseString(url, params, true);					
 					JSONArray comments = new JSONArray(result);
 					if(comments != null)
 					{
@@ -500,6 +509,24 @@ public class StatusDetailActivity extends BaseActivity {
 		
 		adapter = new CommentsAdapter(this);
 		adapter.setListModel(listComments);
+		
+		// 更新一下评论数，因为有可能是自己又发了一条评论，但是mainViewModel这个时候还没更新
+		final int length = listComments.size();
+		itemViewModel.commentCount = String.valueOf(length);
+		textCommentCount.post(new Runnable() {
+			@Override
+			public void run() {
+				textCommentCount.setText(String.valueOf(length));						
+			}
+		});
+		for (ItemViewModel item : App.mainViewModel.items) {
+			if (item != null && !StringTool.isNullOrEmpty(item.ID)
+					&& item.ID.equalsIgnoreCase(itemViewModel.ID)) {
+				item.commentCount = String.valueOf(length);
+				break;
+			}
+		}
+		
 		Collections.sort(listComments, new Comparator<CommentViewModel>() {
 			@Override
 			public int compare(CommentViewModel lhs, CommentViewModel rhs) {
@@ -516,16 +543,6 @@ public class StatusDetailActivity extends BaseActivity {
 			@Override
 			public void run() {
 				listViewComments.setAdapter(adapter);
-				// ListViewTool.setListViewHeightBasedOnChildren(listViewComments, 30, false);
-				
-//				scrollRoot.post(new Runnable() {
-//					
-//					@Override
-//					public void run() {
-//						scrollRoot.scrollBy(0, 0);
-//					}
-//				});
-				
 			}
 		});	
 	}
@@ -589,7 +606,6 @@ public class StatusDetailActivity extends BaseActivity {
 				}
 			
 				CommentViewModel comment = listModel.get(position);
-				// TODO:检测null值会不会导致崩溃
 				if(comment == null)
 					return null;
 				holder.imageAvatar.setTag(comment.iconURL);

@@ -75,6 +75,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -170,15 +172,14 @@ public class AccountActivity extends BaseActivity {
 					long id) {
 				// 登陆
 				if(position == 0) {
+					MiscTool.clearCookie(AccountActivity.this);
 					try {
 						Class sso = Class.forName("com.weibo.sdk.android.sso.SsoHandler");
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
 					Activity activity = AccountActivity.this;
-//					App.getSinaWeibo().authorize(activity, mWeiboAuthListener);
 					msinaWeiboSsoHandler = new SsoHandler(AccountActivity.this, App
 							.getSinaWeibo());
 					msinaWeiboSsoHandler.authorize(mWeiboAuthListener);
@@ -241,7 +242,7 @@ public class AccountActivity extends BaseActivity {
 					long id) {
 				// 登陆
 				if(position == 0) {
-					Util.clearCookies(AccountActivity.this);
+					MiscTool.clearCookie(AccountActivity.this);					
 					Activity activity = AccountActivity.this;
 					App.getRenren().authorize(AccountActivity.this, AppConstants.RENREN_PERMISSION, mRenrenAuthListener);
 				}
@@ -612,8 +613,6 @@ public class AccountActivity extends BaseActivity {
 		
 		@Override
 		public void onCancel() {
-			// TODO Auto-generated method stub
-			
 		}
 	};
 		
@@ -632,7 +631,7 @@ public class AccountActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_account, menu);
-		return true;
+		return false;
 	}
 
 	

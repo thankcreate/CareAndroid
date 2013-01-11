@@ -123,14 +123,14 @@ class RenrenListenerFactory {
             public boolean onPageStart(String url) {
                 boolean b = false;
                 //在授权完成的时候不调用onPageBegin方法，原因未知。有时候装入页面的时候会先调用onPageStart再调onPageBegin，原因未知难道是BUG。
-//                if (url.startsWith(redirectUrl)) {
-//                    Bundle values = Util.parseUrl(url);
-//                    String accessToken = values.getString("access_token");
-//                    if (accessToken != null) {
-//                        this.authComplete(values);
-//                        b = true;
-//                    }
-//                }
+                if (url.startsWith(redirectUrl)) {
+                    Bundle values = Util.parseUrl(url);
+                    String accessToken = values.getString("access_token");
+                    if (accessToken != null) {
+                        this.authComplete(values);
+                        b = true;
+                    }
+                }
                 return b;
             }
 

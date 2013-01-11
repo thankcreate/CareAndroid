@@ -16,6 +16,7 @@ import com.thankcreate.care.tool.misc.MiscTool;
 import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -49,13 +50,14 @@ public class LabPercentageActivity extends LabShareActivity {
 		initActionBar();
 		initControl();
 		analysis();
+		MobclickAgent.onEvent(this, "LabPercentageActivity");
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab_percentage, menu);
-		return true;
+		return false;
 	}
 
 	

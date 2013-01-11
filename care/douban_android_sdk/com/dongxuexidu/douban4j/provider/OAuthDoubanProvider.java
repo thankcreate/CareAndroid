@@ -162,6 +162,29 @@ public class OAuthDoubanProvider {
     }
   }
   
+  /**
+   * 通过refreshToken换acessToken
+   * @return
+   */
+  
+  
+  public AccessToken tradeAccessTokenWithRefreshToken (String refreshToken) throws DoubanException {
+    try {
+      Map<String,String> params = new HashMap<String, String>();
+      params.put("client_id", this.apiKey);
+      params.put("client_secret", this.secretKey);
+      params.put("redirect_uri", DefaultConfigs.ACCESS_TOKEN_REDIRECT_URL);
+      params.put("grant_type", "refresh_token");
+      params.put("refresh_token", refreshToken);
+      String responseStr = new HttpManager().postEncodedEntry(DefaultConfigs.ACCESS_TOKEN_URL, params, false);
+      return Converters.stringToAccessToken(responseStr);
+    } catch (UnsupportedEncodingException ex) {
+      throw ErrorHandler.getCustomDoubanException(100, "Exception in trading access token : " + ex.toString());
+    } catch (IOException ex) {
+      throw ErrorHandler.getCustomDoubanException(100, "Exception in trading access token : " + ex.toString());
+    }
+  }
+  
   private String generateScopeString() {
     if (this.scopes == null || this.scopes.isEmpty()) {
       return "";

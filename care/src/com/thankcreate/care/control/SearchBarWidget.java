@@ -38,7 +38,6 @@ public class SearchBarWidget extends LinearLayout {
 	
 	public SearchBarWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		viewInit(context);
 		logicInit();
 	}
@@ -73,16 +72,10 @@ public class SearchBarWidget extends LinearLayout {
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			//mSearchCancelButton.setVisibility(View.GONE);
 			InputMethodManager imm = (InputMethodManager)getContext().getSystemService(
 				      Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);		
-				
-			
-//			mSearchEditText.setText("");
-//			mSearchEditText.clearFocus();
-//			mSearchEditText.setFocusable(false);
+
 			   
 			if(mSearchCancelButton != null && mSearchCancelButton.getVisibility() == View.VISIBLE)
 			{
@@ -96,7 +89,6 @@ public class SearchBarWidget extends LinearLayout {
 		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
 			if(mSearchCancelButton!= null  
 					&& mSearchCancelButton.getVisibility() != View.VISIBLE)
 			{
@@ -125,11 +117,9 @@ public class SearchBarWidget extends LinearLayout {
 		@Override
 		public void beforeTextChanged(CharSequence s, int start, int count,
 				int after) {
-			// TODO Auto-generated method stub	
 		}
 		@Override
 		public void afterTextChanged(Editable s) {
-			// TODO Auto-generated method stub	
 		}
 	};
 	

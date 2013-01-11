@@ -42,6 +42,7 @@ import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 import android.os.Bundle;
@@ -143,7 +144,7 @@ public class StatusTimelineActivity extends BaseActivity implements
 		pullToRefreshListView.getLoadingLayoutProxy()
 				.setLastUpdatedLabel(label);
 		pullToRefreshListView.setOnItemClickListener(mOnItemClickListener);
-		pullToRefreshListView.setOnLastItemVisibleListener(mOnLastItemVisibleListener);
+		pullToRefreshListView.setOnLastItemVisibleListener(mOnLastItemVisibleListener);		
 	}
 
 	private void initActionBar() {
@@ -153,7 +154,7 @@ public class StatusTimelineActivity extends BaseActivity implements
 
 			@Override
 			public void performAction(View view) {
-				postStatusClicked();
+				postStatusClicked();				
 			}
 
 			@Override
@@ -278,19 +279,18 @@ public class StatusTimelineActivity extends BaseActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_status_timeline, menu);
-		return true;
+		return false;
 	}
 
-	private boolean firstLoadTimeline = true;
+	
 
 	/**
 	 * Android版的“我只在乎你”的缓存机制与其它3个版本不一样
 	 * 其它三个版本都是把缓存直接加载到mainViewModel的item里，然后再把网络得到的数据加载到同样的位置
 	 * 有一个明显的先后顺序，缓存的加载必然比从网络得到的快 但是因为安卓的Splash是个伪启动画面，它就是一个普通的Activity加上延时跳转
 	 * 为了不浪费那个延时，在延时阶段就开始做预加载 所以导致当Timeline页面开始显示时，有可能缓存和网络数据都在写item
-	 * 为了解决这个问题，把缓存数据直接存在这StatusTimeline这个Activity里 如果满足firstLoadTimeline ==
-	 * true 并且 refreshViewerHelper.isComplete = false
-	 * 说明是第一次加载，而且这个时候网络返回还没做完，那么就开始加载缓存
+	 * 为了解决这个问题，把缓存数据直接存在这StatusTimeline这个Activity里 如果满足 refreshViewerHelper.isComplete = false
+	 * 说明这个时候网络返回还没做完，那么就开始加载缓存
 	 */
 	@Override
 	protected void onResume() {
@@ -306,8 +306,8 @@ public class StatusTimelineActivity extends BaseActivity implements
 			if (refreshViewerHelper.isComplete)
 				onRefreshComplete();
 
-			// 如果预加载还没做完，并且这是第一次加载timeline,则使用本地缓存做第一次加载
-			else if (firstLoadTimeline) {
+			// 如果预加载还没做完，则使用本地缓存做第一次加载
+			else {
 				refreshFromCache();
 			}
 		}
@@ -320,6 +320,9 @@ public class StatusTimelineActivity extends BaseActivity implements
 				onRefreshComplete();
 			}
 		}
+		
+		if(adapter != null)
+			adapter.refresh();
 	}
 
 	private void refresh() {
@@ -439,6 +442,11 @@ public class StatusTimelineActivity extends BaseActivity implements
 
 		public void setListModel(List<ItemViewModel> input) {
 			listModel = input;
+			notifyDataSetChanged();
+		}
+		
+		public void refresh()
+		{
 			notifyDataSetChanged();
 		}
 

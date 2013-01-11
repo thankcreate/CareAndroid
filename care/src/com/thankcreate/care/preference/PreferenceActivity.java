@@ -51,7 +51,7 @@ public class PreferenceActivity extends BaseActivity {
 	private RelativeLayout layoutAboutLayout;
 
 	private int pollingSettingSelected = 0;
-	private long miliArray[] = {10 * 60 * 1000, 20 * 60 * 1000, 30 * 60 * 1000, 60 * 60 * 1000, 0};
+	private long miliArray[] = { 10 * 60 * 1000, 20 * 60 * 1000, 30 * 60 * 1000, 60 * 60 * 1000, 0};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class PreferenceActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_preference, menu);
-		return true;
+		return false;
 	}
 
 	private void initControl() {
@@ -124,7 +124,6 @@ public class PreferenceActivity extends BaseActivity {
 
 
 		// 是否显示转发图
-		// TODO
 		toggleUseSharedPicture = (ToggleButton) findViewById(R.id.preference_show_forward_pic_toggle);
 		toggleUseSharedPicture.setOnClickListener(new OnClickListener() {
 			@Override

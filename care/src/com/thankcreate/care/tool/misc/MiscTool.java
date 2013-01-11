@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
 import com.thankcreate.care.App;
 import com.thankcreate.care.AppConstants;
@@ -346,5 +348,12 @@ public class MiscTool {
 	        return true;
 	    }
 	    return false;
+	}
+	
+	public static void clearCookie(Context ctx)
+	{
+		CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(ctx);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();	
 	}
 }

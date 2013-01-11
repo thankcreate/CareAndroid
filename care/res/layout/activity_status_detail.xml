@@ -40,11 +40,12 @@
 
         <TextView
             android:id="@+id/status_detail_title"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/status_detail_header_image"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
+            android:singleLine="true"            
             android:layout_toLeftOf="@id/status_detail_avatar_image"
             android:textColor="#667eb3"
             android:textSize="20sp" />

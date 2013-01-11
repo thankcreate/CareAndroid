@@ -31,7 +31,7 @@ public class GuideActivity extends BaseActivity {
     		R.drawable.guide_4, 
     		R.drawable.guide_5};
     
-    private final int LAST_PAGE_DISPLAY_LENGHT = 1000;
+    private final int LAST_PAGE_DISPLAY_LENGHT = 700;
     
     
 	@Override
@@ -95,44 +95,37 @@ public class GuideActivity extends BaseActivity {
   
         @Override  
         public int getItemPosition(Object object) {  
-            // TODO Auto-generated method stub  
             return super.getItemPosition(object);  
         }  
   
         @Override  
         public void destroyItem(View arg0, int arg1, Object arg2) {  
-            // TODO Auto-generated method stub  
             ((ViewPager) arg0).removeView(pageViews.get(arg1));  
         }  
   
         @Override  
         public Object instantiateItem(View arg0, int arg1) {  
-            // TODO Auto-generated method stub  
             ((ViewPager) arg0).addView(pageViews.get(arg1));  
             return pageViews.get(arg1);  
         }  
   
         @Override  
         public void restoreState(Parcelable arg0, ClassLoader arg1) {  
-            // TODO Auto-generated method stub  
   
         }  
   
         @Override  
         public Parcelable saveState() {  
-            // TODO Auto-generated method stub  
             return null;  
         }  
   
         @Override  
         public void startUpdate(View arg0) {  
-            // TODO Auto-generated method stub  
   
         }  
   
         @Override  
         public void finishUpdate(View arg0) {  
-            // TODO Auto-generated method stub  
   
         }  
     } 
@@ -142,13 +135,11 @@ public class GuideActivity extends BaseActivity {
   
         @Override  
         public void onPageScrollStateChanged(int arg0) {  
-            // TODO Auto-generated method stub  
   
         }  
   
         @Override  
         public void onPageScrolled(int arg0, float arg1, int arg2) {  
-            // TODO Auto-generated method stub  
   
         }  
   
@@ -182,7 +173,7 @@ public class GuideActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_guide, menu);
-		return true;
+		return false;
 	}
 
 }

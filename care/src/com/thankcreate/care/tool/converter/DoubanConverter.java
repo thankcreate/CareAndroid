@@ -23,6 +23,13 @@ import com.thankcreate.care.viewmodel.MainViewModel;
 import com.thankcreate.care.viewmodel.PictureItemViewModel;
 import com.thankcreate.care.viewmodel.RenrenType;
 
+/**
+ * 安卓版的DoubanConverter对所有豆瓣广播做了统一处理
+ * 不论什么类型，都用convertUnionStatus去转化
+ * 注意：豆瓣有个其它平台都没有的特点，对转发广播的评论就是对原始广播的评论
+ * 转发上显示的评论数，也就是原始广播的评论数
+ * @author ThankCreate 
+ */
 public class DoubanConverter {
 	
 	public static String largeAvatar = "";
@@ -72,84 +79,37 @@ public class DoubanConverter {
 		return model;
 	}
 	
-	public static ItemViewModel convertStatusToCommon(JSONObject status, MainViewModel mainViewModel)
+
+	
+	public static ItemViewModel convertUnionStatus(JSONObject status,  MainViewModel mainViewModel)
 	{
 		if(status == null)
 			return null;
 		try {
-			String tp = status.optString("type");
-			String title = status.optString("title");
-			
-			if (title.contains("关注") // 新关注了某个人
-					|| title.contains("加入") // 加入小组
-					|| title.contains("活动") // 对某活动感兴趣
-					|| title.contains("歌曲") // 某2添加了某歌曲
-					|| title.contains("试读") // 正在试读
-					|| title.contains("豆瓣阅读") // 豆瓣阅读
-					|| title.contains("使用") // 开始使用
-					|| title.contains("日记")) // 写了日记
-			{
-				return null;
-			}
-			
-			if(tp.equalsIgnoreCase("collect_book"))
-			{
-				return convertStatusBook(status, mainViewModel);
-			}
-			else if(tp.equalsIgnoreCase("collect_movie"))
-			{
-				return convertStatusMovie(status, mainViewModel);
-			}
-			else if(tp.equalsIgnoreCase("collect_music"))
-			{
-				return convertStatusMusic(status, mainViewModel);
-			}
-			// 豆瓣现在抽风，纯文字状态有时候type是null 真无语>_<
-			// Note:豆瓣的所有的转发，外转的type都是text
-			else if(tp.equalsIgnoreCase("text") || title.equalsIgnoreCase("说："))
-			{
-				return convertStatusText(status, mainViewModel);
-			}
-			return null;
-		} catch (Exception e) {
-			return null;
-		}		
-	}
-	
-	public static ItemViewModel convertStatusBook(JSONObject status, MainViewModel mainViewModel)
-	{		
-		if(status == null)
-			return null;
-		try {
 			ItemViewModel model = new ItemViewModel();
 			JSONObject user = status.optJSONObject("user");
 			if(user == null)
 				return null;
-			model.iconURL = user .optString("small_avatar");			
-			//if(StringTool.isNullOrEmpty(largeAvatar))
-			{
-				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
-			}
+			model.iconURL = user .optString("small_avatar");
+			largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
+
 			model.largeIconURL = largeAvatar;
 			model.title = user.optString("screen_name");
 			
-			String bookTitle = "";
+			String acctachTitle = "";
 			JSONArray listAttach = status.optJSONArray("attachments");
 			if(listAttach != null)
 			{
 				int length = listAttach.length();
 				for (int i = 0; i < length; i++) {
 					JSONObject attach = listAttach.getJSONObject(i);
-					String type = attach.optString("type");
-					if(type.equalsIgnoreCase("book"))
-					{
-						bookTitle =  attach.optString("title");
-					}		
+					String type = attach.optString("type");					
+					acctachTitle =  attach.optString("title");							
 				}
 			}
 			String trimStatusTitle = trimMark(status.optString("title"));
 			String statusText = status.optString("text");					
-			model.content = trimStatusTitle + " “" + bookTitle + "” " + statusText;
+			model.content = trimStatusTitle + " " + acctachTitle + " " + statusText;
 			
 			String rawTime = status.optString("created_at");
 			model.time = convertDoubanDateStringToDate(rawTime);
@@ -157,149 +117,287 @@ public class DoubanConverter {
 			model.commentCount = status.optString("comments_count");
 			model.sharedCount = status.optString("reshared_count");
 			model.type = EntryType.Douban;
-	        filtPicture(status, model, mainViewModel);
-			return model;
-		} catch (Exception e) {
-			return null;
-		}		
-	}
-	
-	public static ItemViewModel convertStatusMovie(JSONObject status, MainViewModel mainViewModel)
-	{		
-		if(status == null)
-			return null;
-		try {
-			ItemViewModel model = new ItemViewModel();
-			JSONObject user = status.optJSONObject("user");
-			if(user == null)
-				return null;
-			model.iconURL = user.optString("small_avatar");			
-			//if(StringTool.isNullOrEmpty(largeAvatar))
-			{
-				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
-			}
-			model.largeIconURL = largeAvatar;
-			model.title = user.optString("screen_name");
 			
-			String movieTitle = "";
-			JSONArray listAttach = status.optJSONArray("attachments");
-			if(listAttach != null)
-			{
-				int length = listAttach.length();
-				for (int i = 0; i < length; i++) {
-					JSONObject attach = listAttach.getJSONObject(i);
-					String type = attach.optString("type");
-					if(type.equalsIgnoreCase("movie"))
-					{
-						movieTitle =  attach.optString("title");
-					}		
+			JSONObject fowardStatus = status.optJSONObject("reshared_status");
+			if(fowardStatus != null)
+			{			
+				ItemViewModel forwardModel = new ItemViewModel();
+				JSONObject forwardUser = fowardStatus.optJSONObject("user");
+				if(forwardUser == null)
+					return null;
+				forwardModel.iconURL = forwardUser.optString("small_avatar");
+				forwardModel.largeIconURL = forwardModel.iconURL;
+				forwardModel.title = forwardUser.optString("screen_name");
+				
+				String forwardAcctachTitle = "";
+				JSONArray forwardListAttach = fowardStatus.optJSONArray("attachments");
+				if(forwardListAttach != null)
+				{
+					int length = forwardListAttach.length();
+					for (int i = 0; i < length; i++) {
+						JSONObject attach = forwardListAttach.getJSONObject(i);
+						String type = attach.optString("type");					
+						forwardAcctachTitle =  attach.optString("title");							
+					}
 				}
+				String trimFowardStatusTitle = trimMark(fowardStatus.optString("title"));
+				String fowardStatusText = fowardStatus.optString("text");					
+				forwardModel.content = trimFowardStatusTitle + " " + forwardAcctachTitle + " " + fowardStatusText;
+				
+				String forwardRawTime = fowardStatus.optString("created_at");
+				forwardModel.time = convertDoubanDateStringToDate(forwardRawTime);
+				forwardModel.ID = fowardStatus.optString("id");
+				forwardModel.commentCount = fowardStatus.optString("comments_count");
+				forwardModel.sharedCount = fowardStatus.optString("reshared_count");
+				forwardModel.type = EntryType.Douban;
+				
+				String useFowardPictureString = PreferenceHelper.getString("Global_NeedFetchImageInRetweet", "True");
+				if(useFowardPictureString.equalsIgnoreCase("True"))
+				{
+					filtPicture(fowardStatus, forwardModel, mainViewModel);
+				}
+				// 如果是转播的话，把model的text改成“转播”两字，不然空在那里很奇怪
+				model.content = "转播";
+				model.commentCount = forwardModel.commentCount;
+				model.sharedCount = forwardModel.sharedCount;
+				model.forwardItem = forwardModel;
 			}
-			String trimStatusTitle = trimMark(status.optString("title"));
-			String statusText = status.optString("text");					
-			model.content = trimStatusTitle + " “" + movieTitle + "” " + statusText;
 			
-			String rawTime = status.optString("created_at");
-			model.time = convertDoubanDateStringToDate(rawTime);
-			model.ID = status.optString("id");
-			model.commentCount = status.optString("comments_count");
-			model.sharedCount = status.optString("reshared_count");
-			model.type = EntryType.Douban;
 	        filtPicture(status, model, mainViewModel);
 			return model;
 		} catch (Exception e) {
 			return null;
 		}	
 	}
-	
-	public static ItemViewModel convertStatusMusic(JSONObject status, MainViewModel mainViewModel)
-	{		
-		if(status == null)
-			return null;
-		try {
-			ItemViewModel model = new ItemViewModel();
-			JSONObject user = status.optJSONObject("user");
-			if(user == null)
-				return null;
-			model.iconURL = user.optString("small_avatar");			
-			//if(StringTool.isNullOrEmpty(largeAvatar))
-			{
-				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
-			}
-			model.largeIconURL = largeAvatar;
-			model.title = user.optString("screen_name");
-			
-			String musicTitle = "";
-			JSONArray listAttach = status.optJSONArray("attachments");
-			if(listAttach != null)
-			{
-				int length = listAttach.length();
-				for (int i = 0; i < length; i++) {
-					JSONObject attach = listAttach.getJSONObject(i);
-					String type = attach.optString("type");
-					if(type.equalsIgnoreCase("music"))
-					{
-						musicTitle =  attach.optString("title");
-					}		
-				}
-			}
-			String trimStatusTitle = trimMark(status.optString("title"));
-			String statusText = status.optString("text");					
-			model.content = trimStatusTitle + " “" + musicTitle + "” " + statusText;
-			
-			String rawTime = status.optString("created_at");
-			model.time = convertDoubanDateStringToDate(rawTime);
-			model.ID = status.optString("id");
-			model.commentCount = status.optString("comments_count");
-			model.sharedCount = status.optString("reshared_count");
-			model.type = EntryType.Douban;
-	        filtPicture(status, model, mainViewModel);
-			return model;
-		} catch (Exception e) {
-			return null;
-		}		
-	}
-	
-	public static ItemViewModel convertStatusText(JSONObject status, MainViewModel mainViewModel)
-	{		
-		if(status == null)
-			return null;
-		try {
-			ItemViewModel model = new ItemViewModel();
-			JSONObject user = status.optJSONObject("user");
-			if(user == null)
-				return null;
-			model.iconURL = user.optString("small_avatar");			
-			//if(StringTool.isNullOrEmpty(largeAvatar))
-			{
-				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
-			}
-			model.largeIconURL = largeAvatar;
-			model.title = user.optString("screen_name");
-			model.content = status.optString("text");	
-			String rawTime = status.optString("created_at");
-			model.time = convertDoubanDateStringToDate(rawTime);
-			model.ID = status.optString("id");
-			model.commentCount = status.optString("comments_count");
-			model.sharedCount = status.optString("reshared_count");
-			model.type = EntryType.Douban;
-			
-			JSONObject foward = status.optJSONObject("reshared_status");
-			if(foward != null)
-			{
-				ItemViewModel fowardModel = convertStatusToCommon(foward, mainViewModel);
-				if(fowardModel == null)				
-					return null;
-				// 如果是转播的话，把model的text改成“转播”两字，不然空在那里很奇怪
-				model.content = "转播";
-				model.forwardItem = fowardModel;
-			}
-			filtPicture(status, model, mainViewModel);
-			return model;
-		} catch (Exception e) {
-			return null;
-		}		
-	}
+
+//	public static ItemViewModel convertStatusToCommon(JSONObject status, MainViewModel mainViewModel)
+//	{
+//		if(status == null)
+//			return null;
+//		try {
+//			String tp = status.optString("type");
+//			String title = status.optString("title");
+//			
+//			if (title.contains("关注") // 新关注了某个人
+//					|| title.contains("加入") // 加入小组
+//					|| title.contains("活动") // 对某活动感兴趣
+//					|| title.contains("歌曲") // 某2添加了某歌曲
+//					|| title.contains("试读") // 正在试读
+//					|| title.contains("豆瓣阅读") // 豆瓣阅读
+//					|| title.contains("使用") // 开始使用
+//					|| title.contains("日记")) // 写了日记
+//			{
+//				return null;
+//			}
+//			
+//			if(tp.equalsIgnoreCase("collect_book"))
+//			{
+//				return convertStatusBook(status, mainViewModel);
+//			}
+//			else if(tp.equalsIgnoreCase("collect_movie"))
+//			{
+//				return convertStatusMovie(status, mainViewModel);
+//			}
+//			else if(tp.equalsIgnoreCase("collect_music"))
+//			{
+//				return convertStatusMusic(status, mainViewModel);
+//			}
+//			// 豆瓣现在抽风，纯文字状态有时候type是null 真无语>_<
+//			// Note:豆瓣的所有的转发，外转的type都是text
+//			else if(tp.equalsIgnoreCase("text") || title.equalsIgnoreCase("说："))
+//			{
+//				return convertStatusText(status, mainViewModel);
+//			}
+//			return null;
+//		} catch (Exception e) {
+//			return null;
+//		}		
+//	}
+//	
+//	public static ItemViewModel convertStatusBook(JSONObject status, MainViewModel mainViewModel)
+//	{		
+//		if(status == null)
+//			return null;
+//		try {
+//			ItemViewModel model = new ItemViewModel();
+//			JSONObject user = status.optJSONObject("user");
+//			if(user == null)
+//				return null;
+//			model.iconURL = user .optString("small_avatar");			
+//			//if(StringTool.isNullOrEmpty(largeAvatar))
+//			{
+//				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
+//			}
+//			model.largeIconURL = largeAvatar;
+//			model.title = user.optString("screen_name");
+//			
+//			String bookTitle = "";
+//			JSONArray listAttach = status.optJSONArray("attachments");
+//			if(listAttach != null)
+//			{
+//				int length = listAttach.length();
+//				for (int i = 0; i < length; i++) {
+//					JSONObject attach = listAttach.getJSONObject(i);
+//					String type = attach.optString("type");
+//					if(type.equalsIgnoreCase("book"))
+//					{
+//						bookTitle =  attach.optString("title");
+//					}		
+//				}
+//			}
+//			String trimStatusTitle = trimMark(status.optString("title"));
+//			String statusText = status.optString("text");					
+//			model.content = trimStatusTitle + " “" + bookTitle + "” " + statusText;
+//			
+//			String rawTime = status.optString("created_at");
+//			model.time = convertDoubanDateStringToDate(rawTime);
+//			model.ID = status.optString("id");
+//			model.commentCount = status.optString("comments_count");
+//			model.sharedCount = status.optString("reshared_count");
+//			model.type = EntryType.Douban;
+//	        filtPicture(status, model, mainViewModel);
+//			return model;
+//		} catch (Exception e) {
+//			return null;
+//		}		
+//	}
+//	
+//	public static ItemViewModel convertStatusMovie(JSONObject status, MainViewModel mainViewModel)
+//	{		
+//		if(status == null)
+//			return null;
+//		try {
+//			ItemViewModel model = new ItemViewModel();
+//			JSONObject user = status.optJSONObject("user");
+//			if(user == null)
+//				return null;
+//			model.iconURL = user.optString("small_avatar");			
+//			//if(StringTool.isNullOrEmpty(largeAvatar))
+//			{
+//				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
+//			}
+//			model.largeIconURL = largeAvatar;
+//			model.title = user.optString("screen_name");
+//			
+//			String movieTitle = "";
+//			JSONArray listAttach = status.optJSONArray("attachments");
+//			if(listAttach != null)
+//			{
+//				int length = listAttach.length();
+//				for (int i = 0; i < length; i++) {
+//					JSONObject attach = listAttach.getJSONObject(i);
+//					String type = attach.optString("type");
+//					if(type.equalsIgnoreCase("movie"))
+//					{
+//						movieTitle =  attach.optString("title");
+//					}		
+//				}
+//			}
+//			String trimStatusTitle = trimMark(status.optString("title"));
+//			String statusText = status.optString("text");					
+//			model.content = trimStatusTitle + " “" + movieTitle + "” " + statusText;
+//			
+//			String rawTime = status.optString("created_at");
+//			model.time = convertDoubanDateStringToDate(rawTime);
+//			model.ID = status.optString("id");
+//			model.commentCount = status.optString("comments_count");
+//			model.sharedCount = status.optString("reshared_count");
+//			model.type = EntryType.Douban;
+//	        filtPicture(status, model, mainViewModel);
+//			return model;
+//		} catch (Exception e) {
+//			return null;
+//		}	
+//	}
+//	
+//	public static ItemViewModel convertStatusMusic(JSONObject status, MainViewModel mainViewModel)
+//	{		
+//		if(status == null)
+//			return null;
+//		try {
+//			ItemViewModel model = new ItemViewModel();
+//			JSONObject user = status.optJSONObject("user");
+//			if(user == null)
+//				return null;
+//			model.iconURL = user.optString("small_avatar");			
+//			//if(StringTool.isNullOrEmpty(largeAvatar))
+//			{
+//				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
+//			}
+//			model.largeIconURL = largeAvatar;
+//			model.title = user.optString("screen_name");
+//			
+//			String musicTitle = "";
+//			JSONArray listAttach = status.optJSONArray("attachments");
+//			if(listAttach != null)
+//			{
+//				int length = listAttach.length();
+//				for (int i = 0; i < length; i++) {
+//					JSONObject attach = listAttach.getJSONObject(i);
+//					String type = attach.optString("type");
+//					if(type.equalsIgnoreCase("music"))
+//					{
+//						musicTitle =  attach.optString("title");
+//					}		
+//				}
+//			}
+//			String trimStatusTitle = trimMark(status.optString("title"));
+//			String statusText = status.optString("text");					
+//			model.content = trimStatusTitle + " “" + musicTitle + "” " + statusText;
+//			
+//			String rawTime = status.optString("created_at");
+//			model.time = convertDoubanDateStringToDate(rawTime);
+//			model.ID = status.optString("id");
+//			model.commentCount = status.optString("comments_count");
+//			model.sharedCount = status.optString("reshared_count");
+//			model.type = EntryType.Douban;
+//	        filtPicture(status, model, mainViewModel);
+//			return model;
+//		} catch (Exception e) {
+//			return null;
+//		}		
+//	}
+//	
+//	public static ItemViewModel convertStatusText(JSONObject status, MainViewModel mainViewModel)
+//	{		
+//		if(status == null)
+//			return null;
+//		try {
+//			ItemViewModel model = new ItemViewModel();
+//			JSONObject user = status.optJSONObject("user");
+//			if(user == null)
+//				return null;
+//			model.iconURL = user.optString("small_avatar");			
+//			//if(StringTool.isNullOrEmpty(largeAvatar))
+//			{
+//				largeAvatar = PreferenceHelper.getString("Douban_FollowerAvatar2"); 
+//			}
+//			model.largeIconURL = largeAvatar;
+//			model.title = user.optString("screen_name");
+//			model.content = status.optString("text");	
+//			String rawTime = status.optString("created_at");
+//			model.time = convertDoubanDateStringToDate(rawTime);
+//			model.ID = status.optString("id");
+//			model.commentCount = status.optString("comments_count");
+//			model.sharedCount = status.optString("reshared_count");
+//			model.type = EntryType.Douban;
+//			
+//			JSONObject foward = status.optJSONObject("reshared_status");
+//			if(foward != null)
+//			{
+//				ItemViewModel fowardModel = convertStatusToCommon(foward, mainViewModel);
+//				if(fowardModel == null)				
+//					return null;
+//				// 如果是转播的话，把model的text改成“转播”两字，不然空在那里很奇怪
+//				model.content = "转播";
+//				model.forwardItem = fowardModel;
+//			}
+//			filtPicture(status, model, mainViewModel);
+//			return model;
+//		} catch (Exception e) {
+//			return null;
+//		}		
+//	}
 	
 	public static void filtPicture(JSONObject status, ItemViewModel model, MainViewModel mainViewModel) {
 		if (status == null || model == null)
@@ -385,12 +483,16 @@ public class DoubanConverter {
 	
 	// 豆瓣的祼格式是这样的
 	// 2012-12-07 20:37:36	
+	// SimpleDateFormat必须做缓存，否则你会死得很惨
+	// 这玩意儿不做缓存的话几乎在虚拟机上跑不动
+    public static SimpleDateFormat sdf;
 	public static Date convertDoubanDateStringToDate(String rawDate)
 	{
 		if(StringTool.isNullOrEmpty(rawDate))
 			return new Date();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+		if(sdf == null)
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
 		Date resultDate = null;
 		try {

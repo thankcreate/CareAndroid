@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string-array name="array_post_source_choose">
+    <string-array name="array_post_source_choose" tools:ignore="MissingTranslation">
         <item>新浪微博</item>
         <item>人人</item>
         <item>豆瓣</item>

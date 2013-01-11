@@ -1,5 +1,7 @@
 package com.weibo.sdk.android.net;
 
+import android.util.Log;
+
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.WeiboParameters;
 
@@ -23,6 +25,8 @@ public class AsyncWeiboRunner {
 				try {
 					String resp = HttpManager.openUrl(url, httpMethod, params,
 							params.getValue("pic"));
+					Log.i("url", url);
+					Log.i("httpMethod", httpMethod);
 					listener.onComplete(resp);
 				} catch (WeiboException e) {
 					listener.onError(e);

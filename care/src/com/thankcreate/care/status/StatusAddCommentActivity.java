@@ -34,6 +34,7 @@ import com.thankcreate.care.viewmodel.CommentViewModel;
 import com.thankcreate.care.viewmodel.EntryType;
 import com.thankcreate.care.viewmodel.ItemViewModel;
 import com.thankcreate.care.viewmodel.RenrenType;
+import com.umeng.analytics.MobclickAgent;
 import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.CommentsAPI;
@@ -41,7 +42,9 @@ import com.weibo.sdk.android.net.RequestListener;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -83,7 +86,7 @@ public class StatusAddCommentActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_status_add_comment, menu);
-		return true;
+		return false;
 	}
 
 	private void initActionBar() {
@@ -93,7 +96,7 @@ public class StatusAddCommentActivity extends BaseActivity {
 			@Override
 			public void performAction(View view) {
 				sendClick();
-				
+				MobclickAgent.onEvent(StatusAddCommentActivity.this, "PostComment");
 			}			
 
 			@Override
@@ -187,6 +190,24 @@ public class StatusAddCommentActivity extends BaseActivity {
 	};
 	
 	private void sendClick() {
+		
+		new AlertDialog.Builder(this)
+        .setIcon(R.drawable.thumb_send)
+        .setTitle("确认发送吗？点击确认将更新您的状态")
+        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	sendInternal();
+            }
+        })
+        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        })
+        .create().show();
+	}
+	
+	private void sendInternal()
+	{
 		String commentText = textInput.getText().toString();
 		if(StringTool.isNullOrEmpty(commentText))
 		{
@@ -365,6 +386,11 @@ public class StatusAddCommentActivity extends BaseActivity {
 		}
 	};
 	
+	
+	
+	/**
+	 * 豆瓣比较特殊，转发的评论其实就是原始广播的评论
+	 */
 	private void doubanSend()
 	{
 		final String commentText = textInput.getText().toString();
@@ -374,8 +400,11 @@ public class StatusAddCommentActivity extends BaseActivity {
 			public void run() {
 				try {					
 					HttpManager httpManager = new HttpManager(token);
+					String itemID = itemViewModel.ID;
+					if(itemViewModel.forwardItem != null)
+						itemID = itemViewModel.forwardItem.ID;
 					String url = String.format("%s/shuo/v2/statuses/%s/comments", 
-							DefaultConfigs.API_URL_PREFIX, itemViewModel.ID);
+							DefaultConfigs.API_URL_PREFIX, itemID);
 					Map<String, String> params = new HashMap<String, String>();					
 					params.put("text", commentText);
 					params.put("source", AppConstants.DOUBAN_SECRET_KEY);					

@@ -286,12 +286,16 @@ public class RenrenConverter {
 	
 	// 人人的祼格式是这样的
 	// 2012-12-07 20:37:36	
+	// SimpleDateFormat必须做缓存，否则你会死得很惨
+	// 这玩意儿不做缓存的话几乎在虚拟机上跑不动
+	public static SimpleDateFormat sdf;
 	public static Date convertRenrenDateStringToDate(String rawDate)
 	{
 		if(StringTool.isNullOrEmpty(rawDate))
 			return new Date();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+		if(sdf == null)
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
 		Date resultDate = null;
 		try {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.youmi.android.AdManager;
 import net.youmi.android.AdView;
 
 import com.buuuk.android.gallery.ImageViewFlipper;
@@ -22,6 +23,9 @@ import android.app.Activity;
 import android.app.LauncherActivity.ListItem;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -77,10 +81,25 @@ public class LabActivity extends BaseActivity {
 			imageViews[i].setOnClickListener(new LabItemOnClickListner(i));
 		}
 		
-		LinearLayout adViewLayout = (LinearLayout) findViewById(R.id.lab_ad);
-		adViewLayout.addView(new AdView(this),
-		new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-		LinearLayout.LayoutParams.WRAP_CONTENT));
+		
+		// 妹的，安智市场不准放有米广告条
+		ApplicationInfo appInfo;
+		String channel = "Default";
+		try {
+			appInfo = this.getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+			channel = appInfo.metaData.getString("UMENG_CHANNEL");
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}		
+		if(!channel.equalsIgnoreCase("AnZhiShiChang"))
+		{
+			AdManager.init(this.getBaseContext(), "3e9fc4796d5e9801",
+					"4d78213f8ac82754 ", 45, false);
+			LinearLayout adViewLayout = (LinearLayout) findViewById(R.id.lab_ad);
+			adViewLayout.addView(new AdView(this),
+			new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+			LinearLayout.LayoutParams.WRAP_CONTENT));
+		}
 	}
 	
 	class LabItemOnClickListner implements OnClickListener{
@@ -106,6 +125,6 @@ public class LabActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_lab, menu);
-		return true;
+		return false;
 	}	
 }

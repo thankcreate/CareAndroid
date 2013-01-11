@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thankcreate.care"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.0.1.0111" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.thankcreate.care.App"
@@ -24,7 +25,7 @@
         android:icon="@drawable/thumb_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" android:logo="@drawable/thumb_logo">
         <activity
             android:name="com.renren.api.connect.android.AuthorizationHelper$BlockActivity"
             android:theme="@android:style/Theme.Dialog" >
@@ -37,7 +38,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -194,21 +194,29 @@
             android:name="net.youmi.android.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation" />
 
-        <!-- 有米广告接收器 -->
+        <!-- 有米广告接收器,安智市场需去除-->
         <receiver android:name="net.youmi.android.YoumiReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_INSTALL" />
-
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        
+         
+         
         <service
             android:name="com.thankcreate.care.service.NewsPollingService"
             android:label="新鲜事轮询"
             android:process=":NewsPollingService">            
         </service>
+        
+        <receiver android:name="com.thankcreate.care.service.CareStartupReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

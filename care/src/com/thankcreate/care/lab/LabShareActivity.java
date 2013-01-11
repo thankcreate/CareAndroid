@@ -24,8 +24,10 @@ import com.thankcreate.care.status.StatusPostActivity;
 import com.thankcreate.care.status.StatusDetailActivity;
 import com.thankcreate.care.tool.misc.DateTool;
 import com.thankcreate.care.tool.misc.MiscTool;
+import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.ToastHelper;
 import com.thankcreate.care.viewmodel.EntryType;
+import com.umeng.analytics.MobclickAgent;
 import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.api.StatusesAPI;
 
@@ -54,7 +56,6 @@ public abstract class LabShareActivity extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		int tp = MiscTool.getFirstFoundLoginType();
 				
@@ -74,6 +75,7 @@ public abstract class LabShareActivity extends BaseActivity {
 			@Override
 			public void performAction(View view) {
 				shareClicked();
+				MobclickAgent.onEvent(LabShareActivity.this, "LabShareClick");
 			}
 			
 			@Override
@@ -82,6 +84,20 @@ public abstract class LabShareActivity extends BaseActivity {
 			}
 		});
 		addActionBarBackButton(actionBar);
+	}
+	
+	
+	protected String getNameForShort(String rawName) {
+		try {
+			if(StringTool.isNullOrEmpty(rawName))
+				return "";
+			if(rawName.length() <= 7)
+				return rawName;
+			return rawName.substring(0,7) + "...";	
+		} catch (Exception e) {
+			return "";
+		}
+		
 	}
 	
 	private void takeScreenShot()
@@ -114,6 +130,7 @@ public abstract class LabShareActivity extends BaseActivity {
 	
 	private void shareClicked()
 	{
+		preShare();
 		takeScreenShot();
 		 new AlertDialog.Builder(this)
 	     .setIcon(R.drawable.thumb_share)
@@ -265,6 +282,11 @@ public abstract class LabShareActivity extends BaseActivity {
         	return getShareTextDouban();
         } 
         return "";
+	}
+	
+	
+	protected void preShare() {
+		// default do nothing
 	}
 	
 	protected abstract String getShareTextSinaWeibo();

@@ -138,7 +138,34 @@ public class SinaWeiboConverter {
 				JSONObject forward = status.optJSONObject("retweeted_status");
 				if(forward != null)
 				{
-					convertPictureToCommon(forward, mainViewModel);
+					// 这里之所以重新又变得这么冗余了，是因为用户还是觉得转发图里还是要有本人的评论
+					// 修改了description的显示方式  2012/1/11
+					PictureItemViewModel forwardModel = new PictureItemViewModel();
+					
+					JSONObject forwardUser = forward.optJSONObject("user");
+					if(forwardUser != null)
+					{
+						forwardModel.title = forwardUser.optString("name");
+					}
+					forwardModel.smallURL = forward.optString("thumbnail_pic");
+					forwardModel.middleURL = forward.optString("bmiddle_pic");
+					forwardModel.largeURL = forward.optString("original_pic");
+					forwardModel.ID = forward.optString("id");
+					forwardModel.type = EntryType.SinaWeibo;
+					forwardModel.description = 
+							status.optString("text") 
+							+ "//@" 
+							+ forwardUser.optString("name")
+							+ "： "
+							+ forward.optString("text");
+					String forwardRawTimeString = forward.optString("created_at");
+					forwardModel.time  = convertSinaWeiboDateStringToDate(forwardRawTimeString);
+					
+					
+					if(!StringTool.isNullOrEmpty(forwardModel.smallURL))
+					{
+						App.mainViewModel.sinaWeiboPictureItems.add(forwardModel);
+					}
 				}
 			}
 			model.smallURL = status.optString("thumbnail_pic");
@@ -167,12 +194,16 @@ public class SinaWeiboConverter {
 	
 	// 新浪的祼格式是这样的
 	// Fri Oct 05 11:38:16 +0800 2012
+	// SimpleDateFormat必须做缓存，否则你会死得很惨
+	// 这玩意儿不做缓存的话几乎在虚拟机上跑不动
+	public static SimpleDateFormat sdf;
 	public static Date convertSinaWeiboDateStringToDate(String rawDate)
 	{
 		if(StringTool.isNullOrEmpty(rawDate))
 			return new Date();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy", Locale.ENGLISH);
+		if(sdf == null)
+			sdf = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy", Locale.ENGLISH);
 
 		Date resultDate = null;
 		try {

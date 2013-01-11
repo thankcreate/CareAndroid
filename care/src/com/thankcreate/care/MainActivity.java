@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,11 +40,12 @@ public class MainActivity extends TabActivity {
 
 	protected void onResume() {
 	    super.onResume();
-	    MobclickAgent.onResume(this);
+	    // 父就别加了，否则统计有误，这统计很有问题
+	    //MobclickAgent.onResume(this);
 	}
 	protected void onPause() {
 	    super.onPause();
-	    MobclickAgent.onPause(this);
+	    //MobclickAgent.onPause(this);
 	}
 	
 	private void setDensity() {
@@ -70,17 +72,16 @@ public class MainActivity extends TabActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
+		return false;
 	}
 	
 	private void setTabs()
 	{
-		addTab("主页", R.drawable.tab_home, StatusTimelineActivity.class);
-		addTab("图片", R.drawable.tab_picture, PictureWallActivity.class);
-		
-		addTab("奇怪的地方", R.drawable.tab_microscope, LabActivity.class);
-		addTab("帐号", R.drawable.tab_account, AccountActivity.class);
-		addTab("设置", R.drawable.tab_settings, PreferenceActivity.class);
+		addTab("主页", R.drawable.tab_home_selector, StatusTimelineActivity.class);
+		addTab("图片", R.drawable.tab_picture_selector, PictureWallActivity.class);
+		addTab("奇怪的地方", R.drawable.tab_microscope_selector, LabActivity.class);
+		addTab("帐号", R.drawable.tab_account_selector, AccountActivity.class);
+		addTab("设置", R.drawable.tab_settings_selector, PreferenceActivity.class);
 	}
 	
 	private void addTab(String labelId, int drawableId, Class<?> c)
@@ -94,7 +95,6 @@ public class MainActivity extends TabActivity {
 		title.setText(labelId);
 		ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
 		icon.setImageResource(drawableId);
-		
 		spec.setIndicator(tabIndicator);
 		spec.setContent(intent);
 		tabHost.addTab(spec);

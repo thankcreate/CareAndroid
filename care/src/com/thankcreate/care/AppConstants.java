@@ -4,6 +4,7 @@ public class AppConstants {
 
 	public static final String PREFERENCES_NAME = "com_thankcreate_care";
 	public static final String CACHE_ITEM = "cacheItem";
+	public static final String CACHE_PIC_ITEM = "cachePicItem";
 	public static final String LAB_SMART_CHAT_HISTORY = "labSmartChatHistory";
 	
 	// SinaWeibo
@@ -11,14 +12,9 @@ public class AppConstants {
 	public static final String SINAWEIBO_REDIRECT_URL = "http://api.weibo.com/oauth2/default.html";
 	
 	// Renren
-//	public static final String RENREN_APP_ID = "223764";
-//	public static final String RENREN_APP_KEY = "c2ec3bd34d834eb48e7d0789c14e0cb5";
-//	public static final String RENREN_SECRET_KEY = "a45988af42454c39807f85664a808cc4";
-	
-	// 这是人人ios版的key其实
-	public static final String RENREN_APP_ID = "220565";
-	public static final String RENREN_APP_KEY = "fd80adfb79554ad8a8fb46d5a3fde69c";
-	public static final String RENREN_SECRET_KEY = "2d853703fc854cdda912f36f3ff69a01";
+	public static final String RENREN_APP_ID = "223764";
+	public static final String RENREN_APP_KEY = "c2ec3bd34d834eb48e7d0789c14e0cb5";
+	public static final String RENREN_SECRET_KEY = "a45988af42454c39807f85664a808cc4";
 	public static final String[] RENREN_PERMISSION = {
         "publish_feed",
         "publish_blog", 
