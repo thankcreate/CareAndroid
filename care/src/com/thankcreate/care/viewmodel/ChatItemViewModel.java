@@ -1,4 +1,4 @@
-package com.thankcreate.care.viewmodel;
+ package com.thankcreate.care.viewmodel;
 
 import java.io.Serializable;
 import java.util.Date;

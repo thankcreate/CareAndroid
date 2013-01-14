@@ -17,3 +17,4 @@ public class CommentViewModel implements Serializable{
 	public Date time;
 	
 }
+ 

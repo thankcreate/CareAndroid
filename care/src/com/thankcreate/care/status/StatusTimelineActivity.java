@@ -9,9 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import net.youmi.android.AdManager;
-
 import com.buuuk.android.gallery.ImageViewFlipper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -103,9 +100,9 @@ public class StatusTimelineActivity extends BaseActivity implements
 		// 做友盟自动更新，因为这里是在tabhost中，所以要getParent
 		// 据说是因为tabhost的子页面拿不到service
 		UmengUpdateAgent.update(this.getParent());
-		// 有米初始化
-		AdManager.init(this.getBaseContext(), "3e9fc4796d5e9801",
-				"4d78213f8ac82754 ", 45, false);
+		// 有米初始化 ，不加广告了
+//		AdManager.init(this.getBaseContext(), "3e9fc4796d5e9801",
+//				"4d78213f8ac82754 ", 45, false);
 	}
 
 	private void checkNetWork() {

@@ -158,7 +158,8 @@ public class SinaWeiboConverter {
 							+ forwardUser.optString("name")
 							+ "： "
 							+ forward.optString("text");
-					String forwardRawTimeString = forward.optString("created_at");
+					// 这个时间应该是转发的时间
+					String forwardRawTimeString = status.optString("created_at");
 					forwardModel.time  = convertSinaWeiboDateStringToDate(forwardRawTimeString);
 					
 					

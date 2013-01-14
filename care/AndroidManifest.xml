@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thankcreate.care"
-    android:versionCode="2"
-    android:versionName="1.0.1.0111" >
+    android:versionCode="3"
+    android:versionName="1.0.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -178,31 +178,19 @@
             android:name="UMENG_APPKEY"
             android:value="50e7f69b5270153441000032" >
         </meta-data>
+        
+        <!-- 友盟渠道统计 -->
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="Default" />
 
-        <!-- 友盟自动更新 -->
+        <!-- 友盟自动更新服务 -->
         <service
             android:name="com.umeng.common.net.DownloadingService"
             android:exported="true"
             android:process=":DownloadingService" >
-        </service>
-
-        <!-- 有米广告条 -->
-        <activity
-            android:name="net.youmi.android.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation" />
-
-        <!-- 有米广告接收器,安智市场需去除-->
-        <receiver android:name="net.youmi.android.YoumiReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_INSTALL" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-         
+        </service>       
+       
          
         <service
             android:name="com.thankcreate.care.service.NewsPollingService"
