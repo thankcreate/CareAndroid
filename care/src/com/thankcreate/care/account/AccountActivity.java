@@ -63,10 +63,13 @@ import com.weibo.sdk.android.sso.SsoHandler;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.R.bool;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -75,6 +78,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.AdapterView;
@@ -102,6 +106,7 @@ public class AccountActivity extends BaseActivity {
 	private AccountGroupAdapter rssAdapter = null;
 	private SsoHandler msinaWeiboSsoHandler;
 		
+	private ProgressDialog mSpinner;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,6 +136,11 @@ public class AccountActivity extends BaseActivity {
 		renrenListView = (ListView) findViewById(R.id.account_list_renren);
 		doubanListView = (ListView) findViewById(R.id.account_list_douban);
 		rssListView = (ListView) findViewById(R.id.account_list_rss);
+		
+		
+		mSpinner = new ProgressDialog(this);
+		mSpinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mSpinner.setMessage("Loading...");
 	}
 	
 	private void initActionBar()
@@ -203,9 +213,21 @@ public class AccountActivity extends BaseActivity {
 				}
 				// 退出
 				else if (position == 2) {
-					PreferenceHelper.removeSinaWeiboPreference();
-					initSinaWeibo();
-					App.mainViewModel.isChanged = true;
+					new AlertDialog.Builder(AccountActivity.this)
+			        .setIcon(R.drawable.tab_account)
+			        .setTitle("确认退出登陆？")
+			        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+							PreferenceHelper.removeSinaWeiboPreference();
+							initSinaWeibo();
+							App.mainViewModel.isChanged = true;
+			            }
+			        })
+			        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            }
+			        })
+			        .create().show();
 				}
 			}
 			
@@ -265,10 +287,23 @@ public class AccountActivity extends BaseActivity {
 				}
 				// 退出
 				else if (position == 2) {
-					PreferenceHelper.removeRenrenPreference();				
-					App.getRenren().logout(AccountActivity.this);
-					initRenren();
-					App.mainViewModel.isChanged = true;
+					new AlertDialog.Builder(AccountActivity.this)
+			        .setIcon(R.drawable.tab_account)
+			        .setTitle("确认退出登陆？")
+			        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            	PreferenceHelper.removeRenrenPreference();				
+							App.getRenren().logout(AccountActivity.this);
+							initRenren();
+							App.mainViewModel.isChanged = true;
+			            }
+			        })
+			        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            }
+			        })
+			        .create().show();
+				
 				}
 			}
 			
@@ -325,9 +360,21 @@ public class AccountActivity extends BaseActivity {
 				}
 				// 退出
 				else if (position == 2) {
-					PreferenceHelper.removeDoubanPreference();
-					initDouban();
-					App.mainViewModel.isChanged = true;
+					new AlertDialog.Builder(AccountActivity.this)
+			        .setIcon(R.drawable.tab_account)
+			        .setTitle("确认退出登陆？")
+			        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+							PreferenceHelper.removeDoubanPreference();
+							initDouban();
+							App.mainViewModel.isChanged = true;
+			            }
+			        })
+			        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            }
+			        })
+			        .create().show();
 				}
 			}
 		});
@@ -371,6 +418,23 @@ public class AccountActivity extends BaseActivity {
 		});
 	}
 	
+	private void showProgress(final boolean isShow)
+	{
+		if(actionBar == null || mSpinner == null)
+			return;
+		actionBar.post(new Runnable() {
+			@Override
+			public void run() {
+				if(isShow)
+					mSpinner.show();
+				else
+					mSpinner.dismiss();
+			}
+		});
+	}
+	
+	
+	
 	private WeiboAuthListener mWeiboAuthListener = new WeiboAuthListener (){
         @Override
         public void onComplete(Bundle values) {
@@ -397,6 +461,7 @@ public class AccountActivity extends BaseActivity {
         		UsersAPI usersAPI=new UsersAPI(oauth2AccessToken);
         		long lID = Long.parseLong(id);
         		usersAPI.show(lID, mSinaWeiboShowRequestListener);
+        		showProgress(true);
 			} catch (Exception e) {
 				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");  
 				PreferenceHelper.removeSinaWeiboPreference();
@@ -442,21 +507,26 @@ public class AccountActivity extends BaseActivity {
 					public void run() {						
 						initSinaWeibo();
 					}
-				});				
+				});
+				showProgress(false);
 			} catch (JSONException e) {
+				showProgress(false);
 				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
 				PreferenceHelper.removeSinaWeiboPreference();				
-			}			
+			}		
+			
 		}
 
 		@Override
 		public void onError(WeiboException arg0) {
+			showProgress(false);
 			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
 			PreferenceHelper.removeSinaWeiboPreference();
 		}
 
 		@Override
 		public void onIOException(IOException arg0) {
+			showProgress(false);
 			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
 			PreferenceHelper.removeSinaWeiboPreference();
 		}	
@@ -490,6 +560,7 @@ public class AccountActivity extends BaseActivity {
 		
 				UsersGetInfoRequestParam param = new UsersGetInfoRequestParam(null, "uid,name,sex,birthday,headurl"); 
 				asyncRenren.getUsersInfo(param, mRenrenShowRequestListener);
+				showProgress(true);
 			} catch (Exception e) {
 				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");
 				PreferenceHelper.removeRenrenPreference();
@@ -526,8 +597,10 @@ public class AccountActivity extends BaseActivity {
 						initRenren();						
 					}
 				});
+				showProgress(false);
 				
-			} catch (Exception e) {				
+			} catch (Exception e) {
+				showProgress(false);
 				ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
 				PreferenceHelper.removeRenrenPreference();
 				App.getRenren().logout(getApplicationContext());
@@ -535,12 +608,14 @@ public class AccountActivity extends BaseActivity {
 		}
 
 		public void onRenrenError(RenrenError renrenError) {
+			showProgress(false);
 			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
 			PreferenceHelper.removeRenrenPreference();
 			App.getRenren().logout(getApplicationContext());
 		}
 
 		public void onFault(Throwable fault) {
+			showProgress(false);
 			ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");	
 			PreferenceHelper.removeRenrenPreference();
 			App.getRenren().logout(getApplicationContext());
@@ -573,6 +648,7 @@ public class AccountActivity extends BaseActivity {
     			editor.putLong("Douban_ExpirationDate", exp);    			
     			editor.commit();
 
+    			showProgress(true);
         		new Thread(new Runnable() {
 					
 					@Override
@@ -598,8 +674,12 @@ public class AccountActivity extends BaseActivity {
 								public void run() {						
 									initDouban();
 								}
-							});				
+							});		
+							showProgress(false);
 						} catch (Exception e) {
+							ToastHelper.show( "授权过程中发生未知错误，请确保网络通畅");  
+							PreferenceHelper.removeDoubanPreference();
+							showProgress(false);
 							e.printStackTrace();
 						} 
 					}

@@ -127,6 +127,7 @@ public class DrawableManager {
 //            	Drawable drawable = (Drawable) message.obj;            	
 //                imageView.setImageDrawable((Drawable) message.obj);
                 Bitmap bmp = (Bitmap) message.obj;
+                Log.i("complete", urlString);
                 imageView.setImageBitmap(drawableMap.get(urlString));
             }
         };

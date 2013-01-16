@@ -8,6 +8,8 @@ import com.thankcreate.care.lab.LabActivity;
 import com.thankcreate.care.picture.PictureWallActivity;
 import com.thankcreate.care.preference.PreferenceActivity;
 import com.thankcreate.care.status.StatusTimelineActivity;
+import com.thankcreate.care.tool.misc.StringTool;
+import com.thankcreate.care.tool.ui.RefreshViewerHelper;
 import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -82,6 +86,22 @@ public class MainActivity extends TabActivity {
 		addTab("奇怪的地方", R.drawable.tab_microscope_selector, LabActivity.class);
 		addTab("帐号", R.drawable.tab_account_selector, AccountActivity.class);
 		addTab("设置", R.drawable.tab_settings_selector, PreferenceActivity.class);
+		
+		SharedPreferences pref = App.getAppContext().getSharedPreferences(
+				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
+		final Editor editor = pref.edit();
+		final String firstInMain = pref.getString("Global_FirstInMainActivity", "");
+		// 如果是第一次进入，先进帐号设置页
+		if(StringTool.isNullOrEmpty(firstInMain))
+		{
+			editor.putString("Global_FirstInMainActivity", "WhatEver");
+			editor.commit();	
+			getTabHost().setCurrentTab(3);
+		}
+		else
+		{
+			getTabHost().setCurrentTab(0);
+		}
 	}
 	
 	private void addTab(String labelId, int drawableId, Class<?> c)

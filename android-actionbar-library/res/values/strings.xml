@@ -2,5 +2,5 @@
 <resources>
     <string name="hello">Hello World!</string>
     <string name="app_name">ActionBar</string>
-    <string name="actionbar_activity_not_found">Failed to open intent...</string>
+    <string name="actionbar_activity_not_found" translatable="false">Failed to open intent...</string>
 </resources>

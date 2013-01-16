@@ -512,13 +512,22 @@ public class StatusDetailActivity extends BaseActivity {
 		
 		// 更新一下评论数，因为有可能是自己又发了一条评论，但是mainViewModel这个时候还没更新
 		final int length = listComments.size();
-		itemViewModel.commentCount = String.valueOf(length);
-		textCommentCount.post(new Runnable() {
-			@Override
-			public void run() {
-				textCommentCount.setText(String.valueOf(length));						
-			}
-		});
+		int originalLength = 0;
+		try {
+			originalLength = Integer.parseInt(itemViewModel.commentCount);	
+		} catch (Exception e) {
+			originalLength = 0;
+		}
+		if(length > originalLength)
+		{
+			itemViewModel.commentCount = String.valueOf(length);
+			textCommentCount.post(new Runnable() {
+				@Override
+				public void run() {
+					textCommentCount.setText(String.valueOf(length));						
+				}
+			});
+		}
 		for (ItemViewModel item : App.mainViewModel.items) {
 			if (item != null && !StringTool.isNullOrEmpty(item.ID)
 					&& item.ID.equalsIgnoreCase(itemViewModel.ID)) {

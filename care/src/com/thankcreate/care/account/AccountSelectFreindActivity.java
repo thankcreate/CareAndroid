@@ -49,6 +49,7 @@ import com.weibo.sdk.android.net.RequestListener;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,6 +59,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -86,8 +88,11 @@ public class AccountSelectFreindActivity extends BaseActivity {
 	private List<FriendViewModel> listFriendsAll = new ArrayList<FriendViewModel>();
 	private DrawableManager drawableManager = new DrawableManager();
 	
-	private final int RENREN_FETCH_COUNT = 500;
+	private final Integer RENREN_FETCH_COUNT = 500;
+	private final Integer DOUBAN_FETCH_COUNT = 200;
 	private int mRenrenLastFetchPage = 1;
+	
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,7 @@ public class AccountSelectFreindActivity extends BaseActivity {
 		
 		listViewFriend.setOnScrollListener(onScrollListener);
 		listViewFriend.setOnItemClickListener(onItemClickListener);
+
 	}
 			
 	private void initActionBar()
@@ -249,7 +255,6 @@ public class AccountSelectFreindActivity extends BaseActivity {
 		{
 			loadFriendDouban();
 		}
-		
 	}
 
 
@@ -277,6 +282,10 @@ public class AccountSelectFreindActivity extends BaseActivity {
 	
 	
 	private void loadFriendDouban() {		
+		loadFriendDoubanInternal(0);
+	}
+	
+	private void loadFriendDoubanInternal(final Integer start) {		
 		SharedPreferences pref = getApplicationContext().getSharedPreferences(
 				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
     	final String token = pref.getString("Douban_Token", "");
@@ -291,20 +300,30 @@ public class AccountSelectFreindActivity extends BaseActivity {
 			public void run() {
 				try {
 					HttpManager httpManager = new HttpManager(token);
-					String url = String.format("%s/shuo/v2/users/%s/following", 
-							DefaultConfigs.API_URL_PREFIX, myID);
+					String strCount= DOUBAN_FETCH_COUNT.toString();
+					String strStart = start.toString();
+					String url = String.format("%s/shuo/v2/users/%s/following?start=%s&count=%s", 
+							DefaultConfigs.API_URL_PREFIX, myID, strStart, strCount);
 					String result = httpManager.getResponseString(url, null, true);
 					JSONArray users = new JSONArray(result);
 					int length = users.length();
-					for (int i = 0 ; i< length; i++) {
-						JSONObject user = users.getJSONObject(i);
-						FriendViewModel model = DoubanConverter.convertFriendToCommon(user);
-						if(model != null)
-						{
-							listFriendsAll.add(model);
+					if(length != 0)
+					{
+						for (int i = 0 ; i< length; i++) {
+							JSONObject user = users.getJSONObject(i);
+							FriendViewModel model = DoubanConverter.convertFriendToCommon(user);
+							if(model != null)
+							{
+								if(!model.name.equalsIgnoreCase("[已注销]"))
+									listFriendsAll.add(model);
+							}
 						}
+						loadFriendDoubanInternal(start + DOUBAN_FETCH_COUNT);
 					}
-					fetchComplete();
+					else
+					{
+						fetchComplete();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					ToastHelper.show("获取朋友列表过程中发生未知错误，请确保网络通畅");

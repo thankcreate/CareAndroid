@@ -220,7 +220,7 @@ public class StatusPostActivity extends BaseActivity {
 	private void sendClick() {
 		new AlertDialog.Builder(this)
         .setIcon(R.drawable.thumb_send)
-        .setTitle("确认发送吗？点击确认将发布您的状态")
+        .setTitle("确认提交？")
         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             	sendInternal();

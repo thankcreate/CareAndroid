@@ -513,7 +513,7 @@ public class StatusTimelineActivity extends BaseActivity implements
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-
+ 
 			final ItemViewModel item = listModel.get(position);
 
 			if (item == null)

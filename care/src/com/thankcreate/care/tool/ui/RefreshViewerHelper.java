@@ -441,7 +441,7 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 								DefaultConfigs.API_URL_PREFIX, strFollowerID);
 						List<NameValuePair> params = new ArrayList<NameValuePair>();
 						if(mType == FORGRAOUND)
-							params.add(new BasicNameValuePair("count", "100")); // 豆瓣最大一次加载200
+							params.add(new BasicNameValuePair("count", "60")); // 豆瓣最大一次加载200
 						else
 							params.add(new BasicNameValuePair("count", "5"));  // 后台轮询的话，要最大化节省流量 ^_^ 我真是个好人
 						String result = httpManager.getResponseString(url, params,

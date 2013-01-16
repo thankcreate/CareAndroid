@@ -39,7 +39,7 @@ public class LabPercentageActivity extends LabShareActivity {
 	private TextView textMyName;
 	private TextView textAward;
 	
-	int param1;
+	long param1;
 	String herName;
 	String myName;
 	
@@ -108,8 +108,8 @@ public class LabPercentageActivity extends LabShareActivity {
 		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getHerIconUrl(), imageViewHerAvatar);
 		App.getDrawableManager().fetchDrawableOnThread(MiscTool.getMyIconUrl(), imageViewMyAvatar);
 		
-		int herSig = StringTool.getSig(herName);
-		int mySig =  StringTool.getSig(myName);
+		 long herSig = StringTool.getSig(herName);
+		long mySig =  StringTool.getSig(myName);
 		
 		param1 =  (herSig + mySig) * 575 % 49 + 50;
 		textAward.setText(String.valueOf(param1));
