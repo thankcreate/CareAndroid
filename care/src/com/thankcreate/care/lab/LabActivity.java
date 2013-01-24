@@ -54,7 +54,7 @@ public class LabActivity extends BaseActivity {
 	{
 		actionBar  = (ActionBar) findViewById(R.id.actionbar);     
         actionBar.setTitle("奇怪的地方");    
-        actionBar.SetTitleLogo(R.drawable.tab_microscope);
+        actionBar.SetTitleLogo(R.drawable.thumb_microscope);
 	}
 	
 	private void initControl()

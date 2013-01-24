@@ -45,6 +45,7 @@ public class PreferenceActivity extends BaseActivity {
 	private ToggleButton toggleUsePassword;
 	private ToggleButton toggleUseSharedPicture;
 	private ToggleButton toggleUsePolling;
+	private ToggleButton toggleUseBlessingPage;
 	private RelativeLayout layoutUsePolling;
 	private RelativeLayout layoutGotoSiteLayout;
 	private RelativeLayout layoutFeedback;
@@ -138,6 +139,22 @@ public class PreferenceActivity extends BaseActivity {
 			}
 		});
 		
+		// 是否在启动时显示祝福心语
+		toggleUseBlessingPage = (ToggleButton) findViewById(R.id.preference_show_blessing_when_startup);
+		toggleUseBlessingPage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ToggleButton btn = (ToggleButton) v;
+				boolean isChecked = btn.isChecked();
+				if (isChecked)
+					edit.putString("Global_UseBlessingPage", "True");
+				else
+					edit.putString("Global_UseBlessingPage", "False");
+				edit.commit();
+			}
+		});
+		
+		
 		// 推送
 		layoutUsePolling = (RelativeLayout) findViewById(R.id.preference_use_polling_layout);
 		layoutUsePolling.setOnClickListener(new OnClickListener() {
@@ -212,6 +229,13 @@ public class PreferenceActivity extends BaseActivity {
 		} else {
 			toggleUsePolling.setChecked(false);
 		}
+		
+		String useBlessingPageString = pref.getString("Global_UseBlessingPage", "True");
+		if(useBlessingPageString.equalsIgnoreCase("True")) {
+			toggleUseBlessingPage.setChecked(true);
+		} else {
+			toggleUseBlessingPage.setChecked(false);
+		} 
 
 		String useSharedPicture = pref.getString(
 				"Global_NeedFetchImageInRetweet", "True");

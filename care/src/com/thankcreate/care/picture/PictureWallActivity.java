@@ -37,6 +37,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.service.dreams.DreamService;
 import android.text.format.DateUtils;
@@ -323,6 +324,29 @@ public class PictureWallActivity extends BaseActivity implements OnRefreshComple
 		});
 		
 		loadPicture(App.mainViewModel.pictureItems);
+			
+		
+		Long current = System.currentTimeMillis();
+		final String label = "上次更新:  "
+				+ DateUtils.formatDateTime(getApplicationContext(),
+						current, DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
+		pullToRefreshGridView.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				pullToRefreshGridView.getLoadingLayoutProxy()
+				.setLastUpdatedLabel(label);
+				
+			}
+		});
+		SharedPreferences pref = App.getAppContext()
+				.getSharedPreferences(AppConstants.PREFERENCES_NAME,
+						Context.MODE_APPEND);
+		Editor editor = pref.edit();
+		editor.putLong("Global_LastUpdateTime", current);
+		editor.commit();
 	}
 
 }

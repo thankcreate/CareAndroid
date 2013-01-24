@@ -4,11 +4,24 @@
     android:layout_height="fill_parent" >
 
     <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/shape_bkg_picture_wall_border_outter" />
+
+    <ImageView
+        android:layout_margin="3dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/shape_bkg_picture_wall_border_inner" />
+
+    <ImageView
         android:id="@+id/picture_wall_item_thumb_image"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_margin="4dp"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
-        android:src="@drawable/thumb_default_avatar1" />
+        android:src="@drawable/thumb_default_avatar1"
+		 />
 
 </com.thankcreate.care.control.SquareRelativeLayout>

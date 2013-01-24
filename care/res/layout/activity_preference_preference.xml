@@ -12,7 +12,8 @@
     <ScrollView
         android:id="@+id/preference_scroll_root"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:paddingBottom="15dp" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -82,6 +83,35 @@
 
                     <ToggleButton
                         android:id="@+id/preference_show_forward_pic_toggle"
+                        android:layout_width="90dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/selector_bkg_switch"
+                        android:textOff=""
+                        android:textOn="" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/roundCornerTableBorder" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:text="启动时显示祝福心语"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ToggleButton
+                        android:id="@+id/preference_show_blessing_when_startup"
                         android:layout_width="90dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"

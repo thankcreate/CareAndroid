@@ -186,6 +186,8 @@ public class StatusPostActivity extends BaseActivity {
         		File imgFile = new  File(imageURL);
         		if(imgFile.exists()){
             	    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        			//Bitmap myBitmap = BitmapFactory.decodeFile("/data/data/com.thankcreate.care/files/belssing_bkg_dir/1.jpg");
+        			
             	    imageViewThumb.setImageBitmap(myBitmap);
             	}
 			} catch (Exception e) {

@@ -29,7 +29,7 @@
             android:layout_marginTop="40dp"
             android:background="@drawable/shape_bkg_avatar_round_corner_pink" >
 
-            <ImageView
+            <com.thankcreate.care.control.RoundCornerImageView
                 android:id="@+id/status_detail_avatar_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

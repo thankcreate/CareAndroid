@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="corner_radius">8dp</dimen> 
+    <dimen name="middle_out_corner_radius">40dp</dimen>
+    <dimen name="middle_inner_corner_radius">25dp</dimen>
     <dimen name="tab_space_top">4dp</dimen>
     <dimen name="tab_space">0dp</dimen>
     <dimen name="tab_space_plus1">3dp</dimen>

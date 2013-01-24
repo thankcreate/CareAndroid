@@ -260,8 +260,15 @@ public class LabTimelineActivity extends LabShareActivity {
 	}
 
 	@Override
-	protected String getShareTextSinaWeibo() {		
-		int pencentage = max * 100 / (param1 + param2 + param3 + param4);
+	protected String getShareTextSinaWeibo() {
+		int pencentage = 0;
+		try {
+			// 因为崩溃上报发现这里可能会有除0异常，所以最好还是catch起来
+			pencentage = max * 100 / (param1 + param2 + param3 + param4);	
+		} catch (Exception e) {
+			pencentage = 0;
+		}
+		
 		herName = MiscTool.getHerName(EntryType.SinaWeibo);
 		String preContentString =  String.format("据消息人士透露，@%s 最活跃的时间是在%s，此段时间中的发贴量占全部发贴的%d%%, 获得了成就【%s】", 
 				herName, mostActiveTime, pencentage,  award);

@@ -5,6 +5,7 @@ public class AppConstants {
 	public static final String PREFERENCES_NAME = "com_thankcreate_care";
 	public static final String CACHE_ITEM = "cacheItem";
 	public static final String CACHE_PIC_ITEM = "cachePicItem";
+	public static final String BLESSING_BACKGROUND_DIR = "belssing_bkg_dir";
 	public static final String LAB_SMART_CHAT_HISTORY = "labSmartChatHistory";
 	
 	// SinaWeibo

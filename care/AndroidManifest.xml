@@ -25,7 +25,8 @@
         android:icon="@drawable/thumb_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" android:logo="@drawable/thumb_logo">
+        android:logo="@drawable/thumb_logo"
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.renren.api.connect.android.AuthorizationHelper$BlockActivity"
             android:theme="@android:style/Theme.Dialog" >
@@ -38,12 +39,20 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.thankcreate.care.GuideActivity"
             android:label="@string/title_activity_guide"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.thankcreate.care.startup.BlessingActivity"
+            android:label="@string/title_activity_blessing" 
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -178,7 +187,7 @@
             android:name="UMENG_APPKEY"
             android:value="50e7f69b5270153441000032" >
         </meta-data>
-        
+
         <!-- 友盟渠道统计 -->
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -189,15 +198,13 @@
             android:name="com.umeng.common.net.DownloadingService"
             android:exported="true"
             android:process=":DownloadingService" >
-        </service>       
-       
-         
+        </service>
         <service
             android:name="com.thankcreate.care.service.NewsPollingService"
             android:label="新鲜事轮询"
-            android:process=":NewsPollingService">            
+            android:process=":NewsPollingService" >
         </service>
-        
+
         <receiver android:name="com.thankcreate.care.service.CareStartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" >
@@ -205,6 +212,7 @@
             </intent-filter>
         </receiver>
 
+      
     </application>
 
 </manifest>

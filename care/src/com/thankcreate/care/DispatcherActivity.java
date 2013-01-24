@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import com.thankcreate.care.password.PasswordActivity;
 import com.thankcreate.care.service.NewsPollingService;
+import com.thankcreate.care.startup.BlessingActivity;
 import com.thankcreate.care.tool.converter.DoubanConverter;
 import com.thankcreate.care.tool.converter.RenrenConverter;
 import com.thankcreate.care.tool.converter.SinaWeiboConverter;
@@ -57,6 +58,7 @@ public class DispatcherActivity extends BaseActivity {
 		final Editor editor = pref.edit();
 		final String firstLaunch = pref.getString("Global_FirstLauch", "");
 		final String usePassword = pref.getString("Global_UsePassword", "False");
+		final String useBlessingPage = pref.getString("Global_UseBlessingPage", "True");
 		
 		if(!StringTool.isNullOrEmpty(firstLaunch))
 		{
@@ -97,6 +99,13 @@ public class DispatcherActivity extends BaseActivity {
         			intent.setClass(DispatcherActivity.this, GuideActivity.class);					
         			startActivity(intent);
         		}
+            	// 不是第一次启动，且允许开机显示祝福墙
+            	else if (useBlessingPage.equalsIgnoreCase("True"))
+            	{
+            		Intent intent = new Intent();
+        			intent.setClass(DispatcherActivity.this, BlessingActivity.class);					
+        			startActivity(intent);
+            	}
             	// 不是第一次启动，且设置了密码
         		else if (usePassword.equalsIgnoreCase("True"))
         		{

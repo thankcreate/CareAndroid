@@ -8,6 +8,7 @@ import com.thankcreate.care.lab.LabActivity;
 import com.thankcreate.care.picture.PictureWallActivity;
 import com.thankcreate.care.preference.PreferenceActivity;
 import com.thankcreate.care.status.StatusTimelineActivity;
+import com.thankcreate.care.tool.misc.BlessHelper;
 import com.thankcreate.care.tool.misc.StringTool;
 import com.thankcreate.care.tool.ui.RefreshViewerHelper;
 import com.umeng.analytics.MobclickAgent;
@@ -36,10 +37,16 @@ public class MainActivity extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		setNavigateBar();
 		setTabs();
 		setDensity();
+		
+		fetchBlessing();
+	}
+
+	BlessHelper blessHelper;
+	private void fetchBlessing() {		
+		blessHelper = new BlessHelper();
+		blessHelper.refresh();
 	}
 
 	protected void onResume() {
@@ -58,19 +65,6 @@ public class MainActivity extends TabActivity {
 		App.density = metric.density;
 	}
 
-	private void setNavigateBar() {
-		
-//		actionBar.addAction(new Action() {
-//            @Override
-//            public void performAction(View view) {
-//                Toast.makeText(MainActivity.this, "Added action.", Toast.LENGTH_SHORT).show();
-//            }
-//            @Override
-//            public int getDrawable() {
-//                return R.drawable.ic_title_share_default;
-//            }
-//        });
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,14 +77,16 @@ public class MainActivity extends TabActivity {
 	{
 		addTab("主页", R.drawable.tab_home_selector, StatusTimelineActivity.class);
 		addTab("图片", R.drawable.tab_picture_selector, PictureWallActivity.class);
-		addTab("奇怪的地方", R.drawable.tab_microscope_selector, LabActivity.class);
+		addTabMiddle("实验室", R.drawable.tab_microscope_selector, LabActivity.class);
 		addTab("帐号", R.drawable.tab_account_selector, AccountActivity.class);
 		addTab("设置", R.drawable.tab_settings_selector, PreferenceActivity.class);
 		
 		SharedPreferences pref = App.getAppContext().getSharedPreferences(
 				AppConstants.PREFERENCES_NAME, Context.MODE_APPEND);
 		final Editor editor = pref.edit();
-		final String firstInMain = pref.getString("Global_FirstInMainActivity", "");
+		final String firstInMain = pref.getString("Global_FirstInMainActivity", "");		
+		getTabWidget().setBackgroundResource(R.color.transparent);
+		getTabHost().setBackgroundResource(R.color.transparent);
 		// 如果是第一次进入，先进帐号设置页
 		if(StringTool.isNullOrEmpty(firstInMain))
 		{
@@ -102,6 +98,8 @@ public class MainActivity extends TabActivity {
 		{
 			getTabHost().setCurrentTab(0);
 		}
+		
+		getTabWidget().setDrawingCacheBackgroundColor(0);		
 	}
 	
 	private void addTab(String labelId, int drawableId, Class<?> c)
@@ -115,9 +113,30 @@ public class MainActivity extends TabActivity {
 		title.setText(labelId);
 		ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
 		icon.setImageResource(drawableId);
+		
 		spec.setIndicator(tabIndicator);
 		spec.setContent(intent);
+		
+		tabHost.addTab(spec);		
+		tabHost.setBackgroundResource(R.color.transparent);
+	}
+	
+	private void addTabMiddle(String labelId, int drawableId, Class<?> c)
+	{
+		TabHost tabHost = getTabHost();
+		Intent intent = new Intent(this, c);
+		TabHost.TabSpec spec = tabHost.newTabSpec("tab" + labelId);	
+		
+		View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator_middle, getTabWidget(), false);
+		
+		ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
+		icon.setImageResource(drawableId);
+		
+		spec.setIndicator(tabIndicator);
+		spec.setContent(intent);
+		
 		tabHost.addTab(spec);
+		tabHost.setBackgroundResource(R.color.transparent);		
 	}
 	
 	

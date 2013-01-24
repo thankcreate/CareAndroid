@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/test_image"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+        />
+        
+    
+
+    <ImageSwitcher
+        
+        android:id="@+id/blessing_image_switcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"        
+         />
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.thankcreate.care.tool.misc;
 
+import android.R.string;
 import net.sourceforge.pinyin4j.PinyinHelper;  
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;  
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;  
@@ -47,4 +48,19 @@ public class StringTool {
 		}
 		return herSig;
 	}
+	
+	public static String getFileName(String input)
+	{
+		if(input == null)
+			return "";
+		String res = "";
+		try {
+			res = input.substring(input.lastIndexOf("/") + 1);
+		} catch (Exception e) {
+			res = "";
+		}
+		return res;
+	}
+	
+	
 }

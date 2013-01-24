@@ -349,6 +349,7 @@ public class StatusTimelineActivity extends BaseActivity implements
 								Context.MODE_APPEND);
 				Editor editor = pref.edit();
 				editor.putLong("Global_LastUpdateTime", current);
+				editor.commit();
 			}
 		});
 

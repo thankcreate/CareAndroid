@@ -126,9 +126,23 @@ public class DrawableManager {
                 }                
 //            	Drawable drawable = (Drawable) message.obj;            	
 //                imageView.setImageDrawable((Drawable) message.obj);
-                Bitmap bmp = (Bitmap) message.obj;
-                Log.i("complete", urlString);
+                final Bitmap bmp = (Bitmap) message.obj;
+
                 imageView.setImageBitmap(drawableMap.get(urlString));
+                
+                
+                /**
+                 * FIXME:纯Hack
+                 * 原因：不知道为什么有时候这里明明bmp是有值的，但是更新到页面上去显示不出来
+                 * 尤其是头像区，非常容易出现这种情况，invalidate了也没有用
+                 * 这里直接作一个延时200ms，再刷新一次，看样子是解决了
+                 */
+                new Handler().postDelayed(new Runnable() {
+        			@Override
+        			public void run() {
+                        imageView.setImageBitmap(bmp);
+        			}
+        		}, 200);
             }
         };
 
