@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.thankcreate.care.control.BackKeyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/post_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="姓名"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/lab_bless_post_name_input"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/search_bkg"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textSize="15sp" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:text="内容"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/lab_bless_post_content_input"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/search_bkg"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:paddingTop="3dp"
+                android:textSize="15sp" >                
+            </EditText>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/status_post_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="2dp"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="剩余字数: "
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bless_post_count_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</com.thankcreate.care.control.BackKeyLinearLayout>

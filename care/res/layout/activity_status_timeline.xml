@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_home"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     >    
  	<com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar"
@@ -15,6 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
-        android:divider="@color/roundCornerTableBorder"
-        android:dividerHeight="0.5dp" />
+        android:divider="#00ffffff"
+        android:dividerHeight="0dp"  />
 </LinearLayout>

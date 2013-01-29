@@ -13,7 +13,7 @@
      	android:layout_centerVertical ="true"  
         android:orientation="horizontal" >
         
-        <ImageView
+        <com.thankcreate.care.control.RoundCornerImageView
             android:id="@+id/comment_list_item_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"            

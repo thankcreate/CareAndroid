@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage">
+    android:background="@drawable/bitmap_bkg_tile_timeline">
 
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar"

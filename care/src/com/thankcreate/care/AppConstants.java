@@ -5,6 +5,7 @@ public class AppConstants {
 	public static final String PREFERENCES_NAME = "com_thankcreate_care";
 	public static final String CACHE_ITEM = "cacheItem";
 	public static final String CACHE_PIC_ITEM = "cachePicItem";
+	public static final String CACHE_BLESS_ITEM = "cacheBlessingItem";
 	public static final String BLESSING_BACKGROUND_DIR = "belssing_bkg_dir";
 	public static final String LAB_SMART_CHAT_HISTORY = "labSmartChatHistory";
 	
@@ -39,4 +40,8 @@ public class AppConstants {
 	// 推送
 	public static final int DEFAULT_POLLING_INTERVAL = 30 * 60 * 1000;
 
+	// Bless
+	public static final String BLESS_IMAGES_PATH_DOC_URL = "http://42.96.147.167/thankcreate/images/image_path.txt";
+	public static final String BLESS_GET_URL = "http://42.96.147.167:8181/admin/get_blessing";
+	public static final String BLESS_POST_URL = "http://42.96.147.167:8181/admin/put_blessing";
 }

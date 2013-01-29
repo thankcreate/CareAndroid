@@ -15,25 +15,29 @@ public class StringTool {
 	}
 	
 	public static String converterToFirstSpell(String chines) {
-		String pinyinName = "";
-		char[] nameChar = chines.toCharArray();
-		HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
-		defaultFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-		defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-		for (int i = 0; i < nameChar.length; i++) {
-			if (nameChar[i] > 128) {
-				try {
-					pinyinName += PinyinHelper.toHanyuPinyinStringArray(
-							nameChar[i], defaultFormat)[0].charAt(0);
-					return pinyinName;
-				} catch (BadHanyuPinyinOutputFormatCombination e) {
-					e.printStackTrace();
+		try {
+			String pinyinName = "";
+			char[] nameChar = chines.toCharArray();
+			HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
+			defaultFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+			defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+			for (int i = 0; i < nameChar.length; i++) {
+				if (nameChar[i] > 128) {
+					try {
+						pinyinName += PinyinHelper.toHanyuPinyinStringArray(
+								nameChar[i], defaultFormat)[0].charAt(0);
+						return pinyinName;
+					} catch (BadHanyuPinyinOutputFormatCombination e) {
+						e.printStackTrace();
+					}
+				} else {
+					pinyinName += nameChar[i];
 				}
-			} else {
-				pinyinName += nameChar[i];
 			}
+			return pinyinName;	
+		} catch (Exception e) {
+			return "#";
 		}
-		return pinyinName;
 	}
 	
 	public static int getSig(String input)
@@ -59,7 +63,7 @@ public class StringTool {
 		} catch (Exception e) {
 			res = "";
 		}
-		return res;
+		return res.trim();
 	}
 	
 	

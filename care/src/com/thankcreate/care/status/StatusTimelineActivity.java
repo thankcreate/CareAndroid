@@ -40,6 +40,7 @@ import com.thankcreate.care.viewmodel.FriendViewModel;
 import com.thankcreate.care.viewmodel.ItemViewModel;
 import com.thankcreate.care.viewmodel.SimpleTableModel;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengDownloadListener;
 import com.umeng.update.UmengUpdateAgent;
 
 import android.os.Bundle;
@@ -97,12 +98,28 @@ public class StatusTimelineActivity extends BaseActivity implements
 		initSourceSelected();
 		checkNetWork();
 
-		// 做友盟自动更新，因为这里是在tabhost中，所以要getParent
-		// 据说是因为tabhost的子页面拿不到service
-		UmengUpdateAgent.update(this.getParent());
+		initAutoUpdate();
+		
 		// 有米初始化 ，不加广告了
 //		AdManager.init(this.getBaseContext(), "3e9fc4796d5e9801",
 //				"4d78213f8ac82754 ", 45, false);
+	}
+	
+	private void initAutoUpdate()
+	{
+		// 做友盟自动更新，因为这里是在tabhost中，所以要getParent
+		// 据说是因为tabhost的子页面拿不到service
+		UmengUpdateAgent.setOnDownloadListener(new UmengDownloadListener() {
+			@Override
+			public void OnDownloadEnd(int result) {
+				if(result == 0)
+				{
+					ToastHelper.show("自动更新失败，请确保网络连接通畅", true);
+				}
+			}
+		});
+		UmengUpdateAgent.update(this.getParent());
+		
 	}
 
 	private void checkNetWork() {

@@ -531,6 +531,7 @@ public class RefreshViewerHelper implements OnTaskCompleteListener {
 			FileOutputStream fos = new FileOutputStream(cacheFile);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(mainViewModel.items);
+			oos.close();
 			
 			File cacheFile2 = new File(myDir, AppConstants.CACHE_PIC_ITEM);
 			FileOutputStream fos2 = new FileOutputStream(cacheFile2);

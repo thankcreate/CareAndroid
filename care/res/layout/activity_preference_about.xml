@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/preference_about_app_title"
             android:layout_centerHorizontal="true"
-            android:text="V1.0.2"
+            android:text="V1.1.0"
             android:textColor="#B3081F"
             android:textSize="16dp" />
         

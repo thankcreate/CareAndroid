@@ -46,7 +46,8 @@ public class MainActivity extends TabActivity {
 	BlessHelper blessHelper;
 	private void fetchBlessing() {		
 		blessHelper = new BlessHelper();
-		blessHelper.refresh();
+		blessHelper.cacheBlessImages();
+		blessHelper.cacheBlessPassedItem();
 	}
 
 	protected void onResume() {

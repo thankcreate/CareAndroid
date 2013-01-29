@@ -46,9 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="5dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="5dip"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
             android:text="Content"
             android:textColor="#6F6F6F"
             android:textSize="13dip" />

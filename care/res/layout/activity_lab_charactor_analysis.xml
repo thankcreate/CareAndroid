@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     android:orientation="vertical" >
 
     <com.markupartist.android.widget.ActionBar
@@ -14,18 +14,33 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <RelativeLayout
+          <RelativeLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/shape_bkg_avatar_round_corner_green" >
+            android:layout_marginTop="5dp" >
 
-            <ImageView
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/gray" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/white" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
                 android:id="@+id/lab_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
                 android:src="@drawable/thumb_default_avatar1" />
         </RelativeLayout>

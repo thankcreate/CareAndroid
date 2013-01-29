@@ -157,55 +157,7 @@ public class LabTimelineActivity extends LabShareActivity {
         return true;
 	}
 	
-	private void refreshChart() {
-//		String[] titles = new String[] { "发贴数" };
-//		List<double[]> values = new ArrayList<double[]>();
-//		values.add(new double[] { param1, param2, param3, param4 });
-//
-//		int[] colors = new int[] {Color.argb(0xBB, 0xFF, 0x9D, 0x00) };
-//
-//		XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
-//		
-//		setChartSettings(renderer, " ",
-//				"时间段", "发贴数", 0.5, 4.5, 0, max + 5, Color.GRAY,
-//				Color.LTGRAY);
-//		renderer.setXLabels(1);
-//		renderer.setYLabels(4);
-//		
-//		renderer.setBarSpacing(0.5f);		
-//		renderer.setYLabelsAlign(Align.LEFT);
-//		renderer.addXTextLabel(1, "上午");
-//		renderer.addXTextLabel(2, "下午");
-//		renderer.addXTextLabel(3, "晚上");
-//		renderer.addXTextLabel(4, "凌晨");
-//		renderer.setOrientation(Orientation.HORIZONTAL);
-//		renderer.setClickEnabled(false);
-//		renderer.setZoomEnabled(false,false);
-//		renderer.setPanEnabled(false,false);
-//		renderer.setAntialiasing(false);
-//		renderer.setShowLegend(false);
-//		// top left bottom right
-//		renderer.setMargins(new int[] { 5, 20, 5, 20 });
-//		
-//
-//		int length = renderer.getSeriesRendererCount();
-//		for (int i = 0; i < length; i++) {
-//			SimpleSeriesRenderer seriesRenderer = renderer
-//					.getSeriesRendererAt(i);
-//			seriesRenderer.setDisplayChartValues(true);
-//		}
-//		renderer.setApplyBackgroundColor(true);
-//		renderer.setBackgroundColor(Color.TRANSPARENT);
-//		renderer.setMarginsColor(Color.argb(0x00, 0x01, 0x01, 0x01));
-//		mChartView = ChartFactory.getBarChartView(this,
-//				buildBarDataset(titles, values), renderer, Type.DEFAULT);
-//
-//		mChartView
-//				.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-//		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-//		layout.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
-//				LayoutParams.MATCH_PARENT));
-		
+	private void refreshChart() {		
 		String[] titles = new String[] { "发贴数" };
 		List<double[]> values = new ArrayList<double[]>();
 		values.add(new double[] { param1, param2, param3, param4 });
@@ -251,8 +203,8 @@ public class LabTimelineActivity extends LabShareActivity {
 				buildBarDataset(titles, values), renderer);
 
 		mChartView
-				.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
+				.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);
+		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);
 		layout.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		

@@ -16,6 +16,7 @@ import com.thankcreate.care.AppConstants;
 import com.thankcreate.care.R;
 import com.thankcreate.care.R.layout;
 import com.thankcreate.care.R.menu;
+import com.thankcreate.care.tool.misc.BlessHelper;
 import com.thankcreate.care.tool.misc.DateTool;
 import com.thankcreate.care.tool.misc.MiscTool;
 import com.thankcreate.care.tool.misc.StringTool;
@@ -62,7 +63,7 @@ public class LabSmartChatActivity extends LabShareActivity {
 	private final int ANSWER_DELAY = 3000;
 
 	private String[] herSentece = { "^_^ 然后呢?", "呵呵..", "嗯嗯，这样~~" };
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class LabSmartChatActivity extends LabShareActivity {
 	@Override
 	protected void initActionBar() {
 		super.initActionBar();
-		actionBar.setTitle("智能聊天");
+		actionBar.setTitle("非智能聊天");
 		actionBar.addActionRight(new Action() {
 
 			@Override

@@ -252,7 +252,7 @@ public class ImageViewFlipper extends TouchActivity {
 			
 			@Override
 			public int getDrawable() {
-				return R.drawable.thumb_save;
+				return R.drawable.thumb_download;
 			}
 		});
 		addActionBarBackButton(actionBar);

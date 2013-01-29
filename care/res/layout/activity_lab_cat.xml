@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"    
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     android:orientation="vertical" >
 
     <com.markupartist.android.widget.ActionBar
@@ -10,11 +10,12 @@
         style="@style/ActionBar" />
  
     <TextView            
+        android:id="@+id/lab_cat_miao"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="喵~~"
+            android:text="喵~"
             android:textColor="#007A16"
             android:textSize="100sp" />
 

@@ -473,8 +473,8 @@ public class LabEnemyActivity extends LabShareActivity implements FetchCompleteL
 				buildBarDataset(titles, values), renderer, Type.DEFAULT);
 
 		mChartView
-				.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);	
+				.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);
+		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);	
 		layout.removeAllViews();
 		layout.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));

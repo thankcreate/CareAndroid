@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     android:orientation="vertical" >
 
     <com.markupartist.android.widget.ActionBar
@@ -18,35 +18,49 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/shape_bkg_avatar_round_corner_green" >
+            android:layout_marginTop="5dp" >
 
-            <ImageView
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/gray" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/white" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
                 android:id="@+id/lab_her_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
                 android:src="@drawable/thumb_default_avatar1" />
         </RelativeLayout>
 
-        
         <RelativeLayout
-            android:layout_width="0dp"            
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-             >
+            android:layout_weight="1" >
+
             <TextView
                 android:id="@+id/lab_her_name"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="top|left"
                 android:gravity="top|left"
-                android:text="未指定"
                 android:singleLine="true"
+                android:text="未指定"
                 android:textColor="#007A16"
                 android:textSize="20sp" >
             </TextView>
@@ -57,30 +71,43 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="bottom|right"
                 android:gravity="bottom|right"
-                android:text="未指定"
                 android:singleLine="true"
+                android:text="未指定"
                 android:textColor="#007A16"
                 android:textSize="20sp" >
             </TextView>
-        
         </RelativeLayout>
-        
-         <RelativeLayout
+
+        <RelativeLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/shape_bkg_avatar_round_corner_green" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp" >
 
-            <ImageView
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/gray" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/white" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
                 android:id="@+id/lab_my_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
                 android:src="@drawable/thumb_default_avatar1" />
         </RelativeLayout>
-        
     </LinearLayout>
 
     <LinearLayout
@@ -91,7 +118,7 @@
         android:layout_marginTop="15dp"
         android:layout_weight="1"
         android:orientation="horizontal" />
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

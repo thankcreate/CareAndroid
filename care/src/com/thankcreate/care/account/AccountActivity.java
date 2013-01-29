@@ -264,7 +264,14 @@ public class AccountActivity extends BaseActivity {
 					long id) {
 				// 登陆
 				if(position == 0) {
-					MiscTool.clearCookie(AccountActivity.this);					
+					// 人人如果已经登陆了一个帐号，再想换个号登陆，如果不logout，则总是原帐号
+					// 这应该是个api的bug
+					MiscTool.clearCookie(AccountActivity.this);	
+	            	PreferenceHelper.removeRenrenPreference();				
+					App.getRenren().logout(AccountActivity.this);
+					initRenren();
+					App.mainViewModel.isChanged = true;
+					
 					Activity activity = AccountActivity.this;
 					App.getRenren().authorize(AccountActivity.this, AppConstants.RENREN_PERMISSION, mRenrenAuthListener);
 				}

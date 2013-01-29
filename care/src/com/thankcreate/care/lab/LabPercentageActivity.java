@@ -139,8 +139,8 @@ public class LabPercentageActivity extends LabShareActivity {
 
 	    mChartView = ChartFactory.getDialChartView(this, category, renderer);
 		mChartView
-				.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
-		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_picturewallpage);
+				.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);
+		layout.setBackgroundResource(R.drawable.bitmap_bkg_tile_timeline);
 		layout.addView(mChartView, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 	}

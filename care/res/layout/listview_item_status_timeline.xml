@@ -9,40 +9,50 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <RelativeLayout
             android:layout_width="42dp"
             android:layout_height="42dp" >
-            
-            
-                   
+
             <com.thankcreate.care.control.RoundCornerImageView
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/app_name"
-            android:src="@color/gray" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/gray" />
 
-        
-         <com.thankcreate.care.control.RoundCornerImageView
-            android:id="@+id/status_list_item_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/thumb_default_avatar1" />
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/app_name"
+                android:src="@color/white" />
+
+            <com.thankcreate.care.control.RoundCornerImageView
+                android:id="@+id/status_list_item_avatar"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/thumb_default_avatar1" />
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical" >
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/thumb_bubble3"
+            android:orientation="vertical"
+            android:paddingBottom="3dp"
+            android:paddingLeft="17dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp" >
 
             <TextView
                 android:id="@+id/status_list_item_title"
@@ -69,16 +79,20 @@
                 android:id="@+id/status_list_item_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/thumb_bubble1"
+                android:layout_gravity="top"                
                 android:orientation="vertical"
-                android:paddingBottom="12dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="15dp" >
+                android:paddingBottom="3dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="3dp" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@drawable/line_dash" />
 
                 <TextView
+                    android:layout_marginTop ="2dp"
                     android:id="@+id/status_list_item_forward_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

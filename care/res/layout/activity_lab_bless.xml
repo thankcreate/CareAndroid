@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar" />
+
+    <RelativeLayout
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" 
+            android:src="@drawable/bkg_lab_bless"
+            android:scaleType="centerCrop"/>
+
+        <ListView
+            android:id="@+id/lab_bless_list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha="0.8"
+            android:cacheColorHint="#00000000"
+            android:divider="#00ffffff"
+            android:dividerHeight="0dp" >
+        </ListView>
+    </RelativeLayout>
+
+</LinearLayout>

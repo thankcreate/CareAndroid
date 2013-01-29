@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/umeng_fb_atomLinearLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"    
+    android:orientation="horizontal" 
+    android:background="#00000000">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="6dp"
+        android:layout_weight="1"
+        android:background="@drawable/thumb_lab_bless_bubble_left"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/lab_bless_item_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/lab_bless_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="5dp"
+                android:text="Title"
+                android:textColor="#6F6F6F"
+                android:textSize="16dp" />
+            
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lab_bless_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:text="Content"
+            android:textColor="#6F6F6F"
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/lab_bless_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
+            android:text="This is State or Send Time"
+            android:textColor="#BDBDBD"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/lab_bless_item_right_margin"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+</LinearLayout>

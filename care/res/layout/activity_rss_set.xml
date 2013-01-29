@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     android:orientation="vertical" >
 
     <com.markupartist.android.widget.ActionBar
@@ -24,8 +24,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/shape_bkg_table_round_corner"
-        android:orientation="vertical" >
+        android:background="@drawable/thumb_bubble4"                
+        android:orientation="vertical"
+        android:padding="0dp" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -46,14 +47,13 @@
                 android:paddingRight="13dp"
                 android:paddingTop="4dp"
                 android:singleLine="true" >
-
             </EditText>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/roundCornerTableBorder" />
+            android:layout_height="2dp"
+            android:background="@drawable/line_dash" />
 
         <RelativeLayout
             android:id="@+id/rss_confirm"
@@ -73,7 +73,7 @@
                 android:textSize="16sp" />
         </RelativeLayout>
     </LinearLayout>
-    
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,13 +82,12 @@
         android:layout_marginTop="5dp"
         android:text="注意: 此处应填入RSS地址而不是网站本身的地址。例如，应填入www.xxx.com/feed或www.xxx.com/rss之类，而不是直接填入www.xxx.com"
         android:textColor="@color/gray" />
-    
-    
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp" 
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:text="当前关注站点信息"
         android:textColor="@color/black" />
@@ -100,8 +99,9 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/shape_bkg_table_round_corner"
-        android:orientation="vertical" >
-        
+        android:orientation="vertical"
+        android:padding="0dp" >
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -112,30 +112,30 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:text="站点名"                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="站点名"
                 android:textColor="#667eb3"
                 android:textSize="12sp" />
 
             <TextView
-                android:maxLines="1"
                 android:id="@+id/rss_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
+                android:maxLines="1"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/roundCornerTableBorder" />
+            android:layout_height="2dp"
+            android:background="@drawable/line_dash" />
 
-         <LinearLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_centerVertical="true"
@@ -145,24 +145,23 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:text="描述"                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="描述"
                 android:textColor="#667eb3"
                 android:textSize="12sp" />
 
             <TextView
-                android:maxLines="1"
                 android:id="@+id/rss_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
+                android:maxLines="1"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

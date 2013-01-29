@@ -38,5 +38,8 @@
     <string name="title_activity_lab_smart_chat">LabSmartChatActivity</string>
     <string name="notification_title">最新更新</string>
     <string name="title_activity_blessing">BlessingActivity</string>
+    <string name="title_activity_lab_bless">LabBlessActivity</string>
+    <string name="title_activity_lab_bless_post">LabBlessPostActivity</string>
+    <string name="title_activity_status_slideshow">StatusSlideshowActivity</string>
 
 </resources>

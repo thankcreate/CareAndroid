@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/tile_picture_wall" android:tileMode="repeat" >
+    android:src="@drawable/tile_status_detail" android:tileMode="repeat" >
 </bitmap>

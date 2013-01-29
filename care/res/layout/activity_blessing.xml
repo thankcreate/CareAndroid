@@ -1,23 +1,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/test_image"
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-        />
-        
-    
+    android:layout_height="match_parent" >
 
-    <ImageSwitcher
-        
-        android:id="@+id/blessing_image_switcher"
+
+
+    <ImageView
+        android:id="@+id/blessing_image2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"        
-         />
+        android:layout_height="match_parent" />
+    
+        <ImageView        
+        android:id="@+id/blessing_image1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/blessing_enter_layout"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="200dp"
+        android:layout_marginRight="25dp"
+        android:alpha="0.8" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/thumb_enter_border" />
+
+        <ImageView
+            android:id="@+id/blessing_enter_slider"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/thumb_enter_slide" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/blessing_item_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="80dp"
+        android:alpha="0.9"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/blessing_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/blessing_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -3,8 +3,8 @@
 
 
     <alpha
-        android:duration="500"
-        android:fromAlpha="0.5"
+        android:duration="1500"
+        android:fromAlpha="1"
         android:toAlpha="0.0" />
 
 </set>

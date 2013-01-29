@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bitmap_bkg_tile_picturewallpage"
+    android:background="@drawable/bitmap_bkg_tile_timeline"
     android:orientation="vertical" >
 
     <com.markupartist.android.widget.ActionBar
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" 
+            android:layout_height="fill_parent"
             android:orientation="vertical" >
 
             <!-- 有米广告条 -->
@@ -23,8 +23,8 @@
             <LinearLayout
                 android:id="@+id/lab_ad"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" 
-                android:orientation="vertical"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <!-- 实验室项目 -->
 
@@ -46,7 +46,7 @@
                         android:layout_margin="7dp"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
-                        android:src="@drawable/lab_1" />
+                        android:src="@drawable/lab_timespan" />
 
                     <ImageView
                         android:id="@+id/lab_item_charactor_analysis"
@@ -55,7 +55,7 @@
                         android:layout_margin="7dp"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
-                        android:src="@drawable/lab_2" />
+                        android:src="@drawable/lab_charactor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -70,7 +70,7 @@
                         android:layout_margin="7dp"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
-                        android:src="@drawable/lab_3" />
+                        android:src="@drawable/lab_percentage" />
 
                     <ImageView
                         android:id="@+id/lab_item_enemy"
@@ -79,7 +79,31 @@
                         android:layout_margin="7dp"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
-                        android:src="@drawable/lab_4" />
+                        android:src="@drawable/lab_enemy" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/lab_item_bless"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="7dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/lab_bless" />
+
+                    <ImageView
+                        android:id="@+id/lab_item_smart_chat"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="7dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/lab_chat" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,18 +118,11 @@
                         android:layout_margin="7dp"
                         android:contentDescription="@string/app_name"
                         android:scaleType="fitXY"
-                        android:src="@drawable/lab_5" />
-                    
-                       <ImageView
-                        android:id="@+id/lab_item_smart_chat"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_margin="7dp"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/lab_6" />
+                        android:src="@drawable/lab_cat" />
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

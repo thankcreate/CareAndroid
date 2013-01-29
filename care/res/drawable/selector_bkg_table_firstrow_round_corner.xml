@@ -2,16 +2,21 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@color/transparent" android:state_window_focused="false" />    
-    <item android:state_window_focused="true" android:state_pressed="true">
-        <shape>
-            <gradient 
-                android:angle="270" 
-                android:endColor="@color/gradient_red_end" 
-                android:startColor="@color/gradient_red_start" />
-            
-            <corners android:topLeftRadius="8dp" android:topRightRadius="8dp" />
-        </shape>
+    <item android:state_window_focused="true" android:state_pressed="true" >
         
+        <layer-list>
+            <item android:right="1dp">
+		        <shape>
+		            <gradient
+		                android:angle="270" 
+		                android:endColor="@color/gradient_red_end" 
+		                android:startColor="@color/gradient_red_start" />
+		            
+		            <corners android:topLeftRadius="8dp" android:topRightRadius="8dp" />            
+		        </shape>
+            </item>
+        </layer-list>
+
     </item>
     
 </selector>
