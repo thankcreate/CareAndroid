@@ -130,7 +130,7 @@ public class LabBlessActivity extends BaseActivity {
 						
 						Builder alertDialog = new  AlertDialog.Builder(LabBlessActivity.this);
 						alertDialog.setTitle("^_^");
-						alertDialog.setMessage("发表在祝福墙上的内容，写得比较好的会显示在软件启动页上哦~ ^_^");
+						alertDialog.setMessage("发表在祝福墙上的内容，写得比较好的会显示在软件启动页上哦~");
 						alertDialog.setPositiveButton("寡人喻矣" ,  null);
 						alertDialog.show();
 					}

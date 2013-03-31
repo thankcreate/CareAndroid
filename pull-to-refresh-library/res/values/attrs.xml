@@ -61,13 +61,13 @@
         <!--
         	Whether PullToRefreshListView has it's extras enabled. This allows the user to be 
         	able to scroll while refreshing, and behaves better. It acheives this by adding
-        	Header and/or Footer Views to the ListView.
+        	Header and/or Footer Views to the ListView.
         -->
         <attr name="ptrListViewExtrasEnabled" format="reference|boolean" />
 
         <!--
         	Whether the Drawable should be continually rotated as you pull. This only
-        	takes effect when using the 'Rotate' Animation Style.
+        	takes effect when using the 'Rotate' Animation Style.
         -->
         <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
 

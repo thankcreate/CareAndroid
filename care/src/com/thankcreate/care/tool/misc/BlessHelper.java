@@ -66,8 +66,7 @@ public class BlessHelper {
 					fetchImages();	
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
-				
+				}				
 			}
 		});
 	}
@@ -95,7 +94,7 @@ public class BlessHelper {
 		{
 			try {
 				Bitmap bitmap = BitmapFactory.decodeFile(alreadyExistsFile[i].getAbsolutePath());
-				if(bitmap != null)
+				if(bitmap != null) 
 				{
 					BitmapDrawable bd = new BitmapDrawable(context.getResources(), bitmap);
 					resList.add(bd);	
@@ -202,6 +201,7 @@ public class BlessHelper {
 	{
 		if(fullURL == null || StringTool.isNullOrEmpty(fullURL))
 			return;
+		
 		File myDir = App.getAppContext().getFilesDir();		
 		File blessingDir = new File(myDir, AppConstants.BLESSING_BACKGROUND_DIR);
 		if(!blessingDir.exists())
